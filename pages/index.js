@@ -1,5 +1,5 @@
 import { Realtime, TextMessage, Event } from 'leancloud-realtime/es-latest'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import envConfig from '../envConfig'
 import Layout from '../components/Layout'
 import { useUserInfoEffect } from '../lib/util'
