@@ -1,4 +1,4 @@
-import { useUserInfoEffect } from '../../../lib/userInfoUtil.js'
+import { useUserInfoEffect } from '../../../lib/util'
 
 export default function Profile () {
   const userName = useUserInfoEffect()
