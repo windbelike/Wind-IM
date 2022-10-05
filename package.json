@@ -9,12 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "leancloud-realtime": "^5.0.0-rc.7",
+    "leancloud-realtime-plugin-typed-messages": "^4.0.2",
+    "leancloud-storage": "^4.13.2",
     "next": "12.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "eslint": "8.24.0",
-    "eslint-config-next": "12.3.1"
+    "eslint": "^8.24.0",
+    "eslint-config-next": "12.3.1",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.3.0",
+    "eslint-plugin-promise": "^6.0.1",
+    "eslint-plugin-react": "^7.31.8"
   }
 }
