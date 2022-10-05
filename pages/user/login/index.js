@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useUserInfoEffect } from '../../../lib/util'
 const AV = require('leancloud-storage')
 
