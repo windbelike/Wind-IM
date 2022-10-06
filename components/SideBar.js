@@ -1,6 +1,6 @@
+import Link from 'next/link'
 import { React } from 'react'
-import { BsPlus, BsFillLightningFill } from 'react-icons/bs'
-import { FaFire, FaPoo } from 'react-icons/fa'
+import { AiOutlineSetting, AiOutlineMessage, AiOutlineHome, AiOutlineSearch } from 'react-icons/ai'
 
 export default function SideBar () {
   return (
@@ -12,10 +12,13 @@ export default function SideBar () {
       <div className=' h-screen w-16 m-0
       flex flex-col
       bg-black text-white shadow-lg'>
-        <SideBarIcon icon={<FaFire size="28" />} />
-        <SideBarIcon icon={<BsPlus size="32" />} />
-        <SideBarIcon icon={<BsFillLightningFill size="20" />} />
-        <SideBarIcon icon={<FaPoo size="20" />} />
+        <Link href='/' passHref>
+          <a>Home</a>
+        </Link>
+        <SideBarIcon icon={<AiOutlineHome size="28" />} />
+        <SideBarIcon icon={<AiOutlineMessage size="32" />} />
+        <SideBarIcon icon={<AiOutlineSearch size="20" />} />
+        <SideBarIcon icon={<AiOutlineSetting size="20" />} />
       </div>
     </div>
   )
@@ -24,7 +27,6 @@ export default function SideBar () {
 const SideBarIcon = ({ icon, text = 'tooltip 💡' }) => (
   <div className="sidebar-icon group">
     {icon}
-
     <span className="sidebar-tooltip group-hover:scale-100">{text}</span>
   </div>
 )
