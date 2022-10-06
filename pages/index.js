@@ -19,7 +19,13 @@ export default function Home () {
 
   return (
     <Layout home={true}>
+      <button className="border-2 border-purple-500 hover:border-gray-500 ...">
+  Button
+      </button>
       <h1>Hello, {userName || defaultUserName}</h1>
+      <h1 className="text-3xl font-bold underline">
+            Hello Tailwindcss!
+      </h1>
       <div>
         {/* Need to login */}
         <Link className={utilStyles.listItem} href='/user/login'>
@@ -27,7 +33,7 @@ export default function Home () {
         </Link>
         {/* Msg sending */}
         {conversation
-          ? <div>
+          ? <div className='flex-'>
             <label htmlFor="msgInput">Msg: </label>
             <input id="msgInput" type="text" name="text" onChange={(e) => setMsg(e.target.value)}/>
             <input type="submit" value={'Send to ' + remoteUsername} onClick={() => sendMsg(conversation, msg)}/>
