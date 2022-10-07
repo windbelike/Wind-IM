@@ -1,11 +1,8 @@
-import { useUserInfoEffect } from '../../../lib/util'
 
-export default function Profile () {
-  const userName = useUserInfoEffect()
-
+export default function Profile ({ username }) {
   return (
     <div>
-      <h1>Hello, {userName}</h1>
+      <h1>Hello, {username}</h1>
     </div>
   )
 }
