@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { AiOutlinePlusCircle } from 'react-icons/ai'
 const AV = require('leancloud-storage')
 
 // Sign in or sign up
@@ -8,6 +9,7 @@ export default function SignInOrSignUp ({ username }) {
 
   return (
     <>
+      <AiOutlinePlusCircle size="28" className="pr-5"/>
       <div className="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4">
         <div className="shrink-0">
           <img className="h-12 w-12" src="https://avatars.githubusercontent.com/u/33996345?v=4" alt="ChitChat Logo" />

@@ -1,5 +1,5 @@
 import { Realtime, TextMessage, Event } from 'leancloud-realtime/es-latest'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import envConfig from '../envConfig'
 import Link from 'next/link'
 import utilStyles from '../styles/utils.module.css'
@@ -7,12 +7,23 @@ import utilStyles from '../styles/utils.module.css'
 let realtime = null
 const defaultUserName = 'Anonymous'
 const loginTitle = 'Login'
+let client = null // IM client
 
 // Conversation component
 export default function Conv ({ username }) {
   const [msg, setMsg] = useState('')
   const [remoteUsername, setRemoteUsername] = useState(null)
   const [conversation, setConversation] = useState(null)
+  // Get all conversations
+  // useEffect(() => {
+  //   if (client != null) {
+  //     const query = client.getQuery()
+  //     query.find().then(function (conversations) {
+  //       console.log(conversations)
+  //     }).catch(console.error.bind(console))
+  //   }
+  // }, [])
+
   // const [msgBox, setMsgBox] = useState([])
   return (
     <div>
@@ -30,9 +41,11 @@ export default function Conv ({ username }) {
         </Link>
         {/* Msg sending */}
         {conversation
-          ? <div className='flex-'>
-            <label htmlFor="msgInput">Msg: </label>
-            <input id="msgInput" type="text" name="text" onChange={(e) => setMsg(e.target.value)}/>
+          ? <div>
+            <label>
+              Msg:
+              <textarea value={msg} onChange={(e) => setMsg(e.target.value)} />
+            </label>
             <input type="submit" value={'Send to ' + remoteUsername} onClick={() => sendMsg(conversation, msg)}/>
           </div>
           : <div> {/* Set remote username */}
@@ -67,7 +80,7 @@ async function loginImAndCreateConversation (clientId, remoteClientId, setConver
     })
   }
 
-  const client = await realtime
+  client = await realtime
     .createIMClient(clientId)
     .then(function (cli) {
       console.log(clientId + ' logined')
@@ -84,8 +97,6 @@ async function loginImAndCreateConversation (clientId, remoteClientId, setConver
     // Make the conversasion unique
     unique: true
   })
-  console.log('conversation:')
-  console.log(conversation)
   setConversation(conversation)
 
   // Bind clint for handling conversation events
