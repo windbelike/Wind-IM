@@ -2,7 +2,7 @@ import { AiOutlinePlusCircle, AiOutlineDown, AiOutlineSearch } from 'react-icons
 
 export default function Msg () {
   return (
-    <div className="flex h-full overflow-hidden">
+    <div className="flex h-full">
       <ConversationSideBar />
       <ConversationWindow />
     </div>
@@ -11,7 +11,7 @@ export default function Msg () {
 
 function ConversationWindow () {
   return (
-    <div className="w-full ">
+    <div className="w-full flex flex-col">
       <ConversationWindowHead />
       <ConversationWindowMain />
     </div>
@@ -40,7 +40,7 @@ function ConversationWindowHead () {
 
 function ConversationWindowMain () {
   return (
-    <div className="w-full h-full bg-orange-200">
+    <div className="flex-1 border-l-2 flex flex-col items-end">
       <ConversationReceived />
       <Conversation2Send />
     </div>
@@ -48,18 +48,31 @@ function ConversationWindowMain () {
 }
 
 function ConversationReceived () {
-
+  return (
+    <div className='bg-gray-50 flex-1 w-full'>
+      <div></div>
+    </div>
+  )
 }
 
 function Conversation2Send () {
+  return (
+    <div className='h-36 w-full flex justify-end items-center'>
+      {/* Msg Input Box */}
+      <textarea className='flex-1 p-3 m-2 h-full focus:outline-none resize-none'>
 
+      </textarea>
+      {/* Msg Send Button */}
+      <button className='w-36 h-12 rounded-full bg-sky-500 text-white hover:bg-sky-600 m-5 px-5 shrink-0 focus:ring focus:ring-sky-300 active:bg-sky-700 focus:outline-none'>Send</button>
+    </div>
+  )
 }
 
 function ConversationSideBar () {
   return (
-    <div className="w-72 h-full bg-white shrink-0">
+    <div className="w-72 h-full bg-white shrink-0 flex flex-col">
       {/* Head */}
-      <div className="border-t-0 border-b-2 border-b-gray-100 border-solid h-24 flex items-center justify-between">
+      <div className="border-t-0 border-b-2 border-solid h-24 flex items-center justify-between">
         <div className='w-48 flex items-center'>
           <p className="pl-5 text-xl font-medium ">Messages</p>
           <AiOutlineDown size="20" className="pr-5 h-9 w-9"/>
@@ -68,14 +81,14 @@ function ConversationSideBar () {
       </div>
       {/* Conversation SideBar */}
       {/* todo hide the scrollbar & overflow-scroll  */}
-      <div className='h-full '>
+      <div className='flex-grow'>
         {/* Search Window */}
         <div className='flex items-center'>
           <input className="bg-gray-200 h-12 w-10/12 m-3 p-3 rounded-md" placeholder='Search messages'/>
           <AiOutlineSearch size="28" className="h-10 w-10 opacity-30 mr-5 inline shrink-0 hover:cursor-pointer hover:text-sky-500"/>
         </div>
         {/* Conversation Card List */}
-        <div className='h-full'>
+        <div className=''>
           <ConversationCard />
           <ConversationCard />
           <ConversationCard />
@@ -95,8 +108,8 @@ function ConversationCard () {
         <img className="h-12 w-12 rounded-md p-0.5" src="https://avatars.githubusercontent.com/u/33996345?v=4" alt="ChitChat Logo" />
       </div>
       <div className='pl-2 w-48'>
-        <div className="text-xl font-medium text-black w-full overflow-hidden">ChitChat</div>
-        <p className="text-slate-500 truncate">You have a new message!asdfasdfasdf</p>
+        <div className="text-xl font-medium text-black w-full ">ChitChat</div>
+        <p className="text-slate-500 truncate">You have a new message! blablablabla</p>
       </div>
     </div>
   )

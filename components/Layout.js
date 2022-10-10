@@ -4,7 +4,7 @@ export default function Layout ({ children, home }) {
   return (
     <div className="flex">
       <SideBar />
-      <main className='w-screen h-screen bg-gray-300'>{children}</main>
+      <main className='w-screen h-screen'>{children}</main>
     </div>
   )
 }
