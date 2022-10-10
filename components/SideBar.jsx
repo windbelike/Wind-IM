@@ -10,14 +10,19 @@ export default function SideBar () {
         <FaAccessibleIcon />
       </div> */}
       <div className='h-screen w-16 m-0
-      flex flex-col justify-end
+      flex flex-col justify-end items-center
       bg-black text-white shadow-lg'>
+        {/* LOGO */}
+        <div className='my-5'>
+          <img className="h-12 w-12 rounded-md p-0.5" src="https://avatars.githubusercontent.com/u/33996345?v=4" alt="ChitChat Logo" />
+        </div>
+        {/* Main Functions */}
         <div className='flex-1'>
           <SideBarIcon linkTo='/' text='Home' icon={<AiOutlineHome size="28" />} />
           <SideBarIcon linkTo='/msg' text='Messages' icon={<AiOutlineMessage size="28" />} />
           <SideBarIcon linkTo='/user/profile' test='Profile' icon={<AiOutlineUser size="28" />} />
         </div>
-        {/* 置底 */}
+        {/* Bottom Button */}
         <SideBarIcon linkTo='/settings' icon={<AiOutlineSetting size="28" />} />
       </div>
     </div>
@@ -26,9 +31,9 @@ export default function SideBar () {
 
 const SideBarIcon = ({ icon, text = 'tooltip 💡', linkTo = '/' }) => (
   <Link href={linkTo}>
-    <div className="sidebar-icon group">
+    <div className="sidebar-icon m-3">
       {icon}
-      <span className="sidebar-tooltip group-hover:scale-100">{text}</span>
+      <span className="sidebar-tooltip hover:scale-100">{text}</span>
     </div>
   </Link>
 )
