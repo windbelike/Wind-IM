@@ -103,7 +103,7 @@ function ConversationSideBar () {
 
 function ConversationCard () {
   return (
-    <div className='h-20 w-full p-4 hover:shadow-lg rounded-lg hover:bg-sky-100 hover:cursor-pointer flex'>
+    <div className='h-20 w-full p-4 hover:shadow-lg rounded-lg hover:bg-sky-100 hover:cursor-pointer flex focus:ring focus:ring-sky-200 active:bg-sky-300'>
       <div className="shrink-0">
         <img className="h-12 w-12 rounded-md p-0.5" src="https://avatars.githubusercontent.com/u/33996345?v=4" alt="ChitChat Logo" />
       </div>

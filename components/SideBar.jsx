@@ -9,12 +9,15 @@ export default function SideBar () {
       {/* <div className='flex items-center justify-center'>
         <FaAccessibleIcon />
       </div> */}
-      <div className=' h-screen w-16 m-0
-      flex flex-col
+      <div className='h-screen w-16 m-0
+      flex flex-col justify-end
       bg-black text-white shadow-lg'>
-        <SideBarIcon linkTo='/' text='Home' icon={<AiOutlineHome size="28" />} />
-        <SideBarIcon linkTo='/msg' text='Messages' icon={<AiOutlineMessage size="28" />} />
-        <SideBarIcon linkTo='/user/profile' test='Profile' icon={<AiOutlineUser size="28" />} />
+        <div className='flex-1'>
+          <SideBarIcon linkTo='/' text='Home' icon={<AiOutlineHome size="28" />} />
+          <SideBarIcon linkTo='/msg' text='Messages' icon={<AiOutlineMessage size="28" />} />
+          <SideBarIcon linkTo='/user/profile' test='Profile' icon={<AiOutlineUser size="28" />} />
+        </div>
+        {/* 置底 */}
         <SideBarIcon linkTo='/settings' icon={<AiOutlineSetting size="28" />} />
       </div>
     </div>
