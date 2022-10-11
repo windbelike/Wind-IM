@@ -47,48 +47,6 @@ function ConversationWindowMain () {
   )
 }
 
-function ConversationHistory () {
-  return (
-    <div className='bg-gray-500 w-full overflow-auto '>
-      <MsgByRemote />
-      <MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote />
-    </div>
-  )
-}
-
-function MsgByRemote () {
-  return (
-    <div className='bg-sky-500 w-full h-24 border-2 border-sky300'>
-      <Avt />
-      <MsgBox />
-    </div>
-  )
-}
-
-function MsgByMyself () {
-  return (
-    <div className='bg-violet-500 w-full h-24'>
-      {/*  */}
-    </div>
-  )
-}
-
-function Avt () {
-  return (
-    <div>
-
-    </div>
-  )
-}
-
-function MsgBox () {
-  return (
-    <div>
-
-    </div>
-  )
-}
-
 function Conversation2Send () {
   return (
     <div className='h-36 w-full flex justify-end items-center'>
@@ -98,6 +56,54 @@ function Conversation2Send () {
       </textarea>
       {/* Msg Send Button */}
       <button className='w-36 h-12 rounded-full bg-sky-500 text-white hover:bg-sky-600 m-5 px-5 shrink-0 focus:ring focus:ring-sky-300 active:bg-sky-700 focus:outline-none'>Send</button>
+    </div>
+  )
+}
+
+function ConversationHistory () {
+  return (
+    <div className='w-full bg-gray-100 overflow-auto flex-1'>
+      <MsgByRemote />
+      <MsgByMyself />
+      <MsgByRemote />
+      <MsgByMyself />
+      <MsgByRemote />
+      <MsgByMyself />
+    </div>
+  )
+}
+
+function MsgByRemote () {
+  return (
+    <div className='p-2 flex m-2'>
+      <Avt />
+      <MsgBox />
+    </div>
+  )
+}
+
+function MsgByMyself () {
+  return (
+    <div className='p-2 m-2 flex justify-end '>
+      <MsgBox />
+      <Avt />
+
+    </div>
+  )
+}
+
+function Avt () {
+  return (
+    <div className='shrink-0'>
+      <img className="h-12 w-12 rounded-md p-0.5" src="https://avatars.githubusercontent.com/u/33996345?v=4" alt="ChitChat Logo" />
+    </div>
+  )
+}
+
+function MsgBox () {
+  return (
+    <div className='bg-white rounded-md mx-1 p-3 w-48'>
+      <p>Hi there, you have a new message ! you have a new message !you have a new message !you have a new message !you have a new message !you have a new message !you have a new message !you have a new message !you have a new message !you have a new message !you have a new message !you have a new message !you have a new message !you have a new message !you have a new message !you have a new message !you have a new message !you have a new message !</p>
     </div>
   )
 }
