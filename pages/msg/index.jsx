@@ -11,7 +11,7 @@ export default function Msg () {
 
 function ConversationWindow () {
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full h-full flex flex-col">
       <ConversationWindowHead />
       <ConversationWindowMain />
     </div>
@@ -40,17 +40,51 @@ function ConversationWindowHead () {
 
 function ConversationWindowMain () {
   return (
-    <div className="flex-1 border-l-2 flex flex-col items-end">
-      <ConversationReceived />
+    <div className="flex-1 border-l-2 flex flex-col items-end h-0">
+      <ConversationHistory />
       <Conversation2Send />
     </div>
   )
 }
 
-function ConversationReceived () {
+function ConversationHistory () {
   return (
-    <div className='bg-gray-50 flex-1 w-full'>
-      <div></div>
+    <div className='bg-gray-500 w-full overflow-auto '>
+      <MsgByRemote />
+      <MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote /><MsgByRemote />
+    </div>
+  )
+}
+
+function MsgByRemote () {
+  return (
+    <div className='bg-sky-500 w-full h-24 border-2 border-sky300'>
+      <Avt />
+      <MsgBox />
+    </div>
+  )
+}
+
+function MsgByMyself () {
+  return (
+    <div className='bg-violet-500 w-full h-24'>
+      {/*  */}
+    </div>
+  )
+}
+
+function Avt () {
+  return (
+    <div>
+
+    </div>
+  )
+}
+
+function MsgBox () {
+  return (
+    <div>
+
     </div>
   )
 }
@@ -72,7 +106,7 @@ function ConversationSideBar () {
   return (
     <div className="w-72 h-full bg-white shrink-0 flex flex-col">
       {/* Head */}
-      <div className="border-t-0 border-b-2 border-solid h-24 flex items-center justify-between">
+      <div className="border-t-0 border-b-2 border-solid h-18 flex items-center justify-between">
         <div className='w-48 flex items-center'>
           <p className="pl-5 text-xl font-medium ">Messages</p>
           <AiOutlineDown size="20" className="pr-5 h-9 w-9"/>
@@ -81,18 +115,14 @@ function ConversationSideBar () {
       </div>
       {/* Conversation SideBar */}
       {/* todo hide the scrollbar & overflow-scroll  */}
-      <div className='flex-grow'>
+      <div className='flex-1 flex flex-col h-0'>
         {/* Search Window */}
         <div className='flex items-center'>
           <input className="bg-gray-200 h-12 w-10/12 m-3 p-3 rounded-md" placeholder='Search messages'/>
           <AiOutlineSearch size="28" className="h-10 w-10 opacity-30 mr-5 inline shrink-0 hover:cursor-pointer hover:text-sky-500"/>
         </div>
         {/* Conversation Card List */}
-        <div className=''>
-          <ConversationCard />
-          <ConversationCard />
-          <ConversationCard />
-          <ConversationCard />
+        <div className='overflow-scroll flex-1 h-0 no-scrollbar'>
           <ConversationCard />
           <ConversationCard />
         </div>

@@ -13,7 +13,7 @@ export default function SideBar () {
       flex flex-col justify-end items-center
       bg-black text-white shadow-lg'>
         {/* LOGO */}
-        <div className='my-5'>
+        <div className='my-5 shrink-0'>
           <img className="h-12 w-12 rounded-md p-0.5" src="https://avatars.githubusercontent.com/u/33996345?v=4" alt="ChitChat Logo" />
         </div>
         {/* Main Functions */}
