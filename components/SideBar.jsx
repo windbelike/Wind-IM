@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { React } from 'react'
-import { AiOutlineSetting, AiOutlineMessage, AiOutlineHome, AiOutlineUser } from 'react-icons/ai'
+import { AiOutlineSetting, AiOutlineMessage, AiOutlineHome, AiOutlineUser, AiOutlineLogin } from 'react-icons/ai'
 
 export default function SideBar () {
   return (
@@ -20,7 +20,8 @@ export default function SideBar () {
         <div className='flex-1'>
           <SideBarIcon linkTo='/' text='Home' icon={<AiOutlineHome size="28" />} />
           <SideBarIcon linkTo='/msg' text='Messages' icon={<AiOutlineMessage size="28" />} />
-          <SideBarIcon linkTo='/user/profile' test='Profile' icon={<AiOutlineUser size="28" />} />
+          <SideBarIcon linkTo='/user/profile' text='Profile' icon={<AiOutlineUser size="28" />} />
+          <SideBarIcon linkTo='/user/login' text='Login' icon={<AiOutlineLogin size="28" />} />
         </div>
         {/* Bottom Button */}
         <SideBarIcon linkTo='/settings' icon={<AiOutlineSetting size="28" />} />
@@ -31,9 +32,10 @@ export default function SideBar () {
 
 const SideBarIcon = ({ icon, text = 'tooltip 💡', linkTo = '/' }) => (
   <Link href={linkTo}>
-    <div className="sidebar-icon m-3">
+    <div className="sidebar-icon m-3 group">
       {icon}
-      <span className="sidebar-tooltip hover:scale-100">{text}</span>
+      {/* Styling based on parent state (group-{modifier}) */}
+      <span className="sidebar-tooltip group-hover:scale-100">{text}</span>
     </div>
   </Link>
 )
