@@ -21,7 +21,7 @@ export default function SideBar () {
           <SideBarIcon linkTo='/' text='Home' icon={<AiOutlineHome size="28" />} />
           <SideBarIcon linkTo='/msg' text='Messages' icon={<AiOutlineMessage size="28" />} />
           <SideBarIcon linkTo='/user/profile' text='Profile' icon={<AiOutlineUser size="28" />} />
-          <SideBarIcon linkTo='/user/login' text='Login' icon={<AiOutlineLogin size="28" />} />
+          <SideBarIcon linkTo='/user/login' text='Sign In or Sign Up' icon={<AiOutlineLogin size="28" />} />
         </div>
         {/* Bottom Button */}
         <SideBarIcon linkTo='/settings' icon={<AiOutlineSetting size="28" />} />
