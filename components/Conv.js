@@ -6,9 +6,9 @@ import utilStyles from '../styles/utils.module.css'
 
 let realtime = null
 const defaultUserName = 'Anonymous'
-const loginTitle = 'Login'
 let client = null // IM client
 
+// Legacy Component
 // Conversation component
 export default function Conv ({ username }) {
   const [msg, setMsg] = useState('')
@@ -31,14 +31,7 @@ export default function Conv ({ username }) {
   Button
       </button>
       <h1>Hello, {username || defaultUserName}</h1>
-      <h1 className="text-3xl font-bold underline">
-            Hello Tailwindcss!
-      </h1>
       <div>
-        {/* Need to sign in */}
-        <Link className={utilStyles.listItem} href='/user/login'>
-          <a href="#">{loginTitle}</a>
-        </Link>
         {/* Msg sending */}
         {conversation
           ? <div>
@@ -52,9 +45,6 @@ export default function Conv ({ username }) {
             <label htmlFor="remoteUsernameInput">Remote: </label>
             <input id="remoteUsernameInput" type="text" name="text" onChange={(e) => setRemoteUsername(e.target.value)}/>
           </div>}
-        {/* Conversation logining */}
-        <input type="submit" value={'Join the IM as ' + username} onClick={() => loginImAndCreateConversation(username, remoteUsername, setConversation)}/>
-        <br/>
         {/* Msg receiving */}
         {/* <h1>Msg Received</h1>
         {msgBox.map((msg, id) =>

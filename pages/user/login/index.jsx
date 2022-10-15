@@ -7,6 +7,8 @@ export default function SignInOrSignUp ({ username }) {
   const [usernameInput, setUsernameInput] = useState('')
   const [passwordInput, setPasswordInput] = useState('')
 
+  // todo If signed in already, show the sign out layout.
+  // todo If sign in or sign up successfully, jump to home.
   return (
     <div className='flex h-full justify-center items-center'>
       <div className='flex flex-col bg-gray-100 p-8 rounded-lg'>
