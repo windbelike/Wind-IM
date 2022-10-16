@@ -12,7 +12,7 @@ export default function SignInOrSignUp ({ username }) {
   return (
     <div className='flex h-full justify-center items-center'>
       <div className='flex flex-col bg-gray-100 p-8 rounded-lg'>
-        {/* <h2>Hello, {username || 'Anonymous'}</h2> */}
+        <h2>Hello, {username || 'Anonymous'}</h2>
         <label htmlFor="usernameInput">Username: </label>
         <input id="usernameInput" type="text" name="text" onChange={(e) => setUsernameInput(e.target.value)}/>
         <br/>
