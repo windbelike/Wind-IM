@@ -6,7 +6,7 @@ export default function Msg () {
 
   return (
     <div className="flex h-full">
-      <CreateConversationWindow visiable={visiable} />
+      <CreateConversationWindow visiable={visiable} setVisiable={setVisiable} />
       <ConversationSideBar setVisiable={setVisiable} />
       <ConversationWindow />
     </div>
@@ -157,7 +157,8 @@ function ConversationCard () {
   )
 }
 
-function CreateConversationWindow ({ visiable }) {
+function CreateConversationWindow ({ visiable, setVisiable }) {
+  console.log('CreateConversationWindow')
   if (!visiable) {
     return (
       <></>
@@ -166,12 +167,20 @@ function CreateConversationWindow ({ visiable }) {
 
   return (
     <>
-      <div className='inset-0 fixed bg-gray-900 opacity-25'>
-      </div>
-      <div className='fixed mt-24 left-0 right-0 mx-auto border border-gray-600 bg-white rounded  w-64 flex items-center justify-around z-10'>
-        <h1>Create a conversation.</h1>
-        <div>
-          <AiOutlineClose />
+      <div className='inset-0 fixed bg-gray-900 opacity-25' onClick={() => setVisiable(false)}></div>
+      {/* Align center */}
+      <div className='fixed mt-24 left-0 right-0 mx-auto z-10 w-full max-w-md'>
+        <div className='flex-col border border-gray-600 bg-white shadow-lg rounded-xl p-3'>
+          <div className='flex items-center justify-between'>
+            <h1>Create A Conversation</h1>
+            <div className='hover:cursor-pointer' onClick={() => setVisiable(false)}>
+              <AiOutlineClose />
+            </div>
+          </div>
+          <div className='bg-white mt-7 flex justify-center flex-col items-center'>
+            <input className="bg-gray-200 h-12 w-1/2 p-3 rounded-md" placeholder='Remote username'/>
+            <button className='w-36 h-12 rounded-full bg-sky-500 text-white hover:bg-sky-600 m-3 px-3 shrink-0 focus:ring focus:ring-sky-300 active:bg-sky-700 focus:outline-none'>Create</button>
+          </div>
         </div>
       </div>
     </>
