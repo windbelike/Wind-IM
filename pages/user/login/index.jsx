@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { AiOutlinePlusCircle } from 'react-icons/ai'
 const AV = require('leancloud-storage')
 
 // Sign in or sign up

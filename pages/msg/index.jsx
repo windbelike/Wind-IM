@@ -1,9 +1,13 @@
-import { AiOutlinePlusCircle, AiOutlineDown, AiOutlineSearch } from 'react-icons/ai'
+import { useState } from 'react'
+import { AiOutlinePlusCircle, AiOutlineDown, AiOutlineSearch, AiOutlineClose } from 'react-icons/ai'
 
 export default function Msg () {
+  const [visiable, setVisiable] = useState(false)
+
   return (
     <div className="flex h-full">
-      <ConversationSideBar />
+      <CreateConversationWindow visiable={visiable} />
+      <ConversationSideBar setVisiable={setVisiable} />
       <ConversationWindow />
     </div>
   )
@@ -108,7 +112,7 @@ function MsgBox () {
   )
 }
 
-function ConversationSideBar () {
+function ConversationSideBar ({ setVisiable }) {
   return (
     <div className="w-72 h-full bg-white shrink-0 flex flex-col">
       {/* Head */}
@@ -117,7 +121,9 @@ function ConversationSideBar () {
           <p className="pl-5 text-xl font-medium ">Messages</p>
           <AiOutlineDown size="20" className="pr-5 h-9 w-9"/>
         </div>
-        <AiOutlinePlusCircle className="pr-5 h-12 w-12 shrink-0"/>
+        <div className='hover:cursor-pointer hover:text-sky-300' onClick={() => setVisiable(true)}>
+          <AiOutlinePlusCircle className="pr-5 h-12 w-12 shrink-0"/>
+        </div>
       </div>
       {/* Conversation SideBar */}
       {/* todo hide the scrollbar & overflow-scroll  */}
@@ -148,5 +154,27 @@ function ConversationCard () {
         <p className="text-slate-500 truncate">You have a new message! blablablabla</p>
       </div>
     </div>
+  )
+}
+
+function CreateConversationWindow ({ visiable }) {
+  if (!visiable) {
+    return (
+      <></>
+    )
+  }
+
+  return (
+    <>
+      <div className='inset-0 fixed bg-gray-900 opacity-25'>
+      </div>
+      <div className='fixed mt-24 left-0 right-0 mx-auto border border-gray-600 bg-white rounded  w-64 flex items-center justify-around z-10'>
+        <h1>Create a conversation.</h1>
+        <div>
+          <AiOutlineClose />
+        </div>
+      </div>
+    </>
+
   )
 }
