@@ -223,16 +223,4 @@ async function createConversation (userInfoContext, remoteUsername, setConversat
   })
   console.log(conversation)
   setConversation(conversation)
-
-  // Bind clint for handling conversation events
-  imClient.on(Event.INVITED, function invitedEventHandler (payload, conversation) {
-    console.log(payload.invitedBy, conversation.id)
-  })
-  imClient.on(Event.MESSAGE, function (message, conversation) {
-    console.log('Got new msg:' + message.text)
-    // console.log(msgBox)
-    // const msgBoxCopy = [...msgBox]
-    // msgBoxCopy.push(message.text)
-    // setMsgBox(msgBoxCopy)
-  })
 }
