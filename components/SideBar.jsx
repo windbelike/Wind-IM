@@ -2,7 +2,8 @@ import Link from 'next/link'
 import { React } from 'react'
 import { AiOutlineSetting, AiOutlineMessage, AiOutlineHome, AiOutlineUser, AiOutlineLogin } from 'react-icons/ai'
 
-export default function SideBar () {
+export default function SideBar ({ userInfoContext }) {
+  const username = userInfoContext.username
   return (
     <div>
       {/* <p className='text-center text-purple-500 font-bold text-9xl'>Hello World !</p> */}
@@ -18,10 +19,10 @@ export default function SideBar () {
         </div>
         {/* Main Functions */}
         <div className='flex-1'>
-          <SideBarIcon linkTo='/' text='Home' icon={<AiOutlineHome size="28" />} />
-          <SideBarIcon linkTo='/msg' text='Messages' icon={<AiOutlineMessage size="28" />} />
-          <SideBarIcon linkTo='/user/profile' text='Profile' icon={<AiOutlineUser size="28" />} />
-          <SideBarIcon linkTo='/user/login' text='Sign In or Sign Up' icon={<AiOutlineLogin size="28" />} />
+          <SideBarIcon username={username} linkTo='/' text='Home' icon={<AiOutlineHome size="28" />} />
+          <SideBarIcon username={username} linkTo='/msg' text='Messages' icon={<AiOutlineMessage size="28" />} />
+          <SideBarIcon username={username} linkTo='/user/profile' text='Profile' icon={<AiOutlineUser size="28" />} />
+          <SideBarIcon username={username} linkTo='/user/login' text='Sign In or Sign Up' icon={<AiOutlineLogin size="28" />} />
         </div>
         {/* Bottom Button */}
         <SideBarIcon linkTo='/settings' icon={<AiOutlineSetting size="28" />} />
@@ -30,8 +31,8 @@ export default function SideBar () {
   )
 }
 
-const SideBarIcon = ({ icon, text = 'tooltip 💡', linkTo = '/' }) => (
-  <Link href={linkTo}>
+const SideBarIcon = ({ icon, text = 'tooltip 💡', linkTo = '/', username }) => (
+  <Link href={linkTo} username={username}>
     <div className="sidebar-icon m-3 group">
       {icon}
       {/* Styling based on parent state (group-{modifier}) */}

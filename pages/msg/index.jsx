@@ -1,12 +1,15 @@
-import { useState } from 'react'
+import { Realtime } from 'leancloud-realtime'
+import { useEffect, useState } from 'react'
 import { AiOutlinePlusCircle, AiOutlineDown, AiOutlineSearch, AiOutlineClose } from 'react-icons/ai'
+import envConfig from '../../envConfig'
 
-export default function Msg () {
+export default function Msg ({ userInfoContext }) {
+  const username = userInfoContext.username
+  console.log('Msg page, username:', username)
   const [visiable, setVisiable] = useState(false)
-
   return (
     <div className="flex h-full">
-      <CreateConversationWindow visiable={visiable} setVisiable={setVisiable} />
+      <CreateConversationWindow userInfoContext={userInfoContext} visiable={visiable} setVisiable={setVisiable} />
       <ConversationSideBar setVisiable={setVisiable} />
       <ConversationWindow />
     </div>
@@ -157,13 +160,14 @@ function ConversationCard () {
   )
 }
 
-function CreateConversationWindow ({ visiable, setVisiable }) {
-  console.log('CreateConversationWindow')
+function CreateConversationWindow ({ visiable, setVisiable, userInfoContext }) {
   if (!visiable) {
     return (
       <></>
     )
   }
+  const [remoteUsername, setRemoteUsername] = useState(null)
+  const [conversation, setConversation] = useState(null)
 
   return (
     <>
@@ -179,8 +183,8 @@ function CreateConversationWindow ({ visiable, setVisiable }) {
           </div>
           <div>
             <div className='bg-white mt-5 flex justify-between items-center'>
-              <input className="bg-gray-200 h-12 w-2/3 p-3 rounded-md" placeholder='Remote username'/>
-              <button className='w-24 h-10 rounded-full bg-sky-500 text-white hover:bg-sky-600 px-3 shrink-0 focus:ring focus:ring-sky-300 active:bg-sky-700 focus:outline-none'>Create</button>
+              <input className="bg-gray-200 h-12 w-2/3 p-3 rounded-md" placeholder='Remote username' onChange={(e) => setRemoteUsername(e.target.value)}/>
+              <button className='w-24 h-10 rounded-full bg-sky-500 text-white hover:bg-sky-600 px-3 shrink-0 focus:ring focus:ring-sky-300 active:bg-sky-700 focus:outline-none' onClick={() => { createConversation(userInfoContext, remoteUsername, setConversation) }}>Create</button>
             </div>
             {/* Create Conversation Status */}
             <div className='flex mt-2 items-center mx-auto w-24'>
@@ -192,6 +196,43 @@ function CreateConversationWindow ({ visiable, setVisiable }) {
         </div>
       </div>
     </>
-
   )
+}
+
+async function createConversation (userInfoContext, remoteUsername, setConversation) {
+  console.log('Creating a conversation...')
+  if (userInfoContext == null || remoteUsername == null) {
+    console.error('#createConversation empty userInfoContext/remoteUsername error.')
+    return
+  }
+  const imClient = userInfoContext.imClient
+  if (imClient == null) {
+    console.error('#createConversation empty imClient.')
+    return
+  }
+  console.log(imClient)
+  const username = userInfoContext.username
+  // Create a conversation
+  const conversation = await imClient.createConversation({
+    // Declare the participant
+    members: [remoteUsername],
+    // Set conversasion name
+    name: username + ' & ' + remoteUsername,
+    // Make the conversasion unique
+    unique: true
+  })
+  console.log(conversation)
+  setConversation(conversation)
+
+  // Bind clint for handling conversation events
+  imClient.on(Event.INVITED, function invitedEventHandler (payload, conversation) {
+    console.log(payload.invitedBy, conversation.id)
+  })
+  imClient.on(Event.MESSAGE, function (message, conversation) {
+    console.log('Got new msg:' + message.text)
+    // console.log(msgBox)
+    // const msgBoxCopy = [...msgBox]
+    // msgBoxCopy.push(message.text)
+    // setMsgBox(msgBoxCopy)
+  })
 }

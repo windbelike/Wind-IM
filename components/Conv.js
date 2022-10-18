@@ -87,6 +87,7 @@ async function loginImAndCreateConversation (clientId, remoteClientId, setConver
     // Make the conversasion unique
     unique: true
   })
+  console.log(conversation)
   setConversation(conversation)
 
   // Bind clint for handling conversation events
