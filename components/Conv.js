@@ -45,13 +45,6 @@ export default function Conv ({ username }) {
             <label htmlFor="remoteUsernameInput">Remote: </label>
             <input id="remoteUsernameInput" type="text" name="text" onChange={(e) => setRemoteUsername(e.target.value)}/>
           </div>}
-        {/* Msg receiving */}
-        {/* <h1>Msg Received</h1>
-        {msgBox.map((msg, id) =>
-          (<li key={id}>
-            <p>{msg}</p>
-          </li>)
-        )} */}
       </div>
     </div>
 
@@ -96,10 +89,6 @@ async function loginImAndCreateConversation (clientId, remoteClientId, setConver
   })
   client.on(Event.MESSAGE, function (message, conversation) {
     console.log('Got new msg:' + message.text)
-    // console.log(msgBox)
-    // const msgBoxCopy = [...msgBox]
-    // msgBoxCopy.push(message.text)
-    // setMsgBox(msgBoxCopy)
   })
 }
 
