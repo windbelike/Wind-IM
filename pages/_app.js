@@ -1,13 +1,14 @@
 import Layout from '../components/Layout'
-import { useClientInfoEffect, useUserInfoEffect } from '../lib/util'
+import { useUserInfo } from '../hooks/useUserInfo'
+import { useImClient } from '../hooks/useImClient'
 import '../styles/global.css'
 
 // Next.js custom app entry, this function runs before every pages's initialization.
-function MyApp ({ Component, pageProps }) {
-  const username = useUserInfoEffect(null)
-  const imClient = useClientInfoEffect(username)
+export default function WindIMApp ({ Component, pageProps }) {
+  const username = useUserInfo(null)
+  console.log('WindIMApp _app username:' + username)
+  const imClient = useImClient(username)
   pageProps.userInfoContext = { username, imClient }
-  console.log('MyApp')
 
   return (
     <Layout userInfoContext={pageProps.userInfoContext}>
@@ -15,5 +16,3 @@ function MyApp ({ Component, pageProps }) {
     </Layout>
   )
 }
-
-export default MyApp

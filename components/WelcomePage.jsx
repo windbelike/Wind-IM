@@ -1,11 +1,11 @@
 
-export default function WelcomePage ({ username }) {
-  if (username == null) {
-    username = 'Anonymous'
+export default function WelcomePage ({ userInfoContext }) {
+  if (userInfoContext.username == null) {
+    userInfoContext.username = 'Anonymous'
   }
   return (
     <div className="flex h-full w-full justify-center items-center">
-      <div className=" bg-sky-50 text-9xl"><h1 >Welcome, {username}.</h1></div>
+      <div className=" bg-sky-50 text-9xl"><h1 >Welcome, {userInfoContext.username}</h1></div>
     </div>
   )
 }
