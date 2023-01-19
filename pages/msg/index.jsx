@@ -1,7 +1,6 @@
-import { Realtime } from 'leancloud-realtime'
 import { useEffect, useState } from 'react'
 import { AiOutlinePlusCircle, AiOutlineDown, AiOutlineSearch, AiOutlineClose } from 'react-icons/ai'
-import envConfig from '../../envConfig'
+import { useImClient } from '../../hooks/useImClient'
 
 export default function Msg ({ userInfoContext }) {
   const username = userInfoContext.username
@@ -205,7 +204,7 @@ async function createConversation (userInfoContext, remoteUsername, setConversat
     console.error('#createConversation empty userInfoContext/remoteUsername error.')
     return
   }
-  const imClient = userInfoContext.imClient
+  const imClient = useImClient(userInfoContext.username)
   if (imClient == null) {
     console.error('#createConversation empty imClient.')
     return

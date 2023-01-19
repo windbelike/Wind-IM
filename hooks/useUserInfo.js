@@ -1,9 +1,9 @@
 import envConfig from '../envConfig'
-import { useEffect, useState } from 'react'
 const AV = require('leancloud-storage')
 
 let hasInitServerless = false
 export function initServerless () {
+  console.log('hasInitServerless:' + hasInitServerless)
   // 初始化Serverless配置
   if (hasInitServerless) {
     return
@@ -16,20 +16,17 @@ export function initServerless () {
 }
 
 export function useUserInfo (defaultUsername) {
-  const [username, setUsername] = useState(defaultUsername)
+  initServerless()
+  const currentUser = AV.User.current()
+  if (currentUser) {
+    // Jump to welcome page.
+    console.log(currentUser.getUsername() + ' has already logined')
 
-  useEffect(() => {
-    initServerless()
-    const currentUser = AV.User.current()
-    if (currentUser) {
-      // Jump to welcome page.
-      console.log(currentUser.getUsername() + ' has already logined')
-      setUsername(currentUser.getUsername())
-    } else {
-      // Jump to login/register page.
-      console.log('Not logined yet')
-    }
-  }, [])
+    return currentUser.getUsername()
+  } else {
+    // Jump to login/register page.
+    console.log('Not logined yet')
 
-  return username
+    return defaultUsername
+  }
 }

@@ -1,14 +1,14 @@
 import Layout from '../components/Layout'
 import { useUserInfo } from '../hooks/useUserInfo'
-import { useImClient } from '../hooks/useImClient'
 import '../styles/global.css'
+const AV = require('leancloud-storage')
 
 // Next.js custom app entry, this function runs before every pages's initialization.
 export default function WindIMApp ({ Component, pageProps }) {
   const username = useUserInfo(null)
+  console.log(AV.User.current())
   console.log('WindIMApp _app username:' + username)
-  const imClient = useImClient(username)
-  pageProps.userInfoContext = { username, imClient }
+  pageProps.userInfoContext = { username }
 
   return (
     <Layout userInfoContext={pageProps.userInfoContext}>
