@@ -1,0 +1,23 @@
+services:
+  web_app:
+    build: ./ 
+    ports:
+      - 3000:3000
+    networks:
+      - internal
+
+  redis: 
+    image: redis:alpine
+    volumes:
+      - redis:/data
+    networks:
+      - internal
+    ports:
+      - 6379:6379
+
+volumes:
+  redis:
+
+networks:
+  internal:
+    name: wind-im-internal

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "ioredis": "^5.2.5",
     "leancloud-realtime": "^5.0.0-rc.7",
     "leancloud-realtime-plugin-typed-messages": "^4.0.2",
     "leancloud-storage": "^4.13.2",
