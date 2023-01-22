@@ -1,6 +1,6 @@
 import { Realtime, TextMessage, Event } from 'leancloud-realtime/es-latest'
 import { useEffect, useState } from 'react'
-import envConfig from '../envConfig'
+import envConfig from '../../envConfig'
 import Link from 'next/link'
 import utilStyles from '../styles/utils.module.css'
 

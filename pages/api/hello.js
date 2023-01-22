@@ -9,7 +9,8 @@ export default async function handler (req, res) {
 }
 
 async function getFromRedis () {
-  const redis = new Redis('redis://redis:6379')
+  // const redis = new Redis('redis://redis:6379')
+  const redis = new Redis()
   redis.set('foo', 'bar')
   redis.get('foo', (err, result) => {
     // `result` should be "bar"

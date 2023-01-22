@@ -1,4 +1,4 @@
-import envConfig from '../envConfig'
+import envConfig from '../utils/envConfig'
 const AV = require('leancloud-storage')
 
 let hasInitServerless = false

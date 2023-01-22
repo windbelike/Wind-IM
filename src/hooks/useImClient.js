@@ -1,5 +1,5 @@
-import envConfig from '../envConfig'
 import { Realtime } from 'leancloud-realtime'
+import envConfig from '../utils/envConfig'
 
 export function useImClient (username) {
   if (username == null) {

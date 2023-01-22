@@ -1,5 +1,5 @@
-import Layout from '../components/Layout'
-import { useUserInfo } from '../hooks/useUserInfo'
+import Layout from '../src/components/Layout'
+import { useUserInfo } from '../src/hooks/useUserInfo'
 import '../styles/global.css'
 const AV = require('leancloud-storage')
 

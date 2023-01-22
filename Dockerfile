@@ -1,8 +1,8 @@
 FROM node:16-alpine
 
-ADD . /wind-im
+ADD . /web_app
 
-WORKDIR /wind-im
+WORKDIR /web_app
 
 RUN npm install
 
