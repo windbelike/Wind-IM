@@ -10,6 +10,10 @@ export default function WindIMApp ({ Component, pageProps }) {
   console.log('WindIMApp _app username:' + username)
   pageProps.userInfoContext = { username }
 
+  if (Component.isEntry) {
+    return <Component {...pageProps} />
+  }
+
   return (
     <Layout userInfoContext={pageProps.userInfoContext}>
       <Component {...pageProps} />

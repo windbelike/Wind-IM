@@ -23,6 +23,8 @@ export default function SignInOrSignUp ({ username }) {
   )
 }
 
+SignInOrSignUp.isEntry = true
+
 function doRegisterAndLogin (usernameInput, passwordInput) {
   if (usernameInput === '' || passwordInput === '') {
     return

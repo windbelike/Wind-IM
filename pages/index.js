@@ -1,5 +1,5 @@
-import WelcomePage from '../components/WelcomePage'
-import SignInOrSignUp from './user/login'
+import WelcomePage from '../src/components/WelcomePage'
+import SignInOrSignUp from './entry/login'
 
 export default function Home ({ userInfoContext }) {
   // Check if the user is signed in.
