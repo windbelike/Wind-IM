@@ -2,7 +2,7 @@ import { useState } from 'react'
 const AV = require('leancloud-storage')
 
 // Sign in or sign up
-export default function SignInOrSignUp ({ username }) {
+export default function Login ({ username }) {
   const [usernameInput, setUsernameInput] = useState('')
   const [passwordInput, setPasswordInput] = useState('')
 
@@ -23,7 +23,7 @@ export default function SignInOrSignUp ({ username }) {
   )
 }
 
-SignInOrSignUp.isEntry = true
+Login.isEntry = true
 
 function doRegisterAndLogin (usernameInput, passwordInput) {
   if (usernameInput === '' || passwordInput === '') {
