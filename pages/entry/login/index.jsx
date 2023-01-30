@@ -1,5 +1,4 @@
 import { useState } from 'react'
-const AV = require('leancloud-storage')
 
 // Sign in or sign up
 export default function Login ({ username }) {
@@ -26,25 +25,6 @@ export default function Login ({ username }) {
 Login.isEntry = true
 
 function doRegisterAndLogin (usernameInput, passwordInput) {
-  if (usernameInput === '' || passwordInput === '') {
-    return
-  }
-  const user = new AV.User()
-  user.setUsername(usernameInput)
-  user.setPassword(passwordInput)
 
   // Register
-  user.signUp().then((user) => {
-    console.log(`Registered susscessfully: ${user.id}`)
-  }).catch(e => {
-    console.log(e)
-  }).finally(() => {
-    // Login
-    AV.User.logIn(usernameInput, passwordInput).then((user) => {
-      console.log(`Logined susscessfully: ${user.id}`)
-      window.location.reload()
-    }).catch(e => {
-      console.log(e)
-    })
-  })
 }
