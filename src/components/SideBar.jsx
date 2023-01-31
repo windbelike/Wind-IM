@@ -6,10 +6,6 @@ export default function SideBar ({ userInfoContext }) {
   const username = userInfoContext.username
   return (
     <div>
-      {/* <p className='text-center text-purple-500 font-bold text-9xl'>Hello World !</p> */}
-      {/* <div className='flex items-center justify-center'>
-        <FaAccessibleIcon />
-      </div> */}
       <div className='h-screen w-16 m-0
       flex flex-col justify-end items-center
       bg-black text-white shadow-lg'>
@@ -22,9 +18,9 @@ export default function SideBar ({ userInfoContext }) {
           <SideBarIcon username={username} linkTo='/' text='Home' icon={<AiOutlineHome size="28" />} />
           <SideBarIcon username={username} linkTo='/msg' text='Messages' icon={<AiOutlineMessage size="28" />} />
           <SideBarIcon username={username} linkTo='/user/profile' text='Profile' icon={<AiOutlineUser size="28" />} />
-          <SideBarIcon username={username} linkTo='/user/login' text='Sign In or Sign Up' icon={<AiOutlineLogin size="28" />} />
+          <SideBarIcon username={username} linkTo='/entry/login' text='Sign In or Sign Up' icon={<AiOutlineLogin size="28" />} />
         </div>
-        {/* Bottom Button */}
+        {/* Bottom Function */}
         <SideBarIcon linkTo='/settings' icon={<AiOutlineSetting size="28" />} />
       </div>
     </div>

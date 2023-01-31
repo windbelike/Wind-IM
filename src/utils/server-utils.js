@@ -1,8 +1,29 @@
 import * as Boom from '@hapi/boom'
 import nc from 'next-connect'
 import { PrismaClient } from '@prisma/client'
+import jwt from 'jsonwebtoken'
 
+// db client
 export const prisma = new PrismaClient()
+
+// hanlde authorization
+export const getUserFromReq = async (req) => {
+  // get JWT `token` on cookies
+  const token = req.cookies.token
+  try {
+    // if token is invalid, `verify` will throw an error
+    const payload = jwt.verify(token, process.env.JWT_SECRET)
+    // find user in database
+    const user = await prisma.user.findUnique({
+      where: {
+        email: payload.email
+      }
+    })
+    return user
+  } catch (e) {
+    return null
+  }
+}
 
 // next-connect的boom封装
 export function apiHandler () {

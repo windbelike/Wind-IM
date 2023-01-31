@@ -1,21 +1,27 @@
-import { useEffect } from 'react'
+import { getUserFromReq } from '../../../src/utils/server-utils'
 
-export default function Profile ({ username, data }) {
-  console.log('serversideProps' + data)
-  useEffect(() => {
-    console.log('Profile effect')
-  }, [])
+export default function Profile ({ user }) {
   return (
     <div>
-      <h1>Hello, {username}</h1>
+      <h1>Hello, {user.email}</h1>
     </div>
   )
 }
-
-// This gets called on every request
-export async function getServerSideProps () {
-  // Fetch data from external API
-  const data = Math.random()
-  // Pass data to the page via props
-  return { props: { data } }
+export async function getServerSideProps (ctx) {
+  const user = await getUserFromReq(ctx.req)
+  if (!user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/api/login'
+      }
+    }
+  }
+  return {
+    props: {
+      user: {
+        email: user.email
+      }
+    }
+  }
 }

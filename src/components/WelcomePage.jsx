@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 
 export default function WelcomePage ({ userInfoContext }) {
   const [username, setUsername] = useState('x')
-  console.log('WelcomePage...' + username)
   useEffect(() => {
     console.log('use WelcomePage effect')
     setUsername(userInfoContext.username)

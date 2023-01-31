@@ -20,6 +20,7 @@ export default function LoginForm () {
     const pwd = $pwd.current.value
     loginMutation.mutate({ email, pwd })
   }
+
   return (
     <div className='flex h-full justify-center items-center'>
       <div className='flex flex-col bg-gray-100 p-8 rounded-lg'>
