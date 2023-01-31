@@ -7,13 +7,14 @@ export default function Profile ({ user }) {
     </div>
   )
 }
+
 export async function getServerSideProps (ctx) {
   const user = await getUserFromReq(ctx.req)
   if (!user) {
     return {
       redirect: {
         permanent: false,
-        destination: '/api/login'
+        destination: '/entry'
       }
     }
   }

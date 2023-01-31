@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 import cookie from 'cookie'
 
 async function validate (email, pwd) {
-  // validate the username and password
+  // validate the mail and password
   const user = await prisma.user.findUnique({
     where: {
       email
@@ -22,9 +22,6 @@ async function validate (email, pwd) {
 }
 
 export default apiHandler()
-  .get((req, res) => {
-    res.json({ msg: 'ok' })
-  })
   .post(async (req, res) => {
     const body = req.body
     const user = await validate(body.email, body.pwd)
@@ -41,5 +38,5 @@ export default apiHandler()
       maxAge: 60 * 60 * 24 * 3
     }))
 
-    res.json({ user })
+    res.json({ ok: true })
   })
