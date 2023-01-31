@@ -1,10 +1,9 @@
 import axios from 'axios'
 import { useRef, useState } from 'react'
-import { QueryClientProvider, useMutation, QueryClient } from 'react-query'
+import { useMutation } from 'react-query'
 
 // Custom nested route for _app.js
-SignUp.isEntry = true
-const queryClient = new QueryClient()
+SignUpForm.isEntry = true
 
 async function createAccount ({ email, pwd }) {
   await axios.post('/api/signup', {
@@ -12,15 +11,7 @@ async function createAccount ({ email, pwd }) {
   })
 }
 
-export default function SignUp () {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <SignUpMain/>
-    </QueryClientProvider>
-  )
-}
-
-function SignUpMain () {
+export default function SignUpForm () {
   // useRef don't cause a rerender
   const $email = useRef()
   const $pwd = useRef()
