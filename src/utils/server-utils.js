@@ -29,7 +29,6 @@ export const getUserFromReq = async (req) => {
 export function apiHandler () {
   return nc({
     onError (err, req, res) {
-      console.log('#apiHandler')
       console.error(err)
       // 如果是一个 Boom 异常，则根据 Boom 异常结构修改 `res`
       if (Boom.isBoom(err)) {

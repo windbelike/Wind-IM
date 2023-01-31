@@ -24,9 +24,10 @@ export default function LoginForm () {
   }
 
   if (loginMutation.data?.ok) {
+    // todo clear this setTimeout
     setTimeout(() => {
       router.push('/user/profile')
-    }, 2000)
+    }, 500)
     return (<>Login successfully !!! Redicting...</>)
   }
 

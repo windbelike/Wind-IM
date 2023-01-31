@@ -18,7 +18,7 @@ export default function SideBar ({ userInfoContext }) {
           <SideBarIcon username={username} linkTo='/' text='Home' icon={<AiOutlineHome size="28" />} />
           <SideBarIcon username={username} linkTo='/msg' text='Messages' icon={<AiOutlineMessage size="28" />} />
           <SideBarIcon username={username} linkTo='/user/profile' text='Profile' icon={<AiOutlineUser size="28" />} />
-          <SideBarIcon username={username} linkTo='/entry' text='Login or Sign Up' icon={<AiOutlineLogin size="28" />} />
+          <SideBarIcon username={username} linkTo='/entry/logout' text='Logout' icon={<AiOutlineLogin size="28" />} />
         </div>
         {/* Bottom Function */}
         <SideBarIcon linkTo='/settings' icon={<AiOutlineSetting size="28" />} />
