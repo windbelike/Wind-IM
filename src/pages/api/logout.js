@@ -12,6 +12,7 @@ export default apiHandler()
         path: '/',
         maxAge: 60 * 60 * 24 * 3
       }))
+
       res.json({ ok: true })
     } else {
       res.json({ ok: false })
