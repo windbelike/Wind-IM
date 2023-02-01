@@ -10,8 +10,9 @@ datasource db {
   url      = "file:./db.sqlite"
 }
 
+// 用户表
 model User {
-  id    Int    @id @default(autoincrement())
+  id    BigInt    @id @default(autoincrement())
   email String @unique
   pwd String
   username String ?
@@ -19,8 +20,39 @@ model User {
   posts Post[]
 }
 
+// 关注列表
+model Follower {
+  id BigInt @id @default(autoincrement())
+  uid BigInt
+  follower_id BigInt // 好友id
+  create_time BigInt // 关注时间
+}
+
+// 消息实体表
+model Message {
+  id BigInt @id @default(autoincrement())
+  from BigInt // 发送者
+  to BigInt // 接受者
+  content String // 消息实体
+  msg_type Int // 消息类型，-1:系统消息 0:点对点 1:群发
+  channel_id BigInt ? // 消息所属频道，仅在msg_type=1时使用
+  pushed Boolean // 是否成功推送（基于4个报文实现消息可靠推送）
+  read Boolean // 是否已读（暂时不实现）
+  create_time BigInt // 创建时间
+}
+
+// 频道列表
+model Channel {
+  id BigInt @id @default(autoincrement())
+  name String // 频道名称
+  desc String // 频道描述
+  uid_list String // 加入者Id json array
+  creator_id BigInt // 创建者Id
+  create_time BigInt // 创建时间
+}
+
 model Post {
   id       Int  @id @default(autoincrement())
   author   User @relation(fields: [authorId], references: [id])
-  authorId Int // relation scalar field  (used in the `@relation` attribute above)
+  authorId BigInt // relation scalar field  (used in the `@relation` attribute above)
 }
