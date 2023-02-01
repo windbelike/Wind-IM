@@ -1,16 +1,12 @@
-import { useEffect, useState } from 'react'
-import { AiOutlinePlusCircle, AiOutlineDown, AiOutlineSearch, AiOutlineClose } from 'react-icons/ai'
-import NewConv from '../../src/components/msg/NewConvWindow'
-import ConversationSideBar from '../../src/components/msg/ConvSideBar'
-import { useImClient } from '../../src/hooks/useImClient'
+import { useState } from 'react'
+import NewConv from '../../components/msg/NewConvWindow'
+import ConversationSideBar from '../../components/msg/ConvSideBar'
 
-export default function Msg ({ userInfoContext }) {
-  const username = userInfoContext.username
-  console.log('Msg page, username:', username)
+export default function Msg () {
   const [visiable, setVisiable] = useState(false)
   return (
     <div className="flex h-full">
-      <NewConv userInfoContext={userInfoContext} visiable={visiable} setVisiable={setVisiable} />
+      <NewConv visiable={visiable} setVisiable={setVisiable} />
       <ConversationSideBar setVisiable={setVisiable} />
       <ConversationWindow />
     </div>

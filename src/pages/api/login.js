@@ -1,5 +1,5 @@
 import Boom from '@hapi/boom'
-import { apiHandler, prisma } from '../../src/utils/server-utils'
+import { apiHandler, prisma } from '../../utils/server-utils'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import cookie from 'cookie'

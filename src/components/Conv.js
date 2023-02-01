@@ -4,9 +4,8 @@ const defaultUserName = 'Anonymous'
 
 // Legacy Component
 // Conversation component
-export default function Conv ({ username }) {
+export default function Conv () {
   const [msg, setMsg] = useState('')
-  const [remoteUsername, setRemoteUsername] = useState(null)
   const [conversation, setConversation] = useState(null)
   // Get all conversations
   // useEffect(() => {
@@ -24,7 +23,7 @@ export default function Conv ({ username }) {
       <button className="border-2 border-purple-500 hover:border-gray-500 ...">
   Button
       </button>
-      <h1>Hello, {username || defaultUserName}</h1>
+      <h1>Hello, </h1>
       <div>
         {/* Msg sending */}
         {conversation
@@ -33,11 +32,11 @@ export default function Conv ({ username }) {
               Msg:
               <textarea value={msg} onChange={(e) => setMsg(e.target.value)} />
             </label>
-            <input type="submit" value={'Send to ' + remoteUsername} onClick={() => sendMsg(conversation, msg)}/>
+            <input type="submit" value={'Send to '} onClick={() => sendMsg(conversation, msg)}/>
           </div>
           : <div> {/* Set remote username */}
             <label htmlFor="remoteUsernameInput">Remote: </label>
-            <input id="remoteUsernameInput" type="text" name="text" onChange={(e) => setRemoteUsername(e.target.value)}/>
+            <input id="remoteUsernameInput" type="text" name="text" />
           </div>}
       </div>
     </div>

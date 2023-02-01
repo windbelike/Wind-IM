@@ -1,4 +1,4 @@
-import { getUserFromReq } from '../../../src/utils/server-utils'
+import { getUserFromReq } from '../../../utils/server-utils'
 
 export default function Profile ({ user }) {
   return (

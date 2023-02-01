@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import axios from 'axios'
 import { useMutation } from 'react-query'
-import { getUserFromReq } from '../../src/utils/server-utils'
+import { getUserFromReq } from '../../utils/server-utils'
 import LoginForm from './login'
 import SignUpForm from './signup'
 

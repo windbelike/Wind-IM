@@ -1,5 +1,5 @@
 import cookie from 'cookie'
-import { apiHandler, getUserFromReq } from '../../src/utils/server-utils'
+import { apiHandler, getUserFromReq } from '../../utils/server-utils'
 
 export default apiHandler()
   .post(async (req, res) => {
