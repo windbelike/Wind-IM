@@ -6,6 +6,14 @@ import jwt from 'jsonwebtoken'
 // db client
 export const prisma = new PrismaClient()
 
+export const loginValidator = async (req, res, next) => {
+  // to validate if current use have already logined.
+  const user = await getUserFromReq(req)
+  if (!user) {
+    throw Boom.forbidden('Please sign in first')
+  }
+  next()
+}
 // hanlde authorization
 export const getUserFromReq = async (req) => {
   // get JWT `token` on cookies

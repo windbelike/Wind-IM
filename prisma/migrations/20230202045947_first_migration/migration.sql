@@ -8,11 +8,20 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "Follower" (
+CREATE TABLE "Friend" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "uid" INTEGER NOT NULL,
-    "follower_id" INTEGER NOT NULL,
-    "create_time" INTEGER NOT NULL
+    "friend_id" INTEGER NOT NULL,
+    "create_time" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- CreateTable
+CREATE TABLE "FriendRequest" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "from_uid" INTEGER NOT NULL,
+    "to_uid" INTEGER NOT NULL,
+    "status" INTEGER NOT NULL,
+    "create_time" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- CreateTable
@@ -25,7 +34,7 @@ CREATE TABLE "Message" (
     "channel_id" INTEGER,
     "pushed" BOOLEAN NOT NULL,
     "read" BOOLEAN NOT NULL,
-    "create_time" INTEGER NOT NULL
+    "create_time" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- CreateTable
@@ -35,8 +44,11 @@ CREATE TABLE "Channel" (
     "desc" TEXT NOT NULL,
     "uid_list" TEXT NOT NULL,
     "creator_id" INTEGER NOT NULL,
-    "create_time" INTEGER NOT NULL
+    "create_time" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Friend_uid_friend_id_key" ON "Friend"("uid", "friend_id");
