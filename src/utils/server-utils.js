@@ -12,6 +12,7 @@ export const loginValidator = async (req, res, next) => {
   if (!user) {
     throw Boom.forbidden('Please sign in first')
   }
+  req.windImUser = user
   next()
 }
 // hanlde authorization

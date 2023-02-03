@@ -35,8 +35,9 @@ model FriendRequest {
   id Int @id @default(autoincrement())
   from_uid Int
   to_uid Int
-  status Int // 请求状态，0: 通过 1: Pending 2: 拒绝
+  status Int // 请求状态，0: 通过   1: 拒绝   2: Pending
   create_time DateTime @default(now())
+  @@unique([from_uid, to_uid])
 }
 
 // 消息实体表
