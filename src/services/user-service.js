@@ -7,7 +7,7 @@ export const statusRefuse = 1
 export const statusPending = 2
 
 export function isReqStatusValid (status) {
-  return status && (status == 0 || status == 2)
+  return status == statusPass || status == statusPending
 }
 
 export async function getFriendReqById (reqId) {
@@ -85,7 +85,7 @@ export async function makeFriends (reqId, uid, friendId, status) {
   if (relationOfFriend) {
     updateOrCreateFriendForFriend = prisma.friend.update({
       where: {
-        id: relationOfUser.id
+        id: relationOfFriend.id
       },
       data: {
         status
@@ -94,8 +94,8 @@ export async function makeFriends (reqId, uid, friendId, status) {
   } else {
     updateOrCreateFriendForFriend = prisma.friend.create({
       data: {
-        uid,
-        friend_id: friendId,
+        uid: friendId,
+        friend_id: uid,
         status
       }
     })
@@ -118,6 +118,7 @@ export async function makeFriends (reqId, uid, friendId, status) {
       ])
       return { code: 0 }
     } catch (e) {
+      console.log(e)
       return { err: e }
     }
   }

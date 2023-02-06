@@ -77,7 +77,7 @@ async function createNewFriendReq (req) {
       if (findReq.status == statusPending) {
         return { err: 'Please wait for reply.' }
       }
-      await prisma.friendRequest.update({
+      await prisma.friendRequest.updateMany({
         where: {
           from_uid: fromUid,
           to_uid: toUid,
@@ -122,7 +122,7 @@ async function handleFriendReq (req) {
     return { err: 'Invalid param' }
   }
 
-  const friendReq = getFriendReqById(reqId)
+  const friendReq = await getFriendReqById(reqId)
 
   const friendId = friendReq?.from_uid
   if (!friendReq || friendReq.to_uid != user.id || friendId == user.id) {

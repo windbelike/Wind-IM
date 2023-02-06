@@ -3,6 +3,8 @@ import nc from 'next-connect'
 import { PrismaClient } from '@prisma/client'
 import jwt from 'jsonwebtoken'
 
+// todo db命名风格更改、service封装、单测
+
 // db client
 export const prisma = new PrismaClient()
 
