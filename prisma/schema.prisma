@@ -3,6 +3,8 @@
 
 // 不使用外键
 
+// todo 重构命名方式，clean all table
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -23,11 +25,12 @@ model User {
   update_time DateTime @default(now()) @updatedAt
 }
 
-// 好友列表
+// 好友列表，一个好友关系需要insert两次
 model Friend {
   id Int @id @default(autoincrement())
   uid Int
   friend_id Int
+  friend_alias String @default("")  // 好友备注
   status Int @default(0) // 好友状态，0: 正常 1: 删除
   create_time DateTime @default(now())
   update_time DateTime @default(now()) @updatedAt
