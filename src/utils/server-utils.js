@@ -49,7 +49,8 @@ export function apiHandler () {
       } else {
         res.status(500)
         res.json({
-          message: 'Unexpected error'
+          message: 'Unexpected error',
+          error: err
         })
         console.error(err)
       }

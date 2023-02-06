@@ -6,78 +6,86 @@ const statusPass = 0
 const statusRefuse = 1
 const statusPending = 2
 
-/**
- * new friend request
- * params:
- * opType = 0
- * toUid
- * content
- *
- * handle friend request
- * params:
- * opType = 1
- * fromUid
- * status
- */
 export default apiHandler()
-  .get(loginValidator, async (req, res) => {
-  // 两种操作类型：
-  // 1. 好友申请
-  // 2. 好友申请操作，通过 or 拒绝
-    const opType = req.body?.type
-    craeteNewFriendReq(req)
-    res.json({ msg: JSON.stringify(req.body) })
-  })
   .post(loginValidator, async (req, res) => {
   // 两种操作类型：
   // 1. 好友申请
   // 2. 好友申请操作，通过 or 拒绝
-    const opType = req.body?.type
-    if (opType === 0) {
-      craeteNewFriendReq(req)
-    } else if (opType === 1) {
-      handleFriendReq(req)
+    const opType = req.body?.opType
+    console.log(req.body)
+    if (opType == 0) {
+      craeteNewFriendReq(req, res)
+    } else if (opType == 1) {
+      handleFriendReq(req, res)
+    } else {
+      res.json({
+        msg: 'invalid opType'
+      })
     }
   })
 
-async function craeteNewFriendReq (req) {
+/**
+ * @param {Object} req.body
+ * @param {Int} body.opType = 0
+ * @param {Int} body.toUid
+*/
+async function craeteNewFriendReq (req, res) {
   const fromUid = req.windImUser?.id
   const toUid = req.body?.toUid
   if (!fromUid || !toUid) {
+    console.log('#craeteNewFriendReq invalid param.')
     return
   }
 
-  // todo 加锁
-  const findReq = await prisma.friendRequest.findUnique({
-    where: {
-      from_uid: fromUid,
-      to_dui: toUid
-    }
-  })
-  // if there is an exist a req, update it.
-  if (findReq) {
-    console.log('duplicated friend request.')
-    prisma.friendRequest.update({
+  try {
+    // todo 加锁
+    const findReq = await prisma.friendRequest.findFirst({
       where: {
         from_uid: fromUid,
-        to_dui: toUid
-      },
-      data: {
-        status: statusPending
+        to_uid: toUid
       }
     })
-  } else {
-    // there is no exist req, create one.
-    prisma.friendRequest.create({
-      data: {
-        from_uid: fromUid,
-        to_dui: toUid,
-        status: statusPending
-      }
+    // if there is an exist a req, update it.
+    if (findReq) {
+      console.log('duplicated friend request.')
+      await prisma.friendRequest.update({
+        where: {
+          from_uid: fromUid,
+          to_uid: toUid
+        },
+        data: {
+          status: statusPending
+        }
+      })
+    } else {
+      // there is no exist req, create one.
+      await prisma.friendRequest.create({
+        data: {
+          from_uid: fromUid,
+          to_dui: toUid,
+          status: statusPending
+        }
+      })
+    }
+    res.json({
+      msg: 'ok'
+    })
+  } catch (e) {
+    console.error(e)
+    res.json({
+      msg: 'done',
+      error: e
     })
   }
 }
 
-function handleFriendReq (body) {
+/**
+ *
+ * @param {Object} req.body
+ * @param {Int} body.opType = 1
+ * @param {Int} body.fromUid
+ * @param {Int} body.status
+ */
+function handleFriendReq (req, res) {
 
 }

@@ -21,6 +21,7 @@ module.exports = {
     indent: ['error', 2],
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off',
-    'no-unused-vars': 0
+    'no-unused-vars': 0,
+    eqeqeq: 'off'
   }
 }

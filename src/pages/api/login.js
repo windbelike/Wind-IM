@@ -5,6 +5,10 @@ import jwt from 'jsonwebtoken'
 import cookie from 'cookie'
 
 async function validate (email, pwd) {
+  if (!email || !pwd) {
+    console.log('login#validate, invalid params')
+    return
+  }
   // validate the mail and password
   const user = await prisma.user.findUnique({
     where: {
