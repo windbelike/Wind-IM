@@ -19,6 +19,8 @@ model User {
   pwd String
   username String ?
   bio String ?
+  create_time DateTime @default(now())
+  update_time DateTime @default(now()) @updatedAt
 }
 
 // 好友列表
@@ -26,8 +28,11 @@ model Friend {
   id Int @id @default(autoincrement())
   uid Int
   friend_id Int
+  status Int @default(0) // 好友状态，0: 正常 1: 删除
   create_time DateTime @default(now())
-  @@unique([uid, friend_id])
+  update_time DateTime @default(now()) @updatedAt
+  
+  @@unique(fields: [uid, friend_id], name: "user_and_friend_id")
 }
 
 // 添加好友请求
@@ -36,8 +41,10 @@ model FriendRequest {
   from_uid Int
   to_uid Int
   status Int // 请求状态，0: 通过   1: 拒绝   2: Pending
+  content String @default("") // 打招呼内容
   create_time DateTime @default(now())
-  @@unique([from_uid, to_uid])
+  update_time DateTime @default(now()) @updatedAt
+  @@unique(fields:[from_uid, to_uid], name: "from_and_to_id")
 }
 
 // 消息实体表
@@ -61,4 +68,5 @@ model Channel {
   uid_list String // 加入者Id json array
   creator_id Int // 创建者Id
   create_time DateTime @default(now()) // 创建时间
+  update_time DateTime @default(now()) @updatedAt
 }

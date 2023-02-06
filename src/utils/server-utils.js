@@ -6,18 +6,11 @@ import jwt from 'jsonwebtoken'
 // db client
 export const prisma = new PrismaClient()
 
-export function buildSucc (data) {
-  return {
-    code: 0,
-    data
-  }
-}
-
-export function buildError (code, data) {
-  return {
-    code,
-    data
-  }
+// General response
+const resp = {
+  code: 0,
+  data: {},
+  err: {}
 }
 
 export const loginValidator = async (req, res, next) => {
@@ -38,6 +31,12 @@ export const getUserFromReq = async (req) => {
     const payload = jwt.verify(token, process.env.JWT_SECRET)
     // find user in database
     const user = await prisma.user.findUnique({
+      select: {
+        id: true,
+        email: true,
+        bio: true,
+        username: true
+      },
       where: {
         email: payload.email
       }
