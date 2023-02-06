@@ -10,7 +10,7 @@ export const loginValidator = async (req, res, next) => {
   // to validate if current use have already logined.
   const user = await getUserFromReq(req)
   if (!user) {
-    throw Boom.forbidden('Please sign in first')
+    throw Boom.forbidden('Please login in first')
   }
   req.windImUser = user
   next()

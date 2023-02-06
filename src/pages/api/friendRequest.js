@@ -1,11 +1,24 @@
 
 import { prisma, apiHandler, getUserFromReq, loginValidator } from 'src/utils/server-utils'
 
-// 请求状态，0: 通过   1: 拒绝   2: Pending
+// 好友请求状态，0: 通过   1: 拒绝   2: Pending
 const statusPass = 0
 const statusRefuse = 1
 const statusPending = 2
 
+/**
+ * new friend request
+ * params:
+ * opType = 0
+ * toUid
+ * content
+ *
+ * handle friend request
+ * params:
+ * opType = 1
+ * fromUid
+ * status
+ */
 export default apiHandler()
   .get(loginValidator, async (req, res) => {
   // 两种操作类型：
@@ -28,12 +41,9 @@ export default apiHandler()
   })
 
 async function craeteNewFriendReq (req) {
-  const user = req.windImUser
-  console.log(JSON.stringify(user))
-  const body = req.body
-  const fromUid = body.fromUid
-  const toUid = body.toUid
-  if (!body || !fromUid || !toUid) {
+  const fromUid = req.windImUser?.id
+  const toUid = req.body?.toUid
+  if (!fromUid || !toUid) {
     return
   }
 
@@ -44,6 +54,7 @@ async function craeteNewFriendReq (req) {
       to_dui: toUid
     }
   })
+  // if there is an exist a req, update it.
   if (findReq) {
     console.log('duplicated friend request.')
     prisma.friendRequest.update({
@@ -55,15 +66,16 @@ async function craeteNewFriendReq (req) {
         status: statusPending
       }
     })
-    return
+  } else {
+    // there is no exist req, create one.
+    prisma.friendRequest.create({
+      data: {
+        from_uid: fromUid,
+        to_dui: toUid,
+        status: statusPending
+      }
+    })
   }
-  prisma.friendRequest.create({
-    data: {
-      from_uid: fromUid,
-      to_dui: toUid,
-      status: statusPending
-    }
-  })
 }
 
 function handleFriendReq (body) {
