@@ -6,6 +6,20 @@ import jwt from 'jsonwebtoken'
 // db client
 export const prisma = new PrismaClient()
 
+export function buildSucc (data) {
+  return {
+    code: 0,
+    data
+  }
+}
+
+export function buildError (code, data) {
+  return {
+    code,
+    data
+  }
+}
+
 export const loginValidator = async (req, res, next) => {
   // to validate if current use have already logined.
   const user = await getUserFromReq(req)
