@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { React } from 'react'
-import { AiOutlineSetting, AiOutlineMessage, AiOutlineHome, AiOutlineUser, AiOutlineLogin } from 'react-icons/ai'
+import { AiOutlineSetting, AiOutlineMessage, AiOutlineHome, AiOutlineUser, AiOutlineLogin, AiOutlineUsergroupAdd } from 'react-icons/ai'
 
 export default function SideBar () {
   return (
@@ -14,6 +14,7 @@ export default function SideBar () {
         </div>
         {/* Main Functions */}
         <div className='flex-1'>
+          <SideBarIcon linkTo='/home' text='Home' icon={<AiOutlineUsergroupAdd size="28" />} />
           <SideBarIcon linkTo='/' text='Home' icon={<AiOutlineHome size="28" />} />
           <SideBarIcon linkTo='/msg' text='Messages' icon={<AiOutlineMessage size="28" />} />
           <SideBarIcon linkTo='/user/profile' text='Profile' icon={<AiOutlineUser size="28" />} />

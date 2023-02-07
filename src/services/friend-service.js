@@ -2,8 +2,15 @@
 import { prisma } from 'src/utils/server-utils'
 import { statusPass, statusPending, statusRefuse } from 'src/utils/friend-enums'
 
+// 在线状态设计：1分钟发一个心跳包，redis记录用户心跳时间。业务层判断心跳时间晚于当前时间2分钟，则离线
 export function isReqStatusValid (status) {
   return status == statusPass || status == statusPending
+}
+
+export async function getAllOnlineFriend (uid) {
+  // todo db获取好友列表
+  // todo redis获取在线好友
+  console.log('Not supported')
 }
 
 export async function getFriendReqById (reqId) {
@@ -166,7 +173,7 @@ export async function newFriendRequest (fromUid, toUid, content) {
         }
       }
     })
-    // if there is an exist a req, update it.
+    // if there is an refused a req, update it.
     if (findReq) {
       if (findReq.status == statusPass) {
         return { err: 'You two are friends already.' }

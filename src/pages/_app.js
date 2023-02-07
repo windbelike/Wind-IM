@@ -5,6 +5,7 @@ import { QueryClientProvider, QueryClient } from 'react-query'
 const queryClient = new QueryClient()
 
 // Next.js custom app entry, this function runs before every pages's initialization.
+// https://nextjs.org/docs/basic-features/layouts
 export default function WindIM ({ Component, pageProps }) {
   if (Component.isEntry) {
     return (

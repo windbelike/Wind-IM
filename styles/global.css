@@ -24,6 +24,10 @@
       transition-all duration-100 scale-0 origin-left;
   }
 
+  .friend-active {
+    @apply bg-black
+  }
+
 }
 @layer utilities {
   /* Chrome, Safari and Opera */
