@@ -1,6 +1,6 @@
 
 import { prisma } from 'src/utils/server-utils'
-import { statusPass, statusPending } from 'src/utils/friend-enums'
+import { statusPass, statusPending, statusRefuse } from 'src/utils/friend-enums'
 
 export function isReqStatusValid (status) {
   return status == statusPass || status == statusPending
