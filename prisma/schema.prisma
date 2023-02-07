@@ -21,46 +21,49 @@ model User {
   pwd String
   username String ?
   bio String ?
-  create_time DateTime @default(now())
-  update_time DateTime @default(now()) @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 // 好友列表，一个好友关系需要insert两次
 model Friend {
   id Int @id @default(autoincrement())
   uid Int
-  friend_id Int
-  friend_alias String @default("")  // 好友备注
+  friendId Int
+  friendAlias String @default("")  // 好友备注
   status Int @default(0) // 好友状态，0: 正常 1: 删除
-  create_time DateTime @default(now())
-  update_time DateTime @default(now()) @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
   
-  @@unique(fields: [uid, friend_id], name: "user_and_friend_id")
+  @@unique(fields: [uid, friendId], name: "uidAndFriendIdIdx")
 }
 
 // 添加好友请求
 model FriendRequest {
   id Int @id @default(autoincrement())
-  from_uid Int
-  to_uid Int
+  fromUid Int
+  toUid Int
   status Int // 请求状态，0: 通过   1: 拒绝   2: Pending
   content String @default("") // 打招呼内容
-  create_time DateTime @default(now())
-  update_time DateTime @default(now()) @updatedAt
-  @@unique(fields:[from_uid, to_uid], name: "from_and_to_id")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  @@unique(fields:[fromUid, toUid], name: "fromUidAndtoUidIdx")
 }
 
 // 消息实体表
 model Message {
   id Int @id @default(autoincrement())
-  from Int // 发送者
-  to Int // 接受者
+  fromUid Int // 发送者
+  toUid Int // 接受者
   content String // 消息实体
-  msg_type Int // 消息类型，-1:系统消息 0:点对点 1:群发
-  channel_id Int ? // 消息所属频道，仅在msg_type=1时使用
+  msgType Int // 消息类型，-1:系统消息 0:点对点 1:群发
+  channelId Int ? // 消息所属频道，仅在msg_type=1时使用
   pushed Boolean // 是否成功推送（基于4个报文实现消息可靠推送）
   read Boolean // 是否已读（暂时不实现）
-  create_time DateTime @default(now()) // 创建时间 
+  createdAt DateTime @default(now()) // 创建时间 
+  updatedAt DateTime @default(now()) @updatedAt // 创建时间
+  @@index(fields: [fromUid, toUid], name: "fromUidAndtoUidIdx")
+  @@index(fields: [toUid, fromUid], name: "toUidAndFromUidIdx")
 }
 
 // 频道列表
@@ -68,8 +71,9 @@ model Channel {
   id Int @id @default(autoincrement())
   name String // 频道名称
   desc String // 频道描述
-  uid_list String // 加入者Id json array
-  creator_id Int // 创建者Id
-  create_time DateTime @default(now()) // 创建时间
-  update_time DateTime @default(now()) @updatedAt
+  uidList String // 加入者Id json array
+  ownerUid Int // 拥有者iUd
+  createdAt DateTime @default(now()) // 创建时间
+  updatedAt DateTime @default(now()) @updatedAt
+  @@index(fields: [ownerUid], name: "ownerUidIdx")
 }
