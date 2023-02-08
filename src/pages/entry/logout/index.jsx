@@ -16,6 +16,7 @@ export default function LogoutForm () {
 
   if (logoutMutation.data?.ok) {
     console.log('onClickLogout ok' + JSON.stringify(logoutMutation.data))
+    // todo clean this setTimeout
     setTimeout(() => router.push('/entry/login'), 2000)
     return (
       <>

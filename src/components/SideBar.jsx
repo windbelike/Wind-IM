@@ -7,14 +7,13 @@ export default function SideBar () {
     <div>
       <div className='h-screen w-16 m-0
       flex flex-col justify-end items-center
-      bg-black text-white shadow-lg'>
+      bg-[#17181a] text-white shadow-lg'>
         {/* LOGO */}
         <div className='my-5 shrink-0'>
           <img className="h-12 w-12 rounded-md p-0.5" src="https://avatars.githubusercontent.com/u/33996345?v=4" alt="ChitChat Logo" />
         </div>
         {/* Main Functions */}
         <div className='flex-1'>
-          <SideBarIcon linkTo='/home' text='Home' icon={<AiOutlineUsergroupAdd size="28" />} />
           <SideBarIcon linkTo='/' text='Home' icon={<AiOutlineHome size="28" />} />
           <SideBarIcon linkTo='/msg' text='Messages' icon={<AiOutlineMessage size="28" />} />
           <SideBarIcon linkTo='/user/profile' text='Profile' icon={<AiOutlineUser size="28" />} />

@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import Link from 'next/link'
-import HomeSideBar from 'src/pages/home/homeSideBar'
+import HomeSideBar from './HomeSideBar'
 
 export default function Home ({ children }) {
+  console.log('home')
   const active = true
   return (
   // <h1 className="{active? friend-active : ''} text-white">Hello Friend</h1>
@@ -19,10 +20,13 @@ export default function Home ({ children }) {
 }
 
 function HomeDashboard ({ children }) {
+  console.log('HomeDashboard')
   return (
-    <div className='h-full p-5 bg-neutral-800 flex felx-col'>
-      <HomeSideBar />
-      {children}
-    </div>
+    <>
+      <div className='h-full p-5 bg-[#25272a] flex felx-col'>
+        <HomeSideBar />
+        {children}
+      </div>
+    </>
   )
 }
