@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import NewConv from '../../components/msg/NewConvWindow'
-import ConversationSideBar from '../../components/msg/ConvSideBar'
+import ConversationSideBar from './ConvSideBar'
+import NewConv from './NewConvWindow'
 
 export default function Msg () {
   const [visiable, setVisiable] = useState(false)

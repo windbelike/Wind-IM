@@ -1,5 +1,3 @@
-import { useState } from 'react'
-import Link from 'next/link'
 import HomeSideBar from './HomeSideBar'
 
 export default function Home () {

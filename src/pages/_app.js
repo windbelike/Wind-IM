@@ -1,6 +1,6 @@
-import Layout from '@/components/Layout'
 import 'styles/global.css'
 import { QueryClientProvider, QueryClient } from 'react-query'
+import Layout from './Layout'
 
 const queryClient = new QueryClient()
 

@@ -20,7 +20,8 @@ model User {
   email String @unique
   pwd String
   username String ?
-  bio String ?
+  bio String ? // 简介（个性签名）
+  avatar String ? // 头像链接
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 }
