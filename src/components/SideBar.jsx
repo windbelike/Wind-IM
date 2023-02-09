@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { React } from 'react'
+import { React, useEffect } from 'react'
 import { AiOutlineSetting, AiOutlineMessage, AiOutlineHome, AiOutlineUser, AiOutlineLogin, AiOutlineUsergroupAdd } from 'react-icons/ai'
 
 export default function SideBar () {

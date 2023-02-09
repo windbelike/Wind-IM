@@ -1,10 +1,10 @@
-import Home from 'src/pages/home/index'
+import { HomeDashboard } from '..'
 
 export default function Friend () {
   const active = true
   return (
-    <Home>
+    <HomeDashboard>
       <h1 >Hello My Friend....</h1>
-    </Home>
+    </HomeDashboard>
   )
 }
