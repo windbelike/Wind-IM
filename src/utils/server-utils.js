@@ -67,7 +67,6 @@ export function apiHandler () {
           message: 'Unexpected error',
           error: err
         })
-        console.error(err)
       }
     }
   })

@@ -1,5 +1,5 @@
 import { apiHandler, loginValidator } from 'src/utils/server-utils'
-import { getFirendList } from 'src/services/friend-service'
+import { getFirendList } from '@/services/FriendService'
 
 export default apiHandler()
   .get(loginValidator, async (req, res) => {

@@ -1,6 +1,7 @@
 
 import { apiHandler, loginValidator } from 'src/utils/server-utils'
-import { isReqStatusValid, makeFriends, getFriendReqById, getPendingFriendReqList, newFriendRequest } from 'src/services/friend-service'
+import { isReqStatusValid, makeFriends, getFriendReqById, getPendingFriendReqList, newFriendRequest, getUserByEmail } from '@/services/FriendService'
+import * as Boom from '@hapi/boom'
 
 export default apiHandler()
   .get(loginValidator, async (req, res) => {
@@ -30,10 +31,12 @@ export default apiHandler()
 */
 async function createNewFriendReq (req) {
   const fromUid = req.windImUser?.id
-  const toUid = req.body?.toUid
+  const email = req.body?.email
+  const toUser = await getUserByEmail(email) // todo use cache instead of requesting db directly.
+  const toUid = toUser?.id
   const content = req.body?.content
   if (!fromUid || !toUid || toUid == fromUid) {
-    return { err: 'Invalid param' }
+    throw Boom.forbidden('Invalid param error')
   }
   return await newFriendRequest(fromUid, toUid, content)
 }
