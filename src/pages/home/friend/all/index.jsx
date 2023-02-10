@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { AiOutlineMessage, AiOutlineUserDelete } from 'react-icons/ai'
 import { HomeDashboard } from 'src/pages/home/index'
 
 export default function All () {
@@ -40,10 +41,13 @@ function FriendCard () {
   return (
     <div className='flex flex-col h-32 w-72 m-3 p-4 bg-[#36383e] rounded-3xl'>
       <div className='flex items-center'>
-        <div className='w-14 h-14 bg-white rounded-full'></div>
+        <div className='w-12 h-12 bg-white rounded-full'></div>
         <div><p className='ml-3 text-[#e6eaf0]'>Sawyer@gmail.com</p></div>
       </div>
-      {/* 两个icon */}
+      <div className='flex gap-2 ml-auto mt-auto text-[#7b8086] '>
+        <AiOutlineMessage className='hover:cursor-pointer' size="24"/>
+        <AiOutlineUserDelete className='hover:cursor-pointer' size="24"/>
+      </div>
     </div>
   )
 }
