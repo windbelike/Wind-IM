@@ -1,53 +1,37 @@
+import axios from 'axios'
 import { useState } from 'react'
-import { AiOutlineMessage, AiOutlineUserDelete } from 'react-icons/ai'
+import { useQuery } from 'react-query'
 import { HomeDashboard } from 'src/pages/home/index'
+import AddFriendButton from '../AddFriendButton'
+import FriendCard from '../FriendCard'
+
+async function getAllFriends () {
+  const result = await axios.get('/api/friend')
+  return result.data
+}
 
 export default function All () {
   const [openAddFriend, setOpenAddFriend] = useState(false)
-  console.log(openAddFriend)
+  const { isLoading, error, data } = useQuery('getAllFriends', getAllFriends)
 
   return (
     <HomeDashboard>
       <div className='p-5'>
         <div className='flex'>
           <h1 className='text-white'>全部&nbsp;-&nbsp;0</h1>
-          <button className='ml-5 rounded-md bg-[#6bc001] text-white px-2' onClick={() => setOpenAddFriend(true)}>添加好友</button>
+          <AddFriendButton openAddFrien={openAddFriend} setOpenAddFriend={setOpenAddFriend}/>
         </div>
         {/* {openAddFriend ? <AddFriendWindow/> : ''} */}
         <div className='flex p-3 flex-wrap items-start content-start'>
-          <FriendCard />
-          <FriendCard />
-          <FriendCard />
-          <FriendCard />
-          <FriendCard />
-          <FriendCard />
-          <FriendCard />
-          <FriendCard />
+          {error ? <p>{error}</p> : ''}
+          {isLoading
+            ? <p>Loading</p>
+            : data.data?.map(friend => {
+              return <FriendCard key={friend.id} email={friend.email}/>
+            })
+          }
         </div>
       </div>
     </HomeDashboard>
-  )
-}
-
-function AddFriendWindow () {
-  return (
-    <div className='fixed w-64 h-96 mx-auto bg-white'>
-
-    </div>
-  )
-}
-
-function FriendCard () {
-  return (
-    <div className='flex flex-col h-32 w-72 m-3 p-4 bg-[#36383e] rounded-3xl'>
-      <div className='flex items-center'>
-        <div className='w-12 h-12 bg-white rounded-full'></div>
-        <div><p className='ml-3 text-[#e6eaf0]'>Sawyer@gmail.com</p></div>
-      </div>
-      <div className='flex gap-2 ml-auto mt-auto text-[#7b8086] '>
-        <AiOutlineMessage className='hover:cursor-pointer' size="24"/>
-        <AiOutlineUserDelete className='hover:cursor-pointer' size="24"/>
-      </div>
-    </div>
   )
 }

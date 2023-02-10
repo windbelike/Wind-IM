@@ -1,6 +1,7 @@
 
 import { prisma } from 'src/utils/server-utils'
 import { statusPass, statusPending, statusRefuse } from 'src/utils/friend-enums'
+import { Boom } from '@hapi/boom'
 
 // 在线状态设计：1分钟发一个心跳包，redis记录用户心跳时间。业务层判断心跳时间晚于当前时间2分钟，则离线
 export function isReqStatusValid (status) {
@@ -35,12 +36,31 @@ export async function getPendingFriendReqList (uid) {
 }
 
 export async function getFirendList (uid) {
-  return await prisma.friend.findMany({
+  // throw Boom.unauthorized('getFirendList boom.')
+  const friendIdList = await getFriendIdList(uid)
+  return await prisma.user.findMany({
+    select: {
+      id: true,
+      email: true,
+      bio: true,
+      username: true
+    },
+    where: {
+      id: {
+        in: friendIdList
+      }
+    }
+  })
+}
+
+async function getFriendIdList (uid) {
+  const friendList = await prisma.friend.findMany({
     where: {
       uid,
       status: statusPass
     }
   })
+  return friendList?.map(f => f.friendId)
 }
 
 // todo 加锁

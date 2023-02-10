@@ -22,7 +22,7 @@ function FriendPanel () {
   return (
     <div className='mt-3'>
       <p className='text-[#e6eaf0] text-sm mt-2'>好友</p>
-      <div className='ml-4'>
+      <div className='ml-4 mt-1'>
         <FriendSelection name='在线' to='/home/friend/online'/>
         <FriendSelection name='全部' to='/home/friend/all'/>
         <FriendSelection name='请求' to='/home/friend/request'/>
@@ -45,7 +45,7 @@ function InboxPanel () {
   return (
     <div className='mt-3'>
       <p className='text-[#e6eaf0] text-sm mt-2'>收件箱</p>
-      <div className='ml-4'>
+      <div className='ml-4 mt-1'>
         <InboxSelection name='系统通知'/>
         <InboxSelection name='私信'/>
       </div>

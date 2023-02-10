@@ -1,43 +1,34 @@
+import axios from 'axios'
 import { useState } from 'react'
+import { useQuery } from 'react-query'
 import { HomeDashboard } from '../..'
+import AddFriendButton from '../AddFriendButton'
+import FriendCard from '../FriendCard'
+
+async function getOnlineFriends ({ email, pwd }) {
+  const result = await axios.get('/api/friend')
+  return result.data
+}
 
 export default function Online () {
   const [openAddFriend, setOpenAddFriend] = useState(false)
-  console.log(openAddFriend)
+  const { isLoading, error, data } = useQuery('getOnlineFriends', getOnlineFriends)
 
   return (
     <HomeDashboard>
       <div className='p-5'>
         <div className='flex'>
           <h1 className='text-white'>在线&nbsp;-&nbsp;0</h1>
-          <button className='ml-5 rounded-md bg-[#6bc001] text-white px-2' onClick={() => setOpenAddFriend(true)}>添加好友</button>
+          <AddFriendButton openAddFrien={openAddFriend} setOpenAddFriend={setOpenAddFriend}/>
         </div>
         {/* {openAddFriend ? <AddFriendWindow/> : ''} */}
         <div className='flex p-3 flex-wrap items-start content-start'>
-          <FriendCard />
-          <FriendCard />
-          <FriendCard />
-          <FriendCard />
-          <FriendCard />
-          <FriendCard />
-          <FriendCard />
-          <FriendCard />
+          {data?.data?.map(friend => {
+            return <FriendCard key={friend.id} email={friend.email}/>
+          })}
         </div>
       </div>
+      {/* {JSON.stringify(data.data)} */}
     </HomeDashboard>
-  )
-}
-
-function AddFriendWindow () {
-  return (
-    <div className='fixed w-64 h-96 mx-auto bg-white'>
-
-    </div>
-  )
-}
-
-function FriendCard () {
-  return (
-    <div className='h-32 w-72 m-3 bg-[#36383e] rounded-lg'></div>
   )
 }
