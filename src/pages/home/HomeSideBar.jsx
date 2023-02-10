@@ -4,13 +4,11 @@ import { useState } from 'react'
 export default function HomeSideBar () {
   useState(0)
   return (
-    <>
-      <div className="flex flex-col h-full w-64 border-r-[1px] border-solid border-r-[#323437]">
-        <UserInfoPanel />
-        <FriendPanel />
-        <InboxPanel />
-      </div>
-    </>
+    <div className="shrink-0 flex flex-col h-full w-64 border-r-[1px] border-solid border-r-[#323437]">
+      <UserInfoPanel />
+      <FriendPanel />
+      <InboxPanel />
+    </div>
   )
 }
 
