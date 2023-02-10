@@ -4,7 +4,7 @@ import { useState } from 'react'
 export default function HomeSideBar () {
   useState(0)
   return (
-    <div className="shrink-0 flex flex-col h-full w-64 border-r-[1px] border-solid border-r-[#323437]">
+    <div className="p-2 shrink-0 flex flex-col h-full w-64 border-r-[1px] border-solid border-r-[#323437]">
       <UserInfoPanel />
       <FriendPanel />
       <InboxPanel />
@@ -14,14 +14,14 @@ export default function HomeSideBar () {
 
 function UserInfoPanel () {
   return (
-    <div className="m-2"><p className="text-[#e6eaf0] font-bold">Sawyer</p></div>
+    <div className=""><p className="text-[#e6eaf0] font-bold">Sawyer</p></div>
   )
 }
 
 function FriendPanel () {
   return (
-    <div className='mt-2'>
-      <p className='text-[#e6eaf0] text-sm m-2'>好友</p>
+    <div className='mt-3'>
+      <p className='text-[#e6eaf0] text-sm mt-2'>好友</p>
       <div className='ml-4'>
         <FriendSelection name='在线' to='/home/friend/online'/>
         <FriendSelection name='全部' to='/home/friend/all'/>
@@ -43,8 +43,8 @@ function FriendSelection ({ icon, name, cnt, to }) {
 
 function InboxPanel () {
   return (
-    <div className='mt-2'>
-      <p className='text-[#e6eaf0] text-sm m-2'>收件箱</p>
+    <div className='mt-3'>
+      <p className='text-[#e6eaf0] text-sm mt-2'>收件箱</p>
       <div className='ml-4'>
         <InboxSelection name='系统通知'/>
         <InboxSelection name='私信'/>
