@@ -5,7 +5,7 @@ import * as Boom from '@hapi/boom'
 
 // 在线状态设计：1分钟发一个心跳包，redis记录用户心跳时间。业务层判断心跳时间晚于当前时间2分钟，则离线
 export function isReqStatusValid (status) {
-  return status == statusPass || status == statusPending
+  return status == statusPass || status == statusRefuse
 }
 
 export async function getUserByEmail (email) {
@@ -45,6 +45,13 @@ export async function getPendingFriendReqList (uid) {
     where: {
       toUid: uid,
       status: statusPending
+    },
+    include: {
+      fromUidRel: {
+        select: {
+          email: true
+        }
+      }
     }
   })
   return { code: 0, data: friendReqList }
@@ -52,17 +59,27 @@ export async function getPendingFriendReqList (uid) {
 
 export async function getFirendList (uid) {
   // throw Boom.unauthorized('getFirendList boom.')
-  const friendIdList = await getFriendIdList(uid)
-  return await prisma.user.findMany({
-    select: {
-      id: true,
-      email: true,
-      bio: true,
-      username: true
-    },
+  // const friendIdList = await getFriendIdList(uid)
+  return await prisma.friend.findMany({
     where: {
-      id: {
-        in: friendIdList
+      uid
+    },
+    include: {
+      userRel: {
+        select: {
+          id: true,
+          email: true,
+          bio: true,
+          username: true
+        }
+      },
+      friendRel: {
+        select: {
+          id: true,
+          email: true,
+          bio: true,
+          username: true
+        }
       }
     }
   })

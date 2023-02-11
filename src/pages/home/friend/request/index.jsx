@@ -14,7 +14,7 @@ async function getFriendRequests () {
 
 export default function Request () {
   const [openAddFriendWindow, setOpenAddFriendWindow] = useState(false)
-  const { isLoading, error, data } = useQuery('getAllFriends', getFriendRequests)
+  const { isLoading, error, data } = useQuery('friendRequest', getFriendRequests)
 
   console.log('Friend Request, data:' + JSON.stringify(data))
 

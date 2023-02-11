@@ -45,6 +45,7 @@ export default function AddFriendWindow ({ openAddFriendWindow, setOpenAddFriend
         <p className="text-[#717579] mt-2">需要用户邮箱</p>
         <input type="text" className="m-4 text-white rounded-xl p-2 border-solid border-2 border-[#323437] focus:border-[#6bc001] bg-transparent" placeholder="请输入邮箱" ref={$email}></input>
         {addFriendMutation.error && <div className='ml-4 text-red-600'>{addFriendMutation.error.response.data.message}</div>}
+        {addFriendMutation.data && <div className='ml-4 text-white'>{JSON.stringify(addFriendMutation.data)}</div>}
         <div className='flex ml-auto mt-auto gap-3 text-white'>
           <button id='cancelButton' className=''>取消</button>
           <button className='rounded-md bg-[#6bc001] p-1' onClick={onClickSubmit}>发送好友请求</button>

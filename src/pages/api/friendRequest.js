@@ -6,7 +6,12 @@ import { statusPass, statusPending } from '@/utils/friend-enums'
 
 export default apiHandler()
   .get(loginValidator, async (req, res) => {
-    res.json(await getFriendReq(req))
+    // 获取pending的好友请求
+    const user = req.windImUser
+    if (!user) {
+      throw Boom.badRequest('Please login first.')
+    }
+    res.json(await getFriendReq(user.id))
   })
   .post(loginValidator, async (req, res) => {
   // 两种操作类型：
@@ -79,11 +84,6 @@ async function handleFriendReq (req) {
   }
 }
 
-async function getFriendReq (req) {
-  const user = req.windImUser
-  if (!user) {
-    return { err: 'Please login first.' }
-  }
-
-  return await getPendingFriendReqList(user.id)
+async function getFriendReq (uid) {
+  return await getPendingFriendReqList(uid)
 }

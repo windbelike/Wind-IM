@@ -32,8 +32,8 @@ export default function All () {
           {error ? <p>{error}</p> : ''}
           {isLoading
             ? <p>Loading</p>
-            : data.data?.map(friend => {
-              return <FriendCard key={friend.id} email={friend.email}/>
+            : data.data?.map((rel, idx) => {
+              return <FriendCard key={idx} email={rel.friendRel?.email}/>
             })
           }
         </div>
