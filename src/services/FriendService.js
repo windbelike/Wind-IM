@@ -124,6 +124,38 @@ export async function checkIsFriends (uid, friendId) {
   return false
 }
 
+export async function passFriendReq (reqId, uid) {
+  const friendReq = await getFriendReqById(reqId)
+  if (!friendReq) {
+    return Boom.badRequest('Invalid reqId.')
+  }
+  const friendId = friendReq.fromUid
+  if (friendReq.status != statusPending) {
+    return Boom.badRequest('Handled already.')
+  }
+  if (friendReq.toUid != uid) {
+    return Boom.badRequest('Not your request.')
+  }
+  return await makeFriends(reqId, uid, friendId)
+}
+
+export async function refuseFriendReq (reqId) {
+  if (!reqId) {
+    return
+  }
+  // 不想用事务，直接updateMany保证原子性
+  const res = await prisma.friendRequest.updateMany({
+    where: {
+      id: reqId,
+      status: statusPending
+    },
+    data: {
+      status: statusRefuse
+    }
+  })
+  return { code: 0 }
+}
+
 // todo 加锁
 export async function makeFriends (reqId, uid, friendId) {
   if (!reqId || !uid || !friendId || friendId == uid) {
@@ -177,7 +209,7 @@ export async function makeFriends (reqId, uid, friendId) {
       return { code: 0 }
     } catch (e) {
       console.log(e)
-      return { err: e }
+      return { error: e }
     }
   }
 }
@@ -201,6 +233,18 @@ export async function newFriendRequest (fromUid, toUid, content) {
   if (await checkIsFriends(fromUid, toUid)) {
     console.log('checkIsFriends checkIsFriends')
     throw Boom.badRequest('Already friends....')
+  }
+  // 处理对方的请求
+  const findReqFromRemote = await prisma.friendRequest.findUnique({
+    where: {
+      fromUidAndtoUidIdx: {
+        fromUid: toUid,
+        toUid: fromUid
+      }
+    }
+  })
+  if (findReqFromRemote?.status == statusPending) {
+    throw Boom.badRequest('Got a pending request from remote.')
   }
   // find exist friend request.
   const findReq = await prisma.friendRequest.findUnique({
