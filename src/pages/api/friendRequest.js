@@ -2,6 +2,7 @@
 import { apiHandler, loginValidator } from 'src/utils/server-utils'
 import { isReqStatusValid, makeFriends, getFriendReqById, getPendingFriendReqList, newFriendRequest, getUserByEmail } from '@/services/FriendService'
 import * as Boom from '@hapi/boom'
+import { statusPass, statusPending } from '@/utils/friend-enums'
 
 export default apiHandler()
   .get(loginValidator, async (req, res) => {
@@ -57,12 +58,25 @@ async function handleFriendReq (req) {
   const reqId = req.body?.reqId
   const status = req.body?.status
   if (!reqId || !isReqStatusValid(status) || !user) {
-    return { err: 'Invalid param' }
+    return Boom.badRequest('Invalid params.')
   }
 
   const friendReq = await getFriendReqById(reqId)
-
-  return await makeFriends(reqId, user.id, friendReq, status)
+  if (!friendReq) {
+    return Boom.badRequest('Invalid reqId.')
+  }
+  if (friendReq.status != statusPending) {
+    return Boom.badRequest('Handled already.')
+  }
+  if (friendReq.toUid != user.id) {
+    return Boom.badRequest('Not your request.')
+  }
+  const friendId = friendReq.fromUid
+  if (status == statusPass) {
+    return await makeFriends(reqId, user.id, friendId)
+  } else {
+    return Boom.badRequest('Unsupported fn.')
+  }
 }
 
 async function getFriendReq (req) {

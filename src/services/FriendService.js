@@ -78,89 +78,83 @@ async function getFriendIdList (uid) {
   return friendList?.map(f => f.friendId)
 }
 
-// todo 加锁
-export async function makeFriends (reqId, uid, friendReq, status) {
-  const friendId = friendReq?.fromUid
-  if (!friendReq || friendReq.toUid != uid || friendId == uid) {
-    return { err: 'Illegal param.' }
+export async function checkIsFriends (uid, friendId) {
+  // check if you were friends.
+  try {
+    const relationOfUser = await prisma.friend.findUnique({
+      where: {
+        uid_friendId: {
+          uid,
+          friendId
+        }
+      }
+    })
+    const relationOfFriend = await prisma.friend.findUnique({
+      where: {
+        uid_friendId: {
+          uid: friendId,
+          friendId: uid
+        }
+      }
+    })
+    if (relationOfUser && relationOfFriend && relationOfUser.status == statusPass && relationOfFriend.status == statusPass) {
+      return true
+    }
+  } catch (e) {
+    console.error(e)
   }
 
-  if (friendReq.status != statusPending) {
-    return { err: 'Handled already.' }
+  return false
+}
+
+// todo 加锁
+export async function makeFriends (reqId, uid, friendId) {
+  if (!reqId || !uid || !friendId || friendId == uid) {
+    return Boom.badRequest('Illegal params.')
   }
 
   // check if you were friends.
-  const relationOfUser = await prisma.friend.findUnique({
-    where: {
-      uidAndFriendIdIdx: {
-        uid,
-        friendId
+  if (checkIsFriends(uid, friendId)) {
+    throw Boom.badRequest('Already friends.')
+  }
+
+  // update both users' friend relations
+  const createFriendForUser = prisma.friend.create({
+    data: {
+      userRel: {
+        connect: { id: uid }
+      },
+      friendRel: {
+        connect: { id: friendId }
       }
     }
   })
 
-  const relationOfFriend = await prisma.friend.findUnique({
-    where: {
-      uidAndFriendIdIdx: {
-        uid: friendId,
-        friendId: uid
+  const createFriendForFriend = prisma.friend.create({
+    data: {
+      userRel: {
+        connect: { id: friendId }
+      },
+      friendRel: {
+        connect: { id: uid }
       }
     }
   })
 
-  // update friend relation
-  let updateOrCreateFriendForUser
-  let updateOrCreateFriendForFriend
-  if (relationOfUser) {
-    updateOrCreateFriendForUser = prisma.friend.update({
-      where: {
-        id: relationOfUser.id
-      },
-      data: {
-        status
-      }
-    })
-  } else {
-    updateOrCreateFriendForUser = prisma.friend.create({
-      data: {
-        uid,
-        friendId,
-        status
-      }
-    })
-  }
-  if (relationOfFriend) {
-    updateOrCreateFriendForFriend = prisma.friend.update({
-      where: {
-        id: relationOfFriend.id
-      },
-      data: {
-        status
-      }
-    })
-  } else {
-    updateOrCreateFriendForFriend = prisma.friend.create({
-      data: {
-        uid: friendId,
-        friendId: uid,
-        status
-      }
-    })
-  }
   // update friendRequest
   const updateFriendReq = prisma.friendRequest.update({
     where: {
       id: reqId
     },
     data: {
-      status
+      status: statusPass
     }
   })
-  if (updateOrCreateFriendForUser && updateFriendReq && updateOrCreateFriendForFriend) {
+  if (createFriendForUser && createFriendForFriend && updateFriendReq) {
     try {
       const txn = await prisma.$transaction([
-        updateOrCreateFriendForFriend,
-        updateOrCreateFriendForUser,
+        createFriendForUser,
+        createFriendForFriend,
         updateFriendReq
       ])
       return { code: 0 }
