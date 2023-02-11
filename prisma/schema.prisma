@@ -1,9 +1,7 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// 不使用外键
-
-// todo 重构命名方式，clean all table
+// rel字段表示关系，用于表示外键约束，字段在db中不存在。
 
 generator client {
   provider = "prisma-client-js"
@@ -14,36 +12,51 @@ datasource db {
   url      = "file:./db.sqlite"
 }
 
-// 用户表
+// 用户
 model User {
   id    Int    @id @default(autoincrement())
+  // todo 使用额外uid做业务逻辑，不使用主键id
+
   email String @unique
   pwd String
   username String ?
   bio String ? // 简介（个性签名）
   avatar String ? // 头像链接
+
+  // 外键关系
+  friendReqSendRel FriendRequest[] @relation("friendReqSendRel") // 发送的好友请求，外键关系
+  friendReqReceiveRel FriendRequest[] @relation("friendReqReceiveRel") // 接收的好友请求，外键关系
+  msgSendRel Message[] @relation("msgSendRel") // 发送的消息，外键关系
+  msgReceiveRel Message[] @relation("msgReceiveRel") // 接受的消息，外键关系
+  channelsRel UsersOnChannels[] // 加入的频道，外键关系
+  friendsRel Friend[] @relation("friendsRel")  // 我的朋友，外键关系
+  friendsToRel Friend[] @relation("friendsToRel") // 我是谁的朋友，外键关系
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 }
 
-// 好友列表，一个好友关系需要insert两次
+// 好友列表(用户-用户)，多对多关系表。注意：添加好友操作需要insert两次
 model Friend {
-  id Int @id @default(autoincrement())
   uid Int
+  userRel User @relation(name: "friendsToRel", fields: [uid], references: [id])
   friendId Int
-  friendAlias String @default("")  // 好友备注
-  status Int @default(0) // 好友状态，0: 正常 1: 删除
+  friendRel User @relation(name: "friendsRel", fields: [friendId], references: [id])
+  alias String @default("")  // uid对friendId的好友备注
+  status Int @default(0) // 好友状态，0: 正常 1: 删除 2:屏蔽
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
   
-  @@unique(fields: [uid, friendId], name: "uidAndFriendIdIdx")
+  @@id([uid, friendId])
 }
 
 // 添加好友请求
 model FriendRequest {
   id Int @id @default(autoincrement())
-  fromUid Int
-  toUid Int
+  fromUid Int // 请求者id
+  fromUidRel User @relation(name: "friendReqReceiveRel", fields: [fromUid], references: [id])
+  toUid Int // 接收者id
+  toUidRel User @relation(name: "friendReqSendRel", fields: [toUid], references: [id])
   status Int // 请求状态，0: 通过   1: 拒绝   2: Pending
   content String @default("") // 打招呼内容
   createdAt DateTime @default(now())
@@ -55,7 +68,9 @@ model FriendRequest {
 model Message {
   id Int @id @default(autoincrement())
   fromUid Int // 发送者
+  fromUidRel User @relation(name: "msgReceiveRel", fields: [fromUid], references: [id])
   toUid Int // 接受者
+  toUidRel User @relation(name: "msgSendRel", fields: [toUid], references: [id])
   content String // 消息实体
   msgType Int // 消息类型，-1:系统消息 0:点对点 1:群发
   channelId Int ? // 消息所属频道，仅在msg_type=1时使用
@@ -72,9 +87,24 @@ model Channel {
   id Int @id @default(autoincrement())
   name String // 频道名称
   desc String // 频道描述
-  uidList String // 加入者Id json array
   ownerUid Int // 拥有者iUd
+  usersRel UsersOnChannels[]
+  status Int // 频道状态。0：正常 1：关闭
   createdAt DateTime @default(now()) // 创建时间
   updatedAt DateTime @default(now()) @updatedAt
   @@index(fields: [ownerUid], name: "ownerUidIdx")
+}
+
+// 用户-频道 多对多关系表（explicit）
+model UsersOnChannels {
+  uid     Int 
+  userRel       User     @relation(fields: [uid], references: [id])
+  channelId Int 
+  channelRel   Channel @relation(fields: [channelId], references: [id])
+  status Int // 关系状态。0：正常，1：已失效
+  invitedBy String ? // 邀请人
+  createdAt DateTime @default(now()) // 关系添加时间（用户加入频道时间）
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@id([uid, channelId])
 }

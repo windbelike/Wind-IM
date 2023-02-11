@@ -175,72 +175,67 @@ export async function newFriendRequest (fromUid, toUid, content) {
   if (!fromUid || !toUid) {
     return { err: 'Invalid params' }
   }
-  try {
-    // check remote user
-    const remoteUser = await prisma.user.findUnique({
-      where: {
-        id: toUid
-      }
-    })
-    if (!remoteUser) {
-      return { err: 'No such remote user' }
+  // check remote user
+  const remoteUser = await prisma.user.findUnique({
+    where: {
+      id: toUid
     }
-
-    // todo 加锁
-    // find exist friend realtion.
-    const friendRelation = await prisma.friend.findUnique({
-      where: {
-        uidAndFriendIdIdx: {
-          uid: fromUid,
-          friendId: toUid
-        }
-      }
-    })
-    if (friendRelation && friendRelation.status == statusPass) {
-      return { err: 'Already friends.' }
-    }
-    // find exist friend request.
-    const findReq = await prisma.friendRequest.findUnique({
-      where: {
-        fromUidAndtoUidIdx: {
-          fromUid,
-          toUid
-        }
-      }
-    })
-    // if there is an refused a req, update it.
-    if (findReq) {
-      if (findReq.status == statusPass) {
-        return { err: 'You two are friends already.' }
-      }
-      if (findReq.status == statusPending) {
-        return { err: 'Please wait for reply.' }
-      }
-      await prisma.friendRequest.updateMany({
-        where: {
-          fromUid,
-          toUid,
-          status: statusRefuse
-        },
-        data: {
-          status: statusPending,
-          content
-        }
-      })
-    } else {
-      // there is no exist req, create one.
-      await prisma.friendRequest.create({
-        data: {
-          fromUid,
-          toUid,
-          status: statusPending,
-          content
-        }
-      })
-    }
-    return { code: 0 }
-  } catch (e) {
-    console.error(e)
-    return { err: e }
+  })
+  if (!remoteUser) {
+    return { err: 'No such remote user' }
   }
+
+  // todo 加锁
+  // find exist friend realtion.
+  const friendRelation = await prisma.friend.findUnique({
+    where: {
+      uidAndFriendIdIdx: {
+        uid: fromUid,
+        friendId: toUid
+      }
+    }
+  })
+  if (friendRelation && friendRelation.status == statusPass) {
+    throw Boom.badRequest('Already friends.')
+  }
+  // find exist friend request.
+  const findReq = await prisma.friendRequest.findUnique({
+    where: {
+      fromUidAndtoUidIdx: {
+        fromUid,
+        toUid
+      }
+    }
+  })
+  // if there is an refused a req, update it.
+  if (findReq) {
+    if (findReq.status == statusPass) {
+      return { err: 'You two are friends already.' }
+    }
+    if (findReq.status == statusPending) {
+      return { err: 'Please wait for reply.' }
+    }
+    await prisma.friendRequest.updateMany({
+      where: {
+        fromUid,
+        toUid,
+        status: statusRefuse
+      },
+      data: {
+        status: statusPending,
+        content
+      }
+    })
+  } else {
+    // there is no exist req, create one.
+    await prisma.friendRequest.create({
+      data: {
+        fromUid,
+        toUid,
+        status: statusPending,
+        content
+      }
+    })
+  }
+  return { code: 0 }
 }

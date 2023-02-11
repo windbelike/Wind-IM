@@ -18,7 +18,7 @@ export default apiHandler()
     } else if (opType == 1) {
       resultJson = await handleFriendReq(req)
     } else {
-      resultJson = { msg: 'invalid opType' }
+      throw Boom.badRequest('Invalid opType')
     }
     res.json(resultJson)
   })
@@ -33,10 +33,13 @@ async function createNewFriendReq (req) {
   const fromUid = req.windImUser?.id
   const email = req.body?.email
   const toUser = await getUserByEmail(email) // todo use cache instead of requesting db directly.
-  const toUid = toUser?.id
+  if (!toUser) {
+    throw Boom.badRequest('User not found.')
+  }
+  const toUid = toUser.id
   const content = req.body?.content
   if (!fromUid || !toUid || toUid == fromUid) {
-    throw Boom.forbidden('Invalid param error')
+    throw Boom.badRequest('Invalid param error')
   }
   return await newFriendRequest(fromUid, toUid, content)
 }
