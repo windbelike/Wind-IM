@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { AiOutlineMessage, AiOutlineUserDelete } from 'react-icons/ai'
 
 export default function FriendCard ({ email }) {
@@ -8,7 +9,9 @@ export default function FriendCard ({ email }) {
         <div><p className='ml-3 text-[#e6eaf0]'>{email}</p></div>
       </div>
       <div className='flex gap-2 ml-auto mt-auto text-[#7b8086] '>
-        <AiOutlineMessage className='hover:cursor-pointer' size="24"/>
+        <Link href={`/home/inbox/${email}`}>
+          <AiOutlineMessage className='hover:cursor-pointer' size="24"/>
+        </Link>
         <AiOutlineUserDelete className='hover:cursor-pointer' size="24"/>
       </div>
     </div>

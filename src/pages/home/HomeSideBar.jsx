@@ -46,8 +46,9 @@ function InboxPanel () {
     <div className='mt-3'>
       <p className='text-[#e6eaf0] text-sm mt-2'>收件箱</p>
       <div className='ml-4 mt-1'>
-        <InboxSelection name='系统通知'/>
-        <InboxSelection name='私信'/>
+        {/* todo for循环生成InboxSelection */}
+        {/* <InboxSelection name='系统通知'/> */}
+        <InboxSelection name='私信' to='/home/inbox/wind'/>
       </div>
     </div>
   )
@@ -56,9 +57,9 @@ function InboxPanel () {
 function InboxSelection ({ icon, name, cnt, to }) {
   return (
     <>
-      {/* <Link> */}
-      <div className='text-gray-400 p-1 rounded-md hover:bg-gray-200 hover:cursor-pointer'>{name}</div>
-      {/* </Link> */}
+      <Link href={to}>
+        <div className='text-gray-400 p-1 rounded-md hover:bg-gray-200 hover:cursor-pointer'>{name}</div>
+      </Link>
     </>
   )
 }
