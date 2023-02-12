@@ -16,8 +16,6 @@ export default function Request () {
   const [openAddFriendWindow, setOpenAddFriendWindow] = useState(false)
   const { isLoading, error, data } = useQuery('friendRequest', getFriendRequests)
 
-  console.log('Friend Request, data:' + JSON.stringify(data))
-
   return (
     <HomeDashboard>
       <div className='p-5'>

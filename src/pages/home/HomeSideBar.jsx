@@ -1,5 +1,7 @@
+import axios from 'axios'
 import Link from 'next/link'
 import { useState } from 'react'
+import { useQuery } from 'react-query'
 
 export default function HomeSideBar () {
   useState(0)
@@ -41,14 +43,20 @@ function FriendSelection ({ icon, name, cnt, to }) {
   )
 }
 
+async function getPrivateMsg () {
+  const result = await axios.get('/api/msg/privateMsg')
+  return result.data
+}
 function InboxPanel () {
+  const { error, isLoading, data } = useQuery('getPrivateMsg', getPrivateMsg)
   return (
     <div className='mt-3'>
       <p className='text-[#e6eaf0] text-sm mt-2'>收件箱</p>
       <div className='ml-4 mt-1'>
-        {/* todo for循环生成InboxSelection */}
         {/* <InboxSelection name='系统通知'/> */}
-        <InboxSelection name='私信' to='/home/inbox/wind'/>
+        {data && data.data?.map((pm, idx) => {
+          return <InboxSelection key={idx} name={pm.toUidRel.email} to={`/home/inbox/${pm.id}`}/>
+        })}
       </div>
     </div>
   )

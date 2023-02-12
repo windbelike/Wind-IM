@@ -23,7 +23,6 @@ async function refuseFriendReq ({ reqId }) {
 }
 
 export default function FriendCard ({ friendReq }) {
-  console.log(JSON.stringify(friendReq))
   const passFriendReqMut = useMutation(passFriendReq)
   const refuseFriendReqMut = useMutation(refuseFriendReq)
 
