@@ -14,5 +14,8 @@
     "moleculer": "^0.14.28",
     "moleculer-web": "^0.10.5",
     "socket.io": "^4.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.24.0"
   }
 }

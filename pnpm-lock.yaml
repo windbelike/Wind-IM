@@ -10,6 +10,7 @@ importers:
 
   packages/server:
     specifiers:
+      eslint: ^8.24.0
       express: '4'
       moleculer: ^0.14.28
       moleculer-web: ^0.10.5
@@ -19,6 +20,8 @@ importers:
       moleculer: registry.npmmirror.com/moleculer/0.14.28
       moleculer-web: registry.npmmirror.com/moleculer-web/0.10.5_moleculer@0.14.28
       socket.io: registry.npmmirror.com/socket.io/4.6.0
+    devDependencies:
+      eslint: registry.npmmirror.com/eslint/8.34.0
 
   packages/web:
     specifiers:
