@@ -10,7 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cookie": "^0.5.0",
+    "dotenv": "^16.0.3",
     "express": "4",
+    "ioredis": "^5.2.5",
+    "jsonwebtoken": "^9.0.0",
     "moleculer": "^0.14.28",
     "moleculer-web": "^0.10.5",
     "socket.io": "^4.6.0"

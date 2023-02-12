@@ -28,8 +28,11 @@ export const loginValidator = async (req, res, next) => {
 export const getUserFromReq = async (req) => {
   // get JWT `token` on cookies
   const token = req.cookies.token
+  return await getUserFromCookieToken(token)
+}
+
+export async function getUserFromCookieToken (token) {
   try {
-    // if token is invalid, `verify` will throw an error
     const payload = jwt.verify(token, process.env.JWT_SECRET)
     // find user in database
     const user = await prisma.user.findUnique({
@@ -43,6 +46,7 @@ export const getUserFromReq = async (req) => {
         email: payload.email
       }
     })
+
     return user
   } catch (e) {
     return null

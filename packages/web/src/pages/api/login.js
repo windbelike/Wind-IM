@@ -37,7 +37,7 @@ export default apiHandler()
 
     // set a cookie named `token`
     res.setHeader('Set-Cookie', cookie.serialize('token', token, {
-      httpOnly: true,
+      httpOnly: false, // could be true
       path: '/',
       maxAge: 60 * 60 * 24 * 3
     }))

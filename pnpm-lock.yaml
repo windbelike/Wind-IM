@@ -10,14 +10,24 @@ importers:
 
   packages/server:
     specifiers:
+      bcrypt: ^5.1.0
+      cookie: ^0.5.0
+      dotenv: ^16.0.3
       eslint: ^8.24.0
       express: '4'
+      ioredis: ^5.2.5
+      jsonwebtoken: ^9.0.0
       moleculer: ^0.14.28
       moleculer-web: ^0.10.5
       socket.io: ^4.6.0
     dependencies:
+      bcrypt: registry.npmmirror.com/bcrypt/5.1.0
+      cookie: registry.npmmirror.com/cookie/0.5.0
+      dotenv: registry.npmmirror.com/dotenv/16.0.3
       express: registry.npmmirror.com/express/4.18.2
-      moleculer: registry.npmmirror.com/moleculer/0.14.28
+      ioredis: registry.npmmirror.com/ioredis/5.3.1
+      jsonwebtoken: registry.npmmirror.com/jsonwebtoken/9.0.0
+      moleculer: registry.npmmirror.com/moleculer/0.14.28_ioredis@5.3.1
       moleculer-web: registry.npmmirror.com/moleculer-web/0.10.5_moleculer@0.14.28
       socket.io: registry.npmmirror.com/socket.io/4.6.0
     devDependencies:
@@ -48,6 +58,7 @@ importers:
       react-dom: 18.2.0
       react-icons: ^4.4.0
       react-query: ^3.39.2
+      socket.io-client: ^3.1.1
       tailwindcss: ^3.1.8
     dependencies:
       '@hapi/boom': registry.npmmirror.com/@hapi/boom/10.0.1
@@ -64,6 +75,7 @@ importers:
       react-dom: registry.npmmirror.com/react-dom/18.2.0_react@18.2.0
       react-icons: registry.npmmirror.com/react-icons/4.7.1_react@18.2.0
       react-query: registry.npmmirror.com/react-query/3.39.3_biqbaboplfbrettd7655fr4n2y
+      socket.io-client: registry.npmmirror.com/socket.io-client/3.1.3
     devDependencies:
       autoprefixer: registry.npmmirror.com/autoprefixer/10.4.13_postcss@8.4.21
       eslint: registry.npmmirror.com/eslint/8.34.0
@@ -431,6 +443,12 @@ packages:
     version: 0.4.11
     dependencies:
       tslib: registry.npmmirror.com/tslib/2.5.0
+    dev: false
+
+  registry.npmmirror.com/@types/component-emitter/1.2.11:
+    resolution: {integrity: sha512-SRXjM+tfsSlA9VuG8hGO2nft2p8zjXCK1VcC6N4NXbBbYbSia9kzCChYQajIjzIqOOOuh5Ock6MmV2oux4jDZQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/component-emitter/-/component-emitter-1.2.11.tgz}
+    name: '@types/component-emitter'
+    version: 1.2.11
     dev: false
 
   registry.npmmirror.com/@types/cookie/0.4.1:
@@ -821,10 +839,23 @@ packages:
       deep-equal: registry.npmmirror.com/deep-equal/2.2.0
     dev: true
 
+  registry.npmmirror.com/backo2/1.0.2:
+    resolution: {integrity: sha512-zj6Z6M7Eq+PBZ7PQxl5NT665MvJdAkzp0f60nAJ+sLaSCBPMwVak5ZegFbgVCzFcCJTKFoMizvM5Ld7+JrRJHA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/backo2/-/backo2-1.0.2.tgz}
+    name: backo2
+    version: 1.0.2
+    dev: false
+
   registry.npmmirror.com/balanced-match/1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/balanced-match/-/balanced-match-1.0.2.tgz}
     name: balanced-match
     version: 1.0.2
+
+  registry.npmmirror.com/base64-arraybuffer/0.1.4:
+    resolution: {integrity: sha512-a1eIFi4R9ySrbiMuyTGx5e92uRH5tQY6kArNcFaKBUleIoLjdjBg7Zxm3Mqm3Kmkf27HLR/1fnxX9q8GQ7Iavg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/base64-arraybuffer/-/base64-arraybuffer-0.1.4.tgz}
+    name: base64-arraybuffer
+    version: 0.1.4
+    engines: {node: '>= 0.6.0'}
+    dev: false
 
   registry.npmmirror.com/base64id/2.0.0:
     resolution: {integrity: sha512-lGe34o6EHj9y3Kts9R4ZYs/Gr+6N7MCaMlIFA3F1R2O5/m7K06AxfSeO5530PEERE6/WyEg3lsuyw4GHlPZHog==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/base64id/-/base64id-2.0.0.tgz}
@@ -1078,6 +1109,12 @@ packages:
     engines: {node: '>= 0.8'}
     dependencies:
       delayed-stream: registry.npmmirror.com/delayed-stream/1.0.0
+    dev: false
+
+  registry.npmmirror.com/component-emitter/1.3.0:
+    resolution: {integrity: sha512-Rd3se6QB+sO1TwqZjscQrurpEPIfO0/yYnSin6Q/rD3mOutHvUrCAhJub3r90uNb+SESBuE0QYoB90YdfatsRg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/component-emitter/-/component-emitter-1.3.0.tgz}
+    name: component-emitter
+    version: 1.3.0
     dev: false
 
   registry.npmmirror.com/concat-map/0.0.1:
@@ -1345,6 +1382,13 @@ packages:
       esutils: registry.npmmirror.com/esutils/2.0.3
     dev: true
 
+  registry.npmmirror.com/dotenv/16.0.3:
+    resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/dotenv/-/dotenv-16.0.3.tgz}
+    name: dotenv
+    version: 16.0.3
+    engines: {node: '>=12'}
+    dev: false
+
   registry.npmmirror.com/ecdsa-sig-formatter/1.0.11:
     resolution: {integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ecdsa-sig-formatter/-/ecdsa-sig-formatter-1.0.11.tgz}
     name: ecdsa-sig-formatter
@@ -1382,6 +1426,36 @@ packages:
     name: encodeurl
     version: 1.0.2
     engines: {node: '>= 0.8'}
+    dev: false
+
+  registry.npmmirror.com/engine.io-client/4.1.4:
+    resolution: {integrity: sha512-843fqAdKeUMFqKi1sSjnR11tJ4wi8sIefu6+JC1OzkkJBmjtc/gM/rZ53tJfu5Iae/3gApm5veoS+v+gtT0+Fg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/engine.io-client/-/engine.io-client-4.1.4.tgz}
+    name: engine.io-client
+    version: 4.1.4
+    dependencies:
+      base64-arraybuffer: registry.npmmirror.com/base64-arraybuffer/0.1.4
+      component-emitter: registry.npmmirror.com/component-emitter/1.3.0
+      debug: registry.npmmirror.com/debug/4.3.4
+      engine.io-parser: registry.npmmirror.com/engine.io-parser/4.0.3
+      has-cors: registry.npmmirror.com/has-cors/1.1.0
+      parseqs: registry.npmmirror.com/parseqs/0.0.6
+      parseuri: registry.npmmirror.com/parseuri/0.0.6
+      ws: registry.npmmirror.com/ws/7.4.6
+      xmlhttprequest-ssl: registry.npmmirror.com/xmlhttprequest-ssl/1.6.3
+      yeast: registry.npmmirror.com/yeast/0.1.2
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    dev: false
+
+  registry.npmmirror.com/engine.io-parser/4.0.3:
+    resolution: {integrity: sha512-xEAAY0msNnESNPc00e19y5heTPX4y/TJ36gr8t1voOaNmTojP9b3oK3BbJLFufW2XFPQaaijpFewm2g2Um3uqA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/engine.io-parser/-/engine.io-parser-4.0.3.tgz}
+    name: engine.io-parser
+    version: 4.0.3
+    engines: {node: '>=8.0.0'}
+    dependencies:
+      base64-arraybuffer: registry.npmmirror.com/base64-arraybuffer/0.1.4
     dev: false
 
   registry.npmmirror.com/engine.io-parser/5.0.6:
@@ -2393,6 +2467,12 @@ packages:
     version: 1.0.2
     dev: true
 
+  registry.npmmirror.com/has-cors/1.1.0:
+    resolution: {integrity: sha512-g5VNKdkFuUuVCP9gYfDJHjK2nqdQJ7aDLTnycnc2+RvsOQbuLdF5pm7vuE5J76SEBIQjs4kQY/BWq74JUmjbXA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/has-cors/-/has-cors-1.1.0.tgz}
+    name: has-cors
+    version: 1.1.0
+    dev: false
+
   registry.npmmirror.com/has-flag/3.0.0:
     resolution: {integrity: sha512-sKJf1+ceQBr4SMkvQnBDNDtf4TXpVhVGateu0t918bl30FnbE2m4vNLX+VWe/dpjlb+HugGYzW7uQXH98HPEYw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/has-flag/-/has-flag-3.0.0.tgz}
     name: has-flag
@@ -3123,7 +3203,7 @@ packages:
       isstream: registry.npmmirror.com/isstream/0.1.2
       kleur: registry.npmmirror.com/kleur/4.1.5
       lodash: registry.npmmirror.com/lodash/4.17.21
-      moleculer: registry.npmmirror.com/moleculer/0.14.28
+      moleculer: registry.npmmirror.com/moleculer/0.14.28_ioredis@5.3.1
       path-to-regexp: registry.npmmirror.com/path-to-regexp/3.2.0
       qs: registry.npmmirror.com/qs/6.11.0
       serve-static: registry.npmmirror.com/serve-static/1.15.0
@@ -3131,8 +3211,9 @@ packages:
       - supports-color
     dev: false
 
-  registry.npmmirror.com/moleculer/0.14.28:
+  registry.npmmirror.com/moleculer/0.14.28_ioredis@5.3.1:
     resolution: {integrity: sha512-HTOtejMpb14oBtW0kKVoYLK6MgZA4NdPEppOf69yJhF1qlqXRGujAXE2ij2wWyXJNf31l84ZZRh+xXXQmRJaOQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/moleculer/-/moleculer-0.14.28.tgz}
+    id: registry.npmmirror.com/moleculer/0.14.28
     name: moleculer
     version: 0.14.28
     engines: {node: '>= 10.x.x'}
@@ -3210,6 +3291,7 @@ packages:
       eventemitter2: registry.npmmirror.com/eventemitter2/6.4.9
       fastest-validator: registry.npmmirror.com/fastest-validator/1.16.0
       glob: registry.npmmirror.com/glob/7.2.3
+      ioredis: registry.npmmirror.com/ioredis/5.3.1
       ipaddr.js: registry.npmmirror.com/ipaddr.js/2.0.1
       kleur: registry.npmmirror.com/kleur/4.1.5
       lodash: registry.npmmirror.com/lodash/4.17.21
@@ -3539,6 +3621,18 @@ packages:
     dependencies:
       callsites: registry.npmmirror.com/callsites/3.1.0
     dev: true
+
+  registry.npmmirror.com/parseqs/0.0.6:
+    resolution: {integrity: sha512-jeAGzMDbfSHHA091hr0r31eYfTig+29g3GKKE/PPbEQ65X0lmMwlEoqmhzu0iztID5uJpZsFlUPDP8ThPL7M8w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/parseqs/-/parseqs-0.0.6.tgz}
+    name: parseqs
+    version: 0.0.6
+    dev: false
+
+  registry.npmmirror.com/parseuri/0.0.6:
+    resolution: {integrity: sha512-AUjen8sAkGgao7UyCX6Ahv0gIK2fABKmYjvP4xmy5JaKvcbTRueIqIPHLAfq30xJddqSE033IOMUSOMCcK3Sow==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/parseuri/-/parseuri-0.0.6.tgz}
+    name: parseuri
+    version: 0.0.6
+    dev: false
 
   registry.npmmirror.com/parseurl/1.3.3:
     resolution: {integrity: sha512-CiyeOxFT/JZyN5m0z9PfXw4SCBJ6Sygz1Dpl0wqjlhDEGGBP1GnsUVEL0p63hoG1fcj3fHynXi9NYO4nWOL+qQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/parseurl/-/parseurl-1.3.3.tgz}
@@ -4147,6 +4241,38 @@ packages:
       - utf-8-validate
     dev: false
 
+  registry.npmmirror.com/socket.io-client/3.1.3:
+    resolution: {integrity: sha512-4sIGOGOmCg3AOgGi7EEr6ZkTZRkrXwub70bBB/F0JSkMOUFpA77WsL87o34DffQQ31PkbMUIadGOk+3tx1KGbw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/socket.io-client/-/socket.io-client-3.1.3.tgz}
+    name: socket.io-client
+    version: 3.1.3
+    engines: {node: '>=10.0.0'}
+    dependencies:
+      '@types/component-emitter': registry.npmmirror.com/@types/component-emitter/1.2.11
+      backo2: registry.npmmirror.com/backo2/1.0.2
+      component-emitter: registry.npmmirror.com/component-emitter/1.3.0
+      debug: registry.npmmirror.com/debug/4.3.4
+      engine.io-client: registry.npmmirror.com/engine.io-client/4.1.4
+      parseuri: registry.npmmirror.com/parseuri/0.0.6
+      socket.io-parser: registry.npmmirror.com/socket.io-parser/4.0.5
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    dev: false
+
+  registry.npmmirror.com/socket.io-parser/4.0.5:
+    resolution: {integrity: sha512-sNjbT9dX63nqUFIOv95tTVm6elyIU4RvB1m8dOeZt+IgWwcWklFDOdmGcfo3zSiRsnR/3pJkjY5lfoGqEe4Eig==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/socket.io-parser/-/socket.io-parser-4.0.5.tgz}
+    name: socket.io-parser
+    version: 4.0.5
+    engines: {node: '>=10.0.0'}
+    dependencies:
+      '@types/component-emitter': registry.npmmirror.com/@types/component-emitter/1.2.11
+      component-emitter: registry.npmmirror.com/component-emitter/1.3.0
+      debug: registry.npmmirror.com/debug/4.3.4
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   registry.npmmirror.com/socket.io-parser/4.2.2:
     resolution: {integrity: sha512-DJtziuKypFkMMHCm2uIshOYC7QaylbtzQwiMYDuCKy3OPkjLzu4B2vAhTlqipRHHzrI0NJeBAizTK7X+6m1jVw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/socket.io-parser/-/socket.io-parser-4.2.2.tgz}
     name: socket.io-parser
@@ -4656,6 +4782,21 @@ packages:
     name: wrappy
     version: 1.0.2
 
+  registry.npmmirror.com/ws/7.4.6:
+    resolution: {integrity: sha512-YmhHDO4MzaDLB+M9ym/mDA5z0naX8j7SIlT8f8z+I0VtzsRbekxEutHSme7NPS2qE8StCYQNUnfWdXta/Yu85A==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ws/-/ws-7.4.6.tgz}
+    name: ws
+    version: 7.4.6
+    engines: {node: '>=8.3.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: ^5.0.2
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+    dev: false
+
   registry.npmmirror.com/ws/8.11.0:
     resolution: {integrity: sha512-HPG3wQd9sNQoT9xHyNCXoDUa+Xw/VevmY9FoHyQ+g+rrMn4j6FB4np7Z0OhdTgjx6MgQLK7jwSy1YecU1+4Asg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ws/-/ws-8.11.0.tgz}
     name: ws
@@ -4669,6 +4810,13 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
+    dev: false
+
+  registry.npmmirror.com/xmlhttprequest-ssl/1.6.3:
+    resolution: {integrity: sha512-3XfeQE/wNkvrIktn2Kf0869fC0BN6UpydVasGIeSm2B1Llihf7/0UfZM+eCkOw3P7bP4+qPgqhm7ZoxuJtFU0Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/xmlhttprequest-ssl/-/xmlhttprequest-ssl-1.6.3.tgz}
+    name: xmlhttprequest-ssl
+    version: 1.6.3
+    engines: {node: '>=0.4.0'}
     dev: false
 
   registry.npmmirror.com/xtend/4.0.2:
@@ -4689,6 +4837,12 @@ packages:
     version: 1.10.2
     engines: {node: '>= 6'}
     dev: true
+
+  registry.npmmirror.com/yeast/0.1.2:
+    resolution: {integrity: sha512-8HFIh676uyGYP6wP13R/j6OJ/1HwJ46snpvzE7aHAN3Ryqh2yX6Xox2B4CUmTwwOIzlG3Bs7ocsP5dZH/R1Qbg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/yeast/-/yeast-0.1.2.tgz}
+    name: yeast
+    version: 0.1.2
+    dev: false
 
   registry.npmmirror.com/yocto-queue/0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/yocto-queue/-/yocto-queue-0.1.0.tgz}
