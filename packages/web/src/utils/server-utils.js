@@ -12,7 +12,7 @@ export const prisma = new PrismaClient()
 const resp = {
   code: 0,
   data: {},
-  err: {}
+  error: {}
 }
 
 export const loginValidator = async (req, res, next) => {
