@@ -8,5 +8,11 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "4",
+    "moleculer": "^0.14.28",
+    "moleculer-web": "^0.10.5",
+    "socket.io": "^4.6.0"
+  }
 }
