@@ -3,6 +3,10 @@ import { prisma } from 'src/utils/server-utils'
 import { statusPass, statusPending, statusRefuse } from 'src/utils/friend-enums'
 import * as Boom from '@hapi/boom'
 
+// todo 限制好友数量
+// todo 限制输入长度
+// todo 限制邮箱格式
+
 // 在线状态设计：1分钟发一个心跳包，redis记录用户心跳时间。业务层判断心跳时间晚于当前时间2分钟，则离线
 export function isReqStatusValid (status) {
   return status == statusPass || status == statusRefuse
@@ -156,7 +160,15 @@ export async function refuseFriendReq (reqId) {
   return { code: 0 }
 }
 
-// todo 加锁
+// 删除好友
+export async function breakFriends (uid, friendId) {
+  if (!uid || !friendId || friendId == uid) {
+    return Boom.badRequest('Illegal params.')
+  }
+  return Boom.badRequest('Unsupported fn.')
+}
+
+// 添加好友
 export async function makeFriends (reqId, uid, friendId) {
   if (!reqId || !uid || !friendId || friendId == uid) {
     return Boom.badRequest('Illegal params.')
@@ -246,7 +258,7 @@ export async function newFriendRequest (fromUid, toUid, content) {
   if (findReqFromRemote?.status == statusPending) {
     throw Boom.badRequest('Got a pending request from remote.')
   }
-  // find exist friend request.
+  // find existed friend request.
   const findReq = await prisma.friendRequest.findUnique({
     where: {
       fromUidAndtoUidIdx: {

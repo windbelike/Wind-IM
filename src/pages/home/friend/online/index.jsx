@@ -30,12 +30,11 @@ export default function Online () {
 
         <div className='flex p-3 flex-wrap items-start content-start'>
           {error ? <p>{error}</p> : ''}
-          {isLoading
-            ? <p>Loading</p>
-            : data.data?.map((rel, idx) => {
-              return <FriendCard key={idx} email={rel.friendRel?.email}/>
-            })
+          {isLoading && <p>Loading</p>
           }
+          {data && data.data?.map((rel, idx) => {
+            return <FriendCard key={idx} email={rel.friendRel?.email}/>
+          })}
         </div>
       </div>
     </HomeDashboard>

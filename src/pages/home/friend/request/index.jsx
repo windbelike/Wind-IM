@@ -26,19 +26,16 @@ export default function Request () {
           <AddFriendButton setOpenAddFriendWindow={setOpenAddFriendWindow}/>
         </div>
 
-        {openAddFriendWindow
-          ? <AddFriendWindow openAddFriendWindow={openAddFriendWindow} setOpenAddFriendWindow={setOpenAddFriendWindow}/>
-          : ''
+        {openAddFriendWindow &&
+          <AddFriendWindow openAddFriendWindow={openAddFriendWindow} setOpenAddFriendWindow={setOpenAddFriendWindow}/>
         }
 
         <div className='flex p-3 flex-wrap items-start content-start'>
-          {error ? <p>{error}</p> : ''}
-          {isLoading
-            ? <p>Loading</p>
-            : data.data?.map(friendReq => {
-              return <FriendReqCard key={friendReq.id} friendReq={friendReq}/>
-            })
-          }
+          {error && <p>{error}</p>}
+          {isLoading && <p>Loading</p>}
+          {data && data.data?.map(friendReq => {
+            return <FriendReqCard key={friendReq.id} friendReq={friendReq}/>
+          })}
         </div>
       </div>
     </HomeDashboard>
