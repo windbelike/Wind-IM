@@ -1,0 +1,43 @@
+{
+  "name": "@wind-im/web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/boom": "^10.0.0",
+    "@prisma/client": "^4.9.0",
+    "axios": "^1.2.3",
+    "bcrypt": "^5.1.0",
+    "cookie": "^0.5.0",
+    "ioredis": "^5.2.5",
+    "jsonwebtoken": "^9.0.0",
+    "next": "12.3.1",
+    "next-connect": "^0.13.0",
+    "prisma": "^4.9.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.4.0",
+    "react-query": "^3.39.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.12",
+    "eslint": "^8.24.0",
+    "eslint-config-next": "12.3.1",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.3.0",
+    "eslint-plugin-promise": "^6.0.1",
+    "eslint-plugin-react": "^7.31.8",
+    "postcss": "^8.4.17",
+    "tailwindcss": "^3.1.8"
+  }
+}
