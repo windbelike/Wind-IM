@@ -55,7 +55,7 @@ function InboxPanel () {
       <div className='ml-4 mt-1'>
         {/* <InboxSelection name='系统通知'/> */}
         {data && data.data?.map((pm, idx) => {
-          return <InboxSelection key={idx} name={pm.toUidRel.email} to={`/home/inbox/${pm.id}`}/>
+          return <InboxSelection key={idx} name={pm.msgTitle} to={`/home/inbox/${pm.id}`}/>
         })}
       </div>
     </div>

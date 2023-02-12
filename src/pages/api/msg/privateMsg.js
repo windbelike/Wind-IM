@@ -6,7 +6,8 @@ import * as Boom from '@hapi/boom'
 export default apiHandler()
   .get(loginValidator, async (req, res) => {
     const user = req.windImUser
-    res.json({ data: await getAllPrivateMsg(user.id) })
+    const wrappedData = wrapPrivateMsg(user.id, await getAllPrivateMsg(user.id))
+    res.json({ data: wrappedData })
   })
   .post(loginValidator, async (req, res) => {
     const user = req.windImUser
@@ -20,3 +21,14 @@ export default apiHandler()
 
     res.json({ data: await createPrivateMsg(fromUid, toUid) })
   })
+
+function wrapPrivateMsg (uid, allPrivateMsg) {
+  return allPrivateMsg.map(m => {
+    if (m.fromUid == uid) {
+      m.msgTitle = m.toUidRel.email
+    } else {
+      m.msgTitle = m.fromUidRel.email
+    }
+    return m
+  })
+}
