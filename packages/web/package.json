@@ -14,7 +14,6 @@
   "license": "ISC",
   "dependencies": {
     "@hapi/boom": "^10.0.0",
-    "@prisma/client": "^4.9.0",
     "axios": "^1.2.3",
     "bcrypt": "^5.1.0",
     "cookie": "^0.5.0",
