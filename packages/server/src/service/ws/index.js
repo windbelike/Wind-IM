@@ -1,8 +1,8 @@
 const express = require('express')
 const { Server } = require('socket.io')
 const http = require('http')
-const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
+const cookie = require('cookie')
 
 dotenv.config()
 
@@ -22,9 +22,8 @@ app.get('/', (req, res) => {
 })
 
 io.on('connection', (socket) => {
-  console.log(socket.id + ' connected. with auth:' + JSON.stringify(socket.handshake.auth))
-  const payload = jwt.verify(socket.handshake.auth?.token, process.env.JWT_SECRET)
-  console.log('email:' + payload?.email)
+  const cookies = cookie.parse(socket.handshake.headers.cookie)
+  console.log(`socket.id:"${socket.id}" connected with token:"${cookies?.token}"`)
   socket.on('disconnect', (reason) => {
     console.log(socket.id + ' disconnected. for reason:' + reason)
   })

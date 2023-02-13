@@ -11,9 +11,7 @@ export default function Inbox () {
     let socket
     if (msgId) {
       socket = io('ws://localhost:2000', {
-        auth: {
-          token: getCookie('token')
-        },
+        withCredentials: true, // send cookies
         transports: ['websocket']
       })
 

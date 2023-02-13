@@ -9,7 +9,6 @@
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cookie": "^0.5.0",
-    "@prisma/client": "^4.9.0",
     "dotenv": "^16.0.3"
   }
 }
