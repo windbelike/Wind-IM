@@ -38,4 +38,8 @@
   input:focus {
     outline: none;
   }
+
+  div:focus {
+    outline: none;
+  }
 }
