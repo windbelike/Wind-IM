@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "compose": "docker compose up --force-recreate",
-    "migrate": "npx prisma migrate dev && npx prisma migrate deploy && npx prisma generate"
+    "compose": "docker compose up --force-recreate"
+    
   },
   "dependencies": {
     "bcrypt": "^5.1.0",

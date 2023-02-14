@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "./bin/runner.js"
+    "dev": "node ./bin/runner.js"
   },
   "keywords": [],
   "author": "",
@@ -15,7 +15,8 @@
     "ioredis": "^5.2.5",
     "moleculer": "^0.14.28",
     "moleculer-web": "^0.10.5",
-    "socket.io": "^4.6.0"
+    "socket.io": "^4.6.0",
+    "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {
     "eslint": "^8.24.0"

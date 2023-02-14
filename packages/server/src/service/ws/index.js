@@ -3,6 +3,7 @@ const { Server } = require('socket.io')
 const http = require('http')
 const dotenv = require('dotenv')
 const cookie = require('cookie')
+const jwt = require('jsonwebtoken')
 
 dotenv.config()
 
@@ -23,13 +24,30 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
   const cookies = cookie.parse(socket.handshake.headers.cookie)
-  console.log(`socket.id:"${socket.id}" connected with token:"${cookies?.token}"`)
+  const msgId = socket.handshake.query?.privateMsgId
+  console.log(JSON.stringify(socket.handshake.query))
+  const token = cookies?.token
+  let email
+  if (token) {
+    try {
+      const payload = jwt.verify(token, process.env.JWT_SECRET)
+      email = payload.email
+    } catch (e) {
+      console.error(e)
+    }
+  }
+  console.log(`email:"${email}" connected with msgId:${msgId}`)
+
   socket.on('disconnect', (reason) => {
-    console.log(socket.id + ' disconnected. for reason:' + reason)
+    console.log(email + ' disconnected. for reason:' + reason)
   })
-  // socket.on('chat message', (msg) => {
-  //   io.emit('chat message', msg)
-  // })
+  if (msgId) {
+    const privateMsgEvent = 'privateMsgEvent_' + msgId
+    socket.on(privateMsgEvent, (msg) => {
+      // broadcast: exclude the sender ws
+      socket.broadcast.emit(privateMsgEvent, msg)
+    })
+  }
 })
 
 server.listen(2000, () => {
