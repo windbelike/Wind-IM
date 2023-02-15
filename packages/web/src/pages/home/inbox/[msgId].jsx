@@ -31,6 +31,7 @@ export default function Inbox () {
       $msgInput.current.value = ''
       if (msgId && socket && msgInput) {
         const privateMsgEvent = 'privateMsgEvent_' + msgId
+        // todo guarantee the msg won't miss, todo so we need to impl ack mechanism with https://socket.io/docs/v4/emitting-events/#acknowledgements
         socket.emit(privateMsgEvent, msgInput)
         renderMsg(msgInput, currMsgList, setCurrMsgList)
       }
@@ -44,23 +45,26 @@ export default function Inbox () {
           Head
           <p className='text-white'>msgId: {msgId}</p>
         </div>
-        <div id="msgScroll" className='overflow-y-scroll scrollbar h-full'>
+        <div id="msgScroll" className='overflow-y-scroll scrollbar h-full my-3'>
           {currMsgList.map((m, idx) => {
             return <div className='text-white' key={idx}>{m}</div>
           })}
         </div>
-
-        <input className='break-all mt-3 h-14 px-10 py-4 rounded-2xl text-white bg-[#36383e]' ref={$msgInput} onKeyDown={onKeyDownMessaging}/>
+        <input className='break-all h-14 px-10 py-4 rounded-2xl text-white bg-[#36383e]' ref={$msgInput} onKeyDown={onKeyDownMessaging}/>
       </div>
     </HomeDashboard>
   )
 }
 
+// render the msg panel
 function renderMsg (msg, currMsgList, setCurrMsgList) {
   console.log('renderMsg:' + msg)
   setCurrMsgList([...currMsgList, msg])
-  const msgScrollElement = document?.getElementById('msgScroll')
-  msgScrollElement?.scrollTo(0, msgScrollElement?.scrollHeight)
+  // wait for next tick
+  setTimeout(() => {
+    const msgScrollElement = document?.getElementById('msgScroll')
+    msgScrollElement?.scrollTo(0, msgScrollElement?.scrollHeight)
+  }, 0)
 }
 
 function useWs (msgId, $currMsgList, setCurrMsgList) {
