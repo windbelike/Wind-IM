@@ -6,7 +6,7 @@ import { useQuery } from 'react-query'
 export default function HomeSideBar () {
   useState(0)
   return (
-    <div className="p-2 shrink-0 flex flex-col h-full w-64 border-r-[1px] border-solid border-r-[#323437]">
+    <div className="p-2 shrink-0 flex flex-col h-full w-64 border-r-[1px] border-solid border-r-[#323437] overflow-y-hidden">
       <UserInfoPanel />
       <FriendPanel />
       <InboxPanel />
