@@ -23,7 +23,12 @@ app.get('/', (req, res) => {
 })
 
 io.on('connection', (socket) => {
-  const cookies = cookie.parse(socket.handshake.headers.cookie)
+  let cookies
+  try {
+    cookies = cookie.parse(socket.handshake.headers.cookie)
+  } catch (e) {
+    console.error(e)
+  }
   const msgId = socket.handshake.query?.privateMsgId
   console.log(JSON.stringify(socket.handshake.query))
   const token = cookies?.token

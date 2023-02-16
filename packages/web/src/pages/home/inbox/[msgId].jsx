@@ -56,9 +56,9 @@ export default function Inbox () {
           <p className='text-white'>msgId: {msgId}</p>
         </div>
         <div id="msgScroll" className='overflow-y-scroll scrollbar h-full my-3'>
-          <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'}/>
+          {/* <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'}/>
           <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'} sendByMyself={true}/>
-          <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'}/>
+          <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'}/> */}
           {currMsgList.map((m, idx) => {
             return <SingleMsg className='text-white' key={idx} content={m.content} sendByMyself={m.sendByMyself} email={'unsetEmail'}/>
           })}
