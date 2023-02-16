@@ -26,15 +26,24 @@ export default function Inbox () {
   // todo 根据msgId获取双方的基础信息，如头像
 
   function onKeyDownMessaging (e) {
-    if (e.code == 'Enter') {
-      const msgInput = $msgInput.current.value
-      $msgInput.current.value = ''
-      if (msgId && socket && msgInput) {
-        const privateMsgEvent = 'privateMsgEvent_' + msgId
-        // todo guarantee the msg won't miss, todo so we need to impl ack mechanism with https://socket.io/docs/v4/emitting-events/#acknowledgements
-        socket.emit(privateMsgEvent, msgInput)
-        renderMsg(msgInput, currMsgList, setCurrMsgList)
-      }
+    if (e.nativeEvent.isComposing) {
+      // handle chinese keyboard composing
+      return
+    }
+    if (e.code != 'Enter') {
+      return
+    }
+    const msgInput = $msgInput.current.value
+    if (!msgInput || msgInput.length > 5000) {
+      console.log('invalid input:' + msgInput)
+      return
+    }
+    $msgInput.current.value = ''
+    if (msgId && socket) {
+      const privateMsgEvent = 'privateMsgEvent_' + msgId
+      // todo guarantee the msg won't miss, we need to impl ack mechanism with https://socket.io/docs/v4/emitting-events/#acknowledgements
+      socket.emit(privateMsgEvent, msgInput)
+      renderMsg(msgInput, currMsgList, setCurrMsgList)
     }
   }
 
