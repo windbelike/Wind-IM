@@ -1,9 +1,10 @@
 FROM node:16-alpine
 
-ADD . /web_app
+# ADD . /web_app
 
-WORKDIR /web_app
+# WORKDIR /web_app
 
-RUN npm install
+# RUN npm install
 
-CMD npm run dev
+# CMD npm run dev
+CMD echo hello wind-im

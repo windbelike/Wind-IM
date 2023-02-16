@@ -1,7 +1,7 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// rel字段表示关系，用于表示外键约束，字段在db中不存在。
+// rel字段表示关系，在schema中用于表示外键约束，字段在db中不存在。
 
 generator client {
   provider = "prisma-client-js"

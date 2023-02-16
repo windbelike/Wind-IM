@@ -1,8 +1,15 @@
 services:
   web_app:
-    build: ./ 
+    build: ./packages/web/ 
     ports:
       - 3000:3000
+    networks:
+      - internal
+
+  server_app:
+    build: ./packages/server/
+    ports:
+      - 2000:2000
     networks:
       - internal
 

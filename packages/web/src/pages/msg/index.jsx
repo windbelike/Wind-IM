@@ -6,9 +6,10 @@ export default function Msg () {
   const [visiable, setVisiable] = useState(false)
   return (
     <div className="flex h-full">
-      <NewConv visiable={visiable} setVisiable={setVisiable} />
+      <p>Channel msg</p>
+      {/* <NewConv visiable={visiable} setVisiable={setVisiable} />
       <ConversationSideBar setVisiable={setVisiable} />
-      <ConversationWindow />
+      <ConversationWindow /> */}
     </div>
   )
 }
