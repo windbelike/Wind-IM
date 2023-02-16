@@ -1,13 +1,11 @@
 FROM node:16-alpine
 
-ADD . /web_app
+ADD . /server_app
 
-WORKDIR /web_app
+WORKDIR /server_app
 
 RUN npm install -g pnpm
 
 RUN pnpm install
-
-RUN pnpm run migrate
 
 CMD pnpm run dev

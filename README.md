@@ -4,9 +4,7 @@ An IM (as Instant Messaging) based on serverless services.
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
+docker compose up --build
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

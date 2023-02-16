@@ -13,17 +13,17 @@ services:
     networks:
       - internal
 
-  redis: 
-    image: redis:alpine
-    volumes:
-      - redis:/data
-    networks:
-      - internal
-    ports:
-      - 6379:6379
+#   redis: 
+#     image: redis:alpine
+#     volumes:
+#       - redis:/data
+#     networks:
+#       - internal
+#     ports:
+#       - 6379:6379
 
-volumes:
-  redis:
+# volumes:
+#   redis:
 
 networks:
   internal:

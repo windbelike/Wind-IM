@@ -11,6 +11,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cookie": "^0.5.0",
+    "dotenv": "^16.0.3",
     "express": "4",
     "ioredis": "^5.2.5",
     "moleculer": "^0.14.28",
