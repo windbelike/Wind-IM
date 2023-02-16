@@ -43,7 +43,8 @@ export default function Inbox () {
       const privateMsgEvent = 'privateMsgEvent_' + msgId
       // todo guarantee the msg won't miss, we need to impl ack mechanism with https://socket.io/docs/v4/emitting-events/#acknowledgements
       socket.emit(privateMsgEvent, msgInput)
-      renderMsg(msgInput, currMsgList, setCurrMsgList)
+
+      renderMsg({ content: msgInput, sendByMyself: true }, currMsgList, setCurrMsgList)
     }
   }
 
@@ -55,13 +56,31 @@ export default function Inbox () {
           <p className='text-white'>msgId: {msgId}</p>
         </div>
         <div id="msgScroll" className='overflow-y-scroll scrollbar h-full my-3'>
+          <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'}/>
+          <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'} sendByMyself={true}/>
+          <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'}/>
           {currMsgList.map((m, idx) => {
-            return <div className='text-white' key={idx}>{m}</div>
+            return <SingleMsg className='text-white' key={idx} content={m.content} sendByMyself={m.sendByMyself} email={'unsetEmail'}/>
           })}
         </div>
         <input className='break-all h-14 px-10 py-4 rounded-2xl text-white bg-[#36383e]' ref={$msgInput} onKeyDown={onKeyDownMessaging}/>
       </div>
     </HomeDashboard>
+  )
+}
+
+function SingleMsg ({ email, content, sendByMyself = false }) {
+  if (sendByMyself) {
+    return (
+      <div className='mx-2 px-2 text-white rounded-lg hover:bg-[#323437]'>
+        <p className='text-right  break-words'>{content}</p>
+      </div>
+    )
+  }
+  return (
+    <div className='mx-2 px-2  text-white rounded-lg hover:bg-[#323437]'>
+      <p className='break-words'>{content}</p>
+    </div>
   )
 }
 
@@ -99,7 +118,7 @@ function useWs (msgId, $currMsgList, setCurrMsgList) {
       const privateMsgEvent = 'privateMsgEvent_' + msgId
       socket.on(privateMsgEvent, function (msg) {
         console.log(`received msg:${msg} for msgId:{msgId}`)
-        renderMsg(msg, $currMsgList.current, setCurrMsgList) // todo bug，注意currMsgList的词法作用域
+        renderMsg({ content: msg, sendByMyself: false }, $currMsgList.current, setCurrMsgList)
       })
     }
     return () => { socket?.disconnect() }
