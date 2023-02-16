@@ -26,15 +26,11 @@ export default function AddFriendWindow ({ openAddFriendWindow, setOpenAddFriend
 
   function onClickSubmit () {
     const email = $email.current.value
-    console.log('onClickSubmit email, ' + email)
     addFriendMutation.mutate({ email })
     // setOpenAddFriendWindow(false)
   }
 
-  console.log(JSON.stringify(addFriendMutation.data))
-
   if (!openAddFriendWindow) {
-    console.log(openAddFriendWindow)
     return <></>
   }
 

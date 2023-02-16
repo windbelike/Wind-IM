@@ -1,9 +1,9 @@
 import SideBar from './SideBar'
 
-export default function Layout ({ children, userInfoContext }) {
+export default function Layout ({ children }) {
   return (
     <div className="flex">
-      <SideBar userInfoContext={userInfoContext}/>
+      <SideBar/>
       <main className='w-screen h-screen'>{children}</main>
     </div>
   )

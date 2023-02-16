@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
-import { HomeDashboard } from '..'
 import { io } from 'socket.io-client'
 import { useEffect, useRef, useState } from 'react'
+import HomeDashboard from '../HomeDashboard'
 
 let socket
 
@@ -70,6 +70,7 @@ function renderMsg (msg, currMsgList, setCurrMsgList) {
 function useWs (msgId, $currMsgList, setCurrMsgList) {
   useEffect(() => {
     if (msgId) {
+      // fixme useEffect runs twice, socket connects twice
       socket = io('ws://localhost:2000', {
         withCredentials: true, // send cookies
         transports: ['websocket'],
@@ -92,6 +93,6 @@ function useWs (msgId, $currMsgList, setCurrMsgList) {
         renderMsg(msg, $currMsgList.current, setCurrMsgList) // todo bug，注意currMsgList的词法作用域
       })
     }
-    return () => { socket && socket.disconnect() }
+    return () => { socket?.disconnect() }
   }, [msgId])
 }

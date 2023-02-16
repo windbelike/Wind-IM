@@ -16,10 +16,10 @@ export default function WindIM ({ Component, pageProps }) {
   }
 
   return (
-    <Layout userInfoContext={pageProps.userInfoContext}>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <Layout>
         <Component {...pageProps} />
-      </QueryClientProvider>
-    </Layout>
+      </Layout>
+    </QueryClientProvider>
   )
 }

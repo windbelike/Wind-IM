@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
-import { HomeDashboard } from 'src/pages/home/index'
+import HomeDashboard from '../../HomeDashboard'
 import AddFriendButton from '../AddFriendButton'
 import AddFriendWindow from '../AddFriendWindow'
 import FriendCard from '../FriendCard'
