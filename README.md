@@ -27,6 +27,13 @@ You can find db schema in ./packages/web/prisma/chema.prisma
 
 Currently using sqlite for dev enviroment.
 
+## Features
+
+### Delivery Guarantees
+
+1. Message ordering
+2. At least once message arrive
+
 ## License
 
 This is a [No License](https://choosealicense.com/no-permission/) project which means you can view and fork the sourcecode arbitrarily, but you can't modify, share or distribute the software for any purpose.
