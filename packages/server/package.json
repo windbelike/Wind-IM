@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": "node ./bin/runner.js"
   },
   "keywords": [],
@@ -16,12 +16,13 @@
     "dotenv": "^16.0.3",
     "express": "4",
     "ioredis": "^5.2.5",
+    "jsonwebtoken": "^9.0.0",
     "moleculer": "^0.14.28",
     "moleculer-web": "^0.10.5",
-    "socket.io": "^4.6.0",
-    "jsonwebtoken": "^9.0.0"
+    "socket.io": "^4.6.0"
   },
   "devDependencies": {
-    "eslint": "^8.24.0"
+    "eslint": "^8.24.0",
+    "jest": "^29.4.3"
   }
 }
