@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "start": "nodemon ./bin/runner.js",
     "dev": "node ./bin/runner.js"
   },
   "keywords": [],
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "eslint": "^8.24.0",
-    "jest": "^29.4.3"
+    "jest": "^29.4.3",
+    "nodemon": "^2.0.20"
   }
 }
