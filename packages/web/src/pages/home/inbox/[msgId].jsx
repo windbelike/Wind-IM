@@ -9,16 +9,14 @@ export default function Inbox () {
   const router = useRouter()
   const { msgId } = router.query
   const [currMsgList, setCurrMsgList] = useState([])
-  const $msgInput = useRef()
   const $currMsgList = useRef([])
   $currMsgList.current = currMsgList
+  const $msgInput = useRef()
   useWs(msgId, $currMsgList, setCurrMsgList)
 
   useEffect(() => {
     // initiate input
-    if ($msgInput.current) {
-      $msgInput.current.value = ''
-    }
+    cleanInputMsg()
     // initiate currMsgList
     setCurrMsgList([])
   }, [msgId])
@@ -30,7 +28,7 @@ export default function Inbox () {
       // handle chinese keyboard composing
       return
     }
-    if (e.code != 'Enter') {
+    if (e.code != 'Enter' || !msgId) {
       return
     }
     const msgInput = $msgInput.current.value
@@ -38,13 +36,30 @@ export default function Inbox () {
       console.log('invalid input:' + msgInput)
       return
     }
-    $msgInput.current.value = ''
-    if (msgId && socket) {
+    emit(msgInput)
+  }
+
+  function emit (msg) {
+    if (socket && socket.connected) {
       const privateMsgEvent = 'privateMsgEvent_' + msgId
       // todo guarantee the msg won't miss, we need to impl ack mechanism with https://socket.io/docs/v4/emitting-events/#acknowledgements
-      socket.emit(privateMsgEvent, msgInput)
+      socket.timeout(2000).emit(privateMsgEvent, msg, (err, resp) => {
+        if (err) {
+          // the other side did not acknowledge the event in the given delay
+          // retry emit
+          console.log('emit error, going to retry, e=' + JSON.stringify(err))
+          emit(msg)
+        } else {
+          cleanInputMsg()
+          renderMsg({ content: msg, sendByMyself: true }, currMsgList, setCurrMsgList)
+        }
+      })
+    }
+  }
 
-      renderMsg({ content: msgInput, sendByMyself: true }, currMsgList, setCurrMsgList)
+  function cleanInputMsg () {
+    if ($msgInput.current) {
+      $msgInput.current.value = ''
     }
   }
 
@@ -86,7 +101,6 @@ function SingleMsg ({ email, content, sendByMyself = false }) {
 
 // render the msg panel
 function renderMsg (msg, currMsgList, setCurrMsgList) {
-  console.log('renderMsg:' + msg)
   setCurrMsgList([...currMsgList, msg])
   // wait for next tick
   setTimeout(() => {

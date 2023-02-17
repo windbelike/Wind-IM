@@ -48,7 +48,11 @@ io.on('connection', (socket) => {
   })
   if (msgId) {
     const privateMsgEvent = 'privateMsgEvent_' + msgId
-    socket.on(privateMsgEvent, (msg) => {
+    socket.on(privateMsgEvent, (msg, ackFn) => {
+      // todo save msg to db
+      // ...
+      // ack to client
+      ackFn({ code: 0 })
       // broadcast: exclude the sender ws
       socket.broadcast.emit(privateMsgEvent, msg)
     })

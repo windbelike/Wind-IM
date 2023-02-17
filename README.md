@@ -32,7 +32,7 @@ Currently using sqlite for dev enviroment.
 ### Delivery Guarantees
 
 1. Message ordering
-2. At least once message arrive
+2. At least once message arrival
 
 ## License
 
