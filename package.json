@@ -6,7 +6,9 @@
     "compose": "docker compose up --force-recreate",
     "devMono": "npm run dev"
   },
-  "dependencies": {
-    
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.52.0",
+    "@typescript-eslint/parser": "^5.52.0",
+    "eslint-config-standard": "^17.0.0"
   }
 }

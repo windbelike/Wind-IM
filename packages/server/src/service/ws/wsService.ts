@@ -47,9 +47,6 @@ io.on('connection', (socket) => {
   console.log(`email:"${email}" connected with msgId:${msgId}`)
 
   socket.on('disconnect', (reason) => {
-
-
-    
     console.log(email + ' disconnected. for reason:' + reason)
   })
   if (msgId) {
