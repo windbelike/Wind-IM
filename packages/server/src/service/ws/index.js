@@ -1,9 +1,10 @@
-const express = require('express')
-const { Server } = require('socket.io')
-const http = require('http')
-const dotenv = require('dotenv')
-const cookie = require('cookie')
-const jwt = require('jsonwebtoken')
+import { Server } from 'socket.io'
+
+import express from 'express'
+import http from 'http'
+import dotenv from 'dotenv'
+import cookie from 'cookie'
+import jwt from 'jsonwebtoken'
 
 dotenv.config()
 
@@ -53,6 +54,7 @@ io.on('connection', (socket) => {
       // ...
       // simulate server timeout, and ack to client
       // setTimeout(() => ackFn({ code: 0 }), 1000)
+      ackFn({ code: 0 })
 
       // broadcast: exclude the sender ws
       socket.broadcast.emit(privateMsgEvent, msg)

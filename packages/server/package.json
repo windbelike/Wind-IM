@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "jest",
     "start": "nodemon ./bin/runner.js",
-    "dev": "node ./bin/runner.js"
+    "dev": "node ./bin/runner.js",
+    "migrate": "npx prisma migrate dev && npx prisma migrate deploy && npx prisma generate"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +22,7 @@
     "jsonwebtoken": "^9.0.0",
     "moleculer": "^0.14.28",
     "moleculer-web": "^0.10.5",
+    "@prisma/client": "^4.9.0",
     "socket.io": "^4.6.0"
   },
   "devDependencies": {

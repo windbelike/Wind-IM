@@ -1,3 +1,3 @@
 #!/usr/bin/env node
-const myWs = require('../src/service/ws')
+import * as ws from '../src/service/ws/index.js'
 console.log('Hello Runner')
