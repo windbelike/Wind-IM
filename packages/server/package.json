@@ -5,8 +5,8 @@
   "scripts": {
     "test": "jest",
     "start": "nodemon ./src/index.js",
-    "dev": "tsc && tsc-alias && node dist/index.js",
-    "ts": "concurrently \"tsc --watch\" \"nodemon -q dist/index.js\"",
+    "dev": "npx tsc && npx tsc-alias && node dist/index.js",
+    "ts": "concurrently \"npx tsc --watch\" \"npx tsc-alias --watch\" \"nodemon -q dist/index.js\"",
     "migrate": "npx prisma migrate dev && npx prisma migrate deploy && npx prisma generate"
   },
   "keywords": [],
