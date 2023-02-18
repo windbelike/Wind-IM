@@ -1,12 +1,12 @@
 import { Server } from 'socket.io'
 
-import express from 'express';
-import dotenv from 'dotenv';
+import express from 'express'
+import dotenv from 'dotenv'
 import http from 'http'
 import cookie from 'cookie'
 import jwt from 'jsonwebtoken'
-import { prisma } from '../../utils/prismaHolder'
-import { getUserFromCookieToken } from '../../utils/authUtils'
+import { prisma } from '@src/utils/prismaHolder'
+import { getUserFromCookieToken } from '@src/utils/authUtils'
 
 dotenv.config()
 
@@ -14,7 +14,7 @@ const app = express()
 const server = http.createServer(app)
 
 const io = new Server(server,
-     {
+  {
     cors: {
       origin: 'http://localhost:3000'
     }
@@ -66,4 +66,4 @@ io.on('connection', (socket) => {
   }
 })
 
-export {server}
+export default server

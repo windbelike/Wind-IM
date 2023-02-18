@@ -1,11 +1,13 @@
 {
   "include": [
-    "src/**/*.ts"
+    "./src/**/*.ts"
   ],
+  "exclude": ["node_modules"],
   "compilerOptions": {
     "outDir": "./dist",
+    "baseUrl": "./src",
     "paths": {
-      "@/*": ["./src/*"]
+      "@src/*": ["./*"]
     },
     "esModuleInterop": true
   }
