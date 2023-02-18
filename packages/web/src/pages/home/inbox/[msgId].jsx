@@ -42,6 +42,7 @@ export default function Inbox () {
   function emit (msg) {
     if (socket && socket.connected) {
       const privateMsgEvent = 'privateMsgEvent_' + msgId
+      cleanInputMsg()
       // todo guarantee the msg won't miss, we need to impl ack mechanism with https://socket.io/docs/v4/emitting-events/#acknowledgements
       socket.timeout(2000).emit(privateMsgEvent, msg, (err, resp) => {
         if (err) {
@@ -50,7 +51,6 @@ export default function Inbox () {
           console.log('emit error, going to retry, e=' + JSON.stringify(err))
           emit(msg)
         } else {
-          cleanInputMsg()
           renderMsg({ content: msg, sendByMyself: true }, currMsgList, setCurrMsgList)
         }
       })

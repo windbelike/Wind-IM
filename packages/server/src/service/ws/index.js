@@ -48,11 +48,12 @@ io.on('connection', (socket) => {
   })
   if (msgId) {
     const privateMsgEvent = 'privateMsgEvent_' + msgId
-    socket.on(privateMsgEvent, (msg, ackFn) => {
+    socket.on(privateMsgEvent, async (msg, ackFn) => {
       // todo save msg to db
       // ...
-      // ack to client
-      ackFn({ code: 0 })
+      // simulate server timeout, and ack to client
+      // setTimeout(() => ackFn({ code: 0 }), 1000)
+
       // broadcast: exclude the sender ws
       socket.broadcast.emit(privateMsgEvent, msg)
     })
