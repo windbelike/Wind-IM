@@ -1,7 +1,17 @@
-import { prisma } from './prismaHolder'
+import { prisma } from '@/utils/prismaHolder'
 import jwt from 'jsonwebtoken'
 
-export async function getUserFromCookieToken (token) {
+type User = {
+  id: Number,
+  email: String,
+  bio: String,
+  username: String
+}
+
+export async function getUserFromCookieToken (token): Promise<User> {
+  if (!token) {
+    return null
+  }
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET)
     // find user in database

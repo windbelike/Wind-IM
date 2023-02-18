@@ -5,8 +5,8 @@ import dotenv from 'dotenv'
 import http from 'http'
 import cookie from 'cookie'
 import jwt from 'jsonwebtoken'
-import { prisma } from '@src/utils/prismaHolder'
-import { getUserFromCookieToken } from '@src/utils/authUtils'
+import { prisma } from '@/utils/prismaHolder'
+import { getUserFromCookieToken } from '@/utils/authUtils'
 
 dotenv.config()
 
@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
   res.send('Hello ws')
 })
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
   let cookies
   try {
     cookies = cookie.parse(socket.handshake.headers.cookie)
@@ -34,16 +34,8 @@ io.on('connection', (socket) => {
   }
   const msgId = socket.handshake.query?.privateMsgId
   console.log(JSON.stringify(socket.handshake.query))
-  const token = cookies?.token
-  let email
-  if (token) {
-    try {
-      const payload = jwt.verify(token, process.env.JWT_SECRET)
-      email = payload.email
-    } catch (e) {
-      console.error(e)
-    }
-  }
+  const user = await getUserFromCookieToken(cookies?.token)
+  const email = user?.email
   console.log(`email:"${email}" connected with msgId:${msgId}`)
 
   socket.on('disconnect', (reason) => {
