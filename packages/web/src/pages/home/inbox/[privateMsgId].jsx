@@ -105,12 +105,10 @@ function SingleMsg ({ email, content, sendByMyself = false }) {
 // render the msg panel
 function renderMsg (msg, currMsgList, setCurrMsgList) {
   if (Array.isArray(msg)) {
-    console.log('array')
     setCurrMsgList([...currMsgList, ...msg])
   } else {
     setCurrMsgList([...currMsgList, msg])
   }
-  console.log('render msg:' + JSON.stringify(msg))
   // wait for next tick
   setTimeout(() => {
     const msgScrollElement = document?.getElementById('msgScroll')
@@ -142,9 +140,7 @@ function useWs (privateMsgId, $currMsgList, setCurrMsgList) {
       // on receive private msg
       const privateMsgEvent = 'privateMsgEvent_' + privateMsgId
       const privateMsgInitEvent = 'privateMsgInitEvent_' + privateMsgId
-      console.log('privateMsgEvent:' + privateMsgEvent)
       socket.on(privateMsgInitEvent, function (msgList) {
-        console.log(`received msgList:${JSON.stringify(msgList)} for privateMsgId:${privateMsgInitEvent}`)
         if (msgList) {
           renderMsg(msgList, $currMsgList.current, setCurrMsgList)
         }
