@@ -79,8 +79,8 @@ model Message {
   msgType Int // 消息类型，-1:系统消息 0:点对点 1:群发
   privateMsgId Int ? // 消息所属私聊，仅在msg_type=0时使用
   channelId Int ? // 消息所属频道，仅在msg_type=1时使用
-  pushed Boolean // 是否成功推送（基于4个报文实现消息可靠推送）
-  read Boolean // 是否已读（暂时不实现）
+  pushed Boolean ?  // 是否成功推送（基于4个报文实现消息可靠推送）
+  read  Boolean ? // 是否已读（暂时不实现）
   createdAt DateTime @default(now()) // 创建时间 
   updatedAt DateTime @default(now()) @updatedAt // 创建时间
   @@index(fields: [fromUid, toUid], name: "fromUidAndtoUidIdx")

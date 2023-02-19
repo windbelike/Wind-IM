@@ -7,19 +7,19 @@ let socket
 
 export default function Inbox () {
   const router = useRouter()
-  const { msgId } = router.query
+  const { privateMsgId } = router.query
   const [currMsgList, setCurrMsgList] = useState([])
   const $currMsgList = useRef([])
   $currMsgList.current = currMsgList
   const $msgInput = useRef()
-  useWs(msgId, $currMsgList, setCurrMsgList)
+  useWs(privateMsgId, $currMsgList, setCurrMsgList)
 
   useEffect(() => {
     // initiate input
     cleanInputMsg()
     // initiate currMsgList
     setCurrMsgList([])
-  }, [msgId])
+  }, [privateMsgId])
 
   // todo 根据msgId获取双方的基础信息，如头像
 
@@ -28,7 +28,7 @@ export default function Inbox () {
       // handle chinese keyboard composing
       return
     }
-    if (e.code != 'Enter' || !msgId) {
+    if (e.code != 'Enter' || !privateMsgId) {
       return
     }
     const msgInput = $msgInput.current.value
@@ -36,13 +36,16 @@ export default function Inbox () {
       console.log('invalid input:' + msgInput)
       return
     }
-    emit(msgInput)
+    const msg2Send = {
+      content: msgInput
+    }
+    cleanInputMsg()
+    emit(msg2Send)
   }
 
   function emit (msg) {
     if (socket && socket.connected) {
-      const privateMsgEvent = 'privateMsgEvent_' + msgId
-      cleanInputMsg()
+      const privateMsgEvent = 'privateMsgEvent_' + privateMsgId
       // todo guarantee the msg won't miss, we need to impl ack mechanism with https://socket.io/docs/v4/emitting-events/#acknowledgements
       socket.timeout(2000).emit(privateMsgEvent, msg, (err, resp) => {
         if (err) {
@@ -51,7 +54,7 @@ export default function Inbox () {
           console.log('emit error, going to retry, e=' + JSON.stringify(err))
           emit(msg)
         } else {
-          renderMsg({ content: msg, sendByMyself: true }, currMsgList, setCurrMsgList)
+          renderMsg({ ...msg, sendByMyself: true }, currMsgList, setCurrMsgList)
         }
       })
     }
@@ -68,7 +71,7 @@ export default function Inbox () {
       <div className='p-3 w-full h-full flex flex-col'>
         <div className='h-24 border-b-[1px] border-solid border-b-[#323437] text-white shrink-0'>
           Head
-          <p className='text-white'>msgId: {msgId}</p>
+          <p className='text-white'>msgId: {privateMsgId}</p>
         </div>
         <div id="msgScroll" className='overflow-y-scroll scrollbar h-full my-3'>
           {/* <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'}/>
@@ -101,7 +104,13 @@ function SingleMsg ({ email, content, sendByMyself = false }) {
 
 // render the msg panel
 function renderMsg (msg, currMsgList, setCurrMsgList) {
-  setCurrMsgList([...currMsgList, msg])
+  if (Array.isArray(msg)) {
+    console.log('array')
+    setCurrMsgList([...currMsgList, ...msg])
+  } else {
+    setCurrMsgList([...currMsgList, msg])
+  }
+  console.log('render msg:' + JSON.stringify(msg))
   // wait for next tick
   setTimeout(() => {
     const msgScrollElement = document?.getElementById('msgScroll')
@@ -109,32 +118,42 @@ function renderMsg (msg, currMsgList, setCurrMsgList) {
   }, 0)
 }
 
-function useWs (msgId, $currMsgList, setCurrMsgList) {
+function useWs (privateMsgId, $currMsgList, setCurrMsgList) {
   useEffect(() => {
-    if (msgId) {
+    if (privateMsgId) {
       // fixme useEffect runs twice, socket connects twice
       socket = io('ws://localhost:2000', {
         withCredentials: true, // send cookies
         transports: ['websocket'],
         query: {
-          privateMsgId: msgId
+          privateMsgId,
+          privateMsgOffset: 0 // received private msg offset
         }
       })
 
       socket.on('connect', () => {
-        console.log(msgId + ' connected.')
+        console.log(privateMsgId + ' connected.')
       })
 
       socket.on('disconnect', () => {
-        console.log(msgId + ' disconnected.')
+        console.log(privateMsgId + ' disconnected.')
       })
 
-      const privateMsgEvent = 'privateMsgEvent_' + msgId
+      // on receive private msg
+      const privateMsgEvent = 'privateMsgEvent_' + privateMsgId
+      const privateMsgInitEvent = 'privateMsgInitEvent_' + privateMsgId
+      console.log('privateMsgEvent:' + privateMsgEvent)
+      socket.on(privateMsgInitEvent, function (msgList) {
+        console.log(`received msgList:${JSON.stringify(msgList)} for privateMsgId:${privateMsgInitEvent}`)
+        if (msgList) {
+          renderMsg(msgList, $currMsgList.current, setCurrMsgList)
+        }
+      })
       socket.on(privateMsgEvent, function (msg) {
-        console.log(`received msg:${msg} for msgId:{msgId}`)
-        renderMsg({ content: msg, sendByMyself: false }, $currMsgList.current, setCurrMsgList)
+        console.log(`received msg:${JSON.stringify(msg)} for privateMsgId:${privateMsgId}`)
+        renderMsg({ ...msg, sendByMyself: false }, $currMsgList.current, setCurrMsgList)
       })
     }
     return () => { socket?.disconnect() }
-  }, [msgId])
+  }, [privateMsgId])
 }
