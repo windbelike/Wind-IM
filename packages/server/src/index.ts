@@ -4,15 +4,16 @@ import { DefaultEventsMap } from 'socket.io/dist/typed-events'
 import express from 'express'
 import http from 'http'
 import * as Boom from '@hapi/boom'
-dotenv.config()
 
 import { SocketData, wsAuthMiddleWare, wsOnConnect } from '@/service/ws/wsService'
+
+dotenv.config()
 
 const app = express()
 const server = http.createServer(app)
 
-function httpAuth(req, res, next) {
-  console.log("httpAuth")
+function httpAuth (req, res, next) {
+  console.log('httpAuth')
   next()
 }
 
@@ -21,7 +22,7 @@ app.get('/', httpAuth, (req, res) => {
 })
 
 app.get('/error', httpAuth, (req, res) => {
-  throw Boom.forbidden("hello Boom")
+  throw Boom.forbidden('hello Boom')
 })
 
 app.use((err, req, res, next) => {
@@ -41,7 +42,6 @@ app.use((err, req, res, next) => {
     })
   }
 })
-
 
 // ws io
 const io = new Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>(server,
