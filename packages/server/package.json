@@ -4,7 +4,6 @@
   "description": "",
   "scripts": {
     "test": "jest",
-    "start": "nodemon ./src/index.js",
     "dev": "npx tsc && npx tsc-alias && node dist/index.js",
     "ts": "concurrently \"npx tsc --watch\" \"npx tsc-alias --watch\" \"nodemon -q dist/index.js\"",
     "migrate": "npx prisma migrate dev && npx prisma migrate deploy && npx prisma generate"
@@ -13,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@hapi/boom": "^10.0.0",
     "@prisma/client": "^4.9.0",
     "bcrypt": "^5.1.0",
     "cookie": "^0.5.0",
@@ -27,6 +27,9 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.20.11",
+    "@typescript-eslint/eslint-plugin": "^5.52.0",
+    "@typescript-eslint/parser": "^5.52.0",
+    "eslint-config-standard": "^17.0.0",
     "@types/express": "^4.17.17",
     "@types/node": "^18.14.0",
     "concurrently": "^7.6.0",
