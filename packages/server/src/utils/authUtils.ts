@@ -1,7 +1,7 @@
 import { prisma } from '@/utils/prismaHolder'
 import jwt from 'jsonwebtoken'
 
-type User = {
+export type User = {
   id: Number,
   email: String,
   bio: String,

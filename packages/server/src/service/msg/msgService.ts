@@ -1,9 +1,9 @@
 import { prisma } from '../../utils/prismaHolder'
 
-function persistPrivateMsg (msgId) {
+function persistPrivateMsg (msgId: Number) {
 
 }
 
-function getDestUserOfPrivateMsg (msgId, fromUid) {
+function getDestUserOfPrivateMsg (msgId: Number, fromUid: Number) {
 
 }

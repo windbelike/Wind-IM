@@ -7,13 +7,24 @@ import cookie from 'cookie'
 import jwt from 'jsonwebtoken'
 import { prisma } from '@/utils/prismaHolder'
 import { getUserFromCookieToken } from '@/utils/authUtils'
+import { DefaultEventsMap } from 'socket.io/dist/typed-events'
+import type { User } from '@/utils/authUtils'
+
+type SocketData = {
+  user: User;
+  msgId: string | string[];
+}
 
 dotenv.config()
 
 const app = express()
 const server = http.createServer(app)
 
-const io = new Server(server,
+app.get('/', (req, res) => {
+  res.send('Hello ws')
+})
+
+const io = new Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>(server,
   {
     cors: {
       origin: 'http://localhost:3000'
@@ -21,20 +32,39 @@ const io = new Server(server,
   }
 )
 
-app.get('/', (req, res) => {
-  res.send('Hello ws')
+// Middleware to attach msgId and user info
+io.use(async (socket, next) => {
+  try {
+    const user = await fetchUserFromSocket(socket)
+    if (!user) {
+      next(new Error('unknown user'))
+    }
+    const msgId = socket.handshake.query?.privateMsgId
+    socket.data = {
+      user,
+      msgId
+    }
+    next()
+  } catch (e) {
+    next(new Error('unknown user'))
+  }
 })
 
-io.on('connection', async (socket) => {
+async function fetchUserFromSocket (socket) {
   let cookies
   try {
     cookies = cookie.parse(socket.handshake.headers.cookie)
   } catch (e) {
     console.error(e)
   }
-  const msgId = socket.handshake.query?.privateMsgId
   console.log(JSON.stringify(socket.handshake.query))
   const user = await getUserFromCookieToken(cookies?.token)
+  return user
+}
+
+io.on('connection', async (socket) => {
+  const msgId = socket.data?.msgId
+  const user = socket.data?.user
   const email = user?.email
   console.log(`email:"${email}" connected with msgId:${msgId}`)
 
