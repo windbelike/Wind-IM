@@ -1,7 +1,5 @@
 
 import cookie from 'cookie'
-import jwt from 'jsonwebtoken'
-import { prisma } from '@/utils/prismaHolder'
 import { getUserFromCookieToken } from '@/utils/authUtils'
 
 import type { User } from '@/utils/authUtils'
@@ -14,10 +12,8 @@ export type SocketData = {
   privateMsgOffset: any
 }
 
-
-
 // Middleware to attach msgId and user info
-export async function wsAuthMiddleWare(socket, next) {
+export async function wsAuthMiddleware (socket, next) {
   try {
     const user = await fetchUserFromSocket(socket)
     if (!user) {
@@ -41,7 +37,7 @@ export async function wsAuthMiddleWare(socket, next) {
   }
 }
 
-export async function wsOnConnect(socket) {
+export async function wsOnConnect (socket) {
   const privateMsgId = socket.data?.privateMsgId
   const user = socket.data?.user
   const toUid = socket.data?.toUserId

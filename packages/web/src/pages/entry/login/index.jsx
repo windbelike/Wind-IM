@@ -1,10 +1,13 @@
 import { useState, useRef } from 'react'
-import axios from 'axios'
 import { useMutation } from 'react-query'
 import { useRouter } from 'next/router'
+import axios from '@/utils/axiosUtils'
+
+const backendDomain = process.env.NEXT_PUBLIC_BACKEND_HOST
 
 async function login ({ email, pwd }) {
-  const result = await axios.post('/api/login', {
+  // backendDomain + '/api/login'
+  const result = await axios.post(backendDomain + '/api/login', {
     email,
     pwd
   })
@@ -26,7 +29,7 @@ export default function LoginForm () {
   if (loginMutation.data?.ok) {
     // todo clear this setTimeout
     setTimeout(() => {
-      router.push('/user/profile')
+      router.push('/')
     }, 500)
     return (<>Login successfully !!! Redicting...</>)
   }
@@ -34,7 +37,7 @@ export default function LoginForm () {
   return (
     <div className='flex h-full justify-center items-center'>
       <div className='flex flex-col bg-gray-100 p-8 rounded-lg'>
-        {loginMutation.error && <div style={{ color: 'red' }}>{loginMutation.error.response.data.message}</div>}
+        {loginMutation.error && <div style={{ color: 'red' }}>{loginMutation.error.response?.data.message}</div>}
         <label>Email: </label>
         <input type="text" autoComplete="on" ref={$email}/>
         <br/>

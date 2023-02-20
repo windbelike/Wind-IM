@@ -44,17 +44,26 @@ export async function getUserFromCookieToken (token): Promise<User> {
 
 export const loginValidator = async (req, res, next) => {
   // to validate if current use have already logined.
-  const user = await getUserFromReq(req)
-  if (!user) {
-    throw Boom.forbidden('Please login in first')
+  try {
+    const user = await getUserFromReq(req)
+    if (!user) {
+      throw Boom.forbidden('Please login in first')
+    }
+    req.windImUser = user
+    next()
+  } catch (e) {
+    console.error(e)
+    res.json({ msg: 'loginValidator error' })
   }
-  req.windImUser = user
-  next()
 }
+
 // hanlde authorization
 export const getUserFromReq = async (req) => {
   // get JWT `token` on cookies
-  const token = req.cookies.token
+  console.log('cookies:')
+  console.log(req.cookies)
+  console.log(JSON.stringify(req.cookies))
+  console.log(req.signedCookies)
+  const token = req.cookies?.token
   return await getUserFromCookieToken(token)
 }
-

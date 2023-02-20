@@ -1,9 +1,13 @@
-import axios from 'axios'
+import axios from '@/utils/axiosUtils'
 import { useRouter } from 'next/router'
 import { useMutation } from 'react-query'
 
+const backendDomain = process.env.NEXT_PUBLIC_BACKEND_HOST
+
 async function logout () {
-  const result = await axios.post('/api/logout', {})
+  const result = await axios.post(backendDomain + '/api/logout', {
+    withCredentials: true
+  })
   return result.data
 }
 

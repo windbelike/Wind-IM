@@ -4,56 +4,64 @@ import { DefaultEventsMap } from 'socket.io/dist/typed-events'
 import express from 'express'
 import http from 'http'
 import * as Boom from '@hapi/boom'
+import cors from 'cors'
 
-import { SocketData, wsAuthMiddleWare, wsOnConnect } from '@/service/ws/wsService'
+import { SocketData, wsAuthMiddleware, wsOnConnect } from '@/service/ws/wsPrivateMsgService'
+import { loginValidator } from './utils/authUtils'
+import { privateMsgGet, privateMsgPost } from './handler/http/privateMsgHandler'
+import { whoami } from './handler/http/userHandler'
+import { errorHandler } from './handler/http/errorHandler'
+import { loginPost } from './handler/http/loginHandler'
+import { signupPost } from './handler/http/signupHandler'
+import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
+import { logoutPost } from './handler/http/logoutHandler'
 
 dotenv.config()
+const FRONTEND_HOST = process.env.FRONTEND_HOST
 
 const app = express()
 const server = http.createServer(app)
 
-function httpAuth (req, res, next) {
-  console.log('httpAuth')
-  next()
+const corsOptions = {
+  credentials: true,
+  origin: FRONTEND_HOST,
+  optionsSuccessStatus: 200
 }
 
-app.get('/', httpAuth, (req, res) => {
-  res.send('Hello ws')
-})
+// http service
+app.use(cookieParser())
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cors(corsOptions))
+  .get('/', (req, res) => {
+    res.send('Hello Wind-IM.')
+  })
+  .get('/error', (req, res) => {
+    throw Boom.forbidden('hello Boom')
+  })
+  .get('/api/msg/privateMsg', loginValidator, privateMsgGet)
+  .get('/api/whoami', whoami)
+  .post('/api/msg/privateMsg', loginValidator, privateMsgPost)
+  .post('/api/login', loginPost)
+  .post('/api/singup', signupPost)
+  .post('/api/logout', loginValidator, logoutPost)
 
-app.get('/error', httpAuth, (req, res) => {
-  throw Boom.forbidden('hello Boom')
-})
+  .use(errorHandler) // for handling global error
 
-app.use((err, req, res, next) => {
-  console.error(err)
-  // 如果是一个 Boom 异常，则根据 Boom 异常结构修改 `res`
-  if (Boom.isBoom(err)) {
-    res.status(err.output.payload.statusCode)
-    res.json({
-      error: err.output.payload.error,
-      message: err.output.payload.message
-    })
-  } else {
-    res.status(500)
-    res.json({
-      error: err,
-      message: 'Unexpected error'
-    })
-  }
-})
-
-// ws io
+// ws service
 const io = new Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>(server,
   {
     cors: {
-      origin: 'http://localhost:3000'
+      origin: FRONTEND_HOST
     }
   }
 )
 
-io.use(wsAuthMiddleWare).on('connection', wsOnConnect)
+io.use(wsAuthMiddleware)
+  .on('connection', wsOnConnect)
 
+// start http & ws server
 server.listen(2000, () => {
   console.log('listening on *:2000')
 })
