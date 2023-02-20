@@ -47,13 +47,13 @@ export const loginValidator = async (req, res, next) => {
   try {
     const user = await getUserFromReq(req)
     if (!user) {
-      throw Boom.forbidden('Please login in first')
+      next(Boom.forbidden('Please login in first'))
     }
     req.windImUser = user
     next()
   } catch (e) {
     console.error(e)
-    res.json({ msg: 'loginValidator error' })
+    next(e)
   }
 }
 

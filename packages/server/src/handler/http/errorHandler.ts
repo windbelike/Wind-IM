@@ -1,6 +1,7 @@
 import * as Boom from '@hapi/boom'
 
 export function errorHandler (err, req, res, next) {
+  console.log('#errorHandler')
   console.error(err)
   // 如果是一个 Boom 异常，则根据 Boom 异常结构修改 `res`
   if (Boom.isBoom(err)) {

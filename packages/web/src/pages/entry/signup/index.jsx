@@ -4,10 +4,9 @@ import { useMutation } from 'react-query'
 
 // Custom nested route for _app.js
 SignUpForm.isEntry = true
-const backendDomain = process.env.NEXT_PUBLIC_BACKEND_HOST
 
 async function createAccount ({ email, pwd }) {
-  await axios.post(backendDomain + '/api/signup', {
+  await axios.post('/api/signup', {
     email, pwd
   })
 }

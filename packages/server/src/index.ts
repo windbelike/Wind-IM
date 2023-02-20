@@ -30,6 +30,7 @@ const corsOptions = {
 }
 
 // http service
+
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -37,11 +38,11 @@ app.use(cors(corsOptions))
   .get('/', (req, res) => {
     res.send('Hello Wind-IM.')
   })
-  .get('/error', (req, res) => {
-    throw Boom.forbidden('hello Boom')
+  .get('/error', (req, res, next) => {
+    next(Boom.forbidden('hello Boom'))
   })
   .get('/api/msg/privateMsg', loginValidator, privateMsgGet)
-  .get('/api/whoami', whoami)
+  .get('/api/whoami', loginValidator, whoami)
   .post('/api/msg/privateMsg', loginValidator, privateMsgPost)
   .post('/api/login', loginPost)
   .post('/api/singup', signupPost)

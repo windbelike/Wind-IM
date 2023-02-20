@@ -25,24 +25,26 @@ async function validate (email, pwd) {
   }
 }
 
-export async function loginPost (req, res) {
-  console.log('loginPost...')
-  // todo body undefined
-  const body = req.body
-  const user = await validate(body.email, body.pwd)
-  const expireDays = 7
-  const token = jwt.sign(
-    { email: user.email },
-    process.env.JWT_SECRET,
-    { expiresIn: `${expireDays} days` }
-  )
+export async function loginPost (req, res, next) {
+  try {
+    const body = req.body
+    const user = await validate(body.email, body.pwd)
+    const expireDays = 7
+    const token = jwt.sign(
+      { email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: `${expireDays} days` }
+    )
 
-  // set a cookie named `token`
-  res.setHeader('Set-Cookie', cookie.serialize('token', token, {
-    httpOnly: true,
-    path: '/',
-    maxAge: 60 * 60 * 24 * expireDays
-  }))
+    // set a cookie named `token`
+    res.setHeader('Set-Cookie', cookie.serialize('token', token, {
+      httpOnly: true,
+      path: '/',
+      maxAge: 60 * 60 * 24 * expireDays
+    }))
 
-  res.json({ ok: true })
+    res.json({ ok: true })
+  } catch (e) {
+    next(e)
+  }
 }

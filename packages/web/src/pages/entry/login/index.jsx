@@ -3,11 +3,9 @@ import { useMutation } from 'react-query'
 import { useRouter } from 'next/router'
 import axios from '@/utils/axiosUtils'
 
-const backendDomain = process.env.NEXT_PUBLIC_BACKEND_HOST
-
 async function login ({ email, pwd }) {
   // backendDomain + '/api/login'
-  const result = await axios.post(backendDomain + '/api/login', {
+  const result = await axios.post('/api/login', {
     email,
     pwd
   })
