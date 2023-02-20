@@ -1,6 +1,6 @@
 
 import { statusPass, statusRefuse } from '@/utils/friend-enums'
-import axios from 'axios'
+import axios from '@/utils/axiosUtils'
 import { AiOutlineUserAdd, AiOutlineCloseCircle, AiOutlineCheckCircle } from 'react-icons/ai'
 import { useMutation } from 'react-query'
 

@@ -2,26 +2,45 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node ./bin/runner.js"
+    "test": "jest",
+    "dev": "npx prisma generate && npx tsc && npx tsc-alias && node dist/index.js",
+    "ts": "concurrently \"npx tsc --watch\" \"npx tsc-alias --watch\" \"nodemon -q dist/index.js\"",
+    "migrate": "npx prisma migrate dev && npx prisma migrate deploy && npx prisma generate"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@hapi/boom": "^10.0.0",
+    "@prisma/client": "^4.9.0",
     "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.1",
     "cookie": "^0.5.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "4",
     "ioredis": "^5.2.5",
+    "jsonwebtoken": "^9.0.0",
     "moleculer": "^0.14.28",
     "moleculer-web": "^0.10.5",
     "socket.io": "^4.6.0",
-    "jsonwebtoken": "^9.0.0"
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "eslint": "^8.24.0"
+    "@babel/plugin-transform-modules-commonjs": "^7.20.11",
+    "@types/express": "^4.17.17",
+    "@types/node": "^18.14.0",
+    "@typescript-eslint/eslint-plugin": "^5.52.0",
+    "@typescript-eslint/parser": "^5.52.0",
+    "concurrently": "^7.6.0",
+    "eslint": "^8.24.0",
+    "eslint-config-standard": "^17.0.0",
+    "jest": "^29.4.3",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "tsc-alias": "^1.8.2",
+    "typescript": "^4.9.5"
   }
 }

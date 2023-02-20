@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '@/utils/axiosUtils'
 import { useRef } from 'react'
 import { useMutation } from 'react-query'
 

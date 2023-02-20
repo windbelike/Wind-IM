@@ -1,10 +1,10 @@
-import axios from 'axios'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
+import axios from '@/utils/axiosUtils'
 
 async function getWhoami () {
-  const result = await axios.get('/api/hasLogin')
+  const result = await axios.get('/api/whoami')
   return result.data
 }
 

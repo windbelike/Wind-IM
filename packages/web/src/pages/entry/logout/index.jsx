@@ -1,9 +1,11 @@
-import axios from 'axios'
+import axios from '@/utils/axiosUtils'
 import { useRouter } from 'next/router'
 import { useMutation } from 'react-query'
 
 async function logout () {
-  const result = await axios.post('/api/logout', {})
+  const result = await axios.post('/api/logout', {
+    withCredentials: true
+  })
   return result.data
 }
 

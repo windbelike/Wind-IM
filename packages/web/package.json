@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "migrate": "npx prisma migrate dev && npx prisma migrate deploy && npx prisma generate",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -14,7 +13,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^4.9.0",
     "@hapi/boom": "^10.0.0",
     "axios": "^1.2.3",
     "bcrypt": "^5.1.0",
@@ -28,7 +26,7 @@
     "react-dom": "18.2.0",
     "react-icons": "^4.4.0",
     "react-query": "^3.39.2",
-    "socket.io-client": "^3.1.1"
+    "socket.io-client": "^4.6.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.12",
