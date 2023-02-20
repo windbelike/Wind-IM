@@ -60,10 +60,6 @@ export const loginValidator = async (req, res, next) => {
 // hanlde authorization
 export const getUserFromReq = async (req) => {
   // get JWT `token` on cookies
-  console.log('cookies:')
-  console.log(req.cookies)
-  console.log(JSON.stringify(req.cookies))
-  console.log(req.signedCookies)
   const token = req.cookies?.token
   return await getUserFromCookieToken(token)
 }

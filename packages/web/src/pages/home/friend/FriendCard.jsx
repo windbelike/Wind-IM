@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '@/utils/axiosUtils'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { AiOutlineMessage, AiOutlineUserDelete } from 'react-icons/ai'

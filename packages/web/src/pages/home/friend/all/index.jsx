@@ -1,10 +1,10 @@
-import axios from 'axios'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import HomeDashboard from '../../HomeDashboard'
 import AddFriendButton from '../AddFriendButton'
 import AddFriendWindow from '../AddFriendWindow'
 import FriendCard from '../FriendCard'
+import axios from '@/utils/axiosUtils'
 
 async function getAllFriends () {
   const result = await axios.get('/api/friend')

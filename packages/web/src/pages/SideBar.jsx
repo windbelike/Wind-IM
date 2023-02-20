@@ -16,8 +16,8 @@ export default function SideBar () {
         <div className='flex-1'>
           <SideBarIcon linkTo='/' text='Home' icon={<AiOutlineHome size="28" />} />
           <SideBarIcon linkTo='/msg' text='Messages' icon={<AiOutlineMessage size="28" />} />
-          {/* <SideBarIcon linkTo='/user/profile' text='Profile' icon={<AiOutlineUser size="28" />} /> */}
-          <SideBarIcon linkTo='/entry/login' text='Profile' icon={<AiOutlineUser size="28" />} />
+          <SideBarIcon linkTo='/user/profile' text='Profile' icon={<AiOutlineUser size="28" />} />
+          {/* <SideBarIcon linkTo='/entry/login' text='Profile' icon={<AiOutlineUser size="28" />} /> */}
           <SideBarIcon linkTo='/entry/logout' text='Logout' icon={<AiOutlineLogin size="28" />} />
         </div>
         {/* Bottom Function */}

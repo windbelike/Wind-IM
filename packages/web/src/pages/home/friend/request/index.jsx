@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '@/utils/axiosUtils'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import HomeDashboard from '../../HomeDashboard'

@@ -16,6 +16,8 @@ import { signupPost } from './handler/http/signupHandler'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import { logoutPost } from './handler/http/logoutHandler'
+import { friendReqGet, friendReqPost } from './handler/http/friendReqhandler'
+import { friendGet } from './handler/http/friendHandler'
 
 dotenv.config()
 const FRONTEND_HOST = process.env.FRONTEND_HOST
@@ -41,12 +43,15 @@ app.use(cors(corsOptions))
   .get('/error', (req, res, next) => {
     next(Boom.forbidden('hello Boom'))
   })
-  .get('/api/msg/privateMsg', loginValidator, privateMsgGet)
   .get('/api/whoami', loginValidator, whoami)
+  .get('/api/msg/privateMsg', loginValidator, privateMsgGet)
   .post('/api/msg/privateMsg', loginValidator, privateMsgPost)
   .post('/api/login', loginPost)
   .post('/api/singup', signupPost)
   .post('/api/logout', loginValidator, logoutPost)
+  .get('/api/friendRequest', loginValidator, friendReqGet)
+  .post('/api/friendRequest', loginValidator, friendReqPost)
+  .get('/api/friend', loginValidator, friendGet)
 
   .use(errorHandler) // for handling global error
 

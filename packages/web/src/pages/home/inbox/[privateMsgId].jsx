@@ -120,7 +120,7 @@ function useWs (privateMsgId, $currMsgList, setCurrMsgList) {
   useEffect(() => {
     if (privateMsgId) {
       // fixme useEffect runs twice, socket connects twice
-      socket = io('ws://localhost:2000', {
+      socket = io(process.env.NEXT_PUBLIC_WS_HOST, {
         withCredentials: true, // send cookies
         transports: ['websocket'],
         query: {
