@@ -8,6 +8,4 @@ RUN npm install -g pnpm
 
 RUN pnpm install
 
-RUN pnpm run migrate
-
 CMD pnpm run dev
