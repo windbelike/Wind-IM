@@ -23,7 +23,7 @@ account16: email: 16 password: 1
 
 ## DB Schema
 
-You can find db schema in ./packages/web/prisma/chema.prisma
+You can find db schema in ./packages/server/prisma/chema.prisma
 
 Currently using sqlite for dev enviroment.
 
