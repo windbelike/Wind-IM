@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import { io } from 'socket.io-client'
 import { useEffect, useRef, useState } from 'react'
 import HomeDashboard from '../HomeDashboard'
+import EmojiPicker from 'emoji-picker-react'
 
 let socket
 
@@ -13,6 +14,11 @@ export default function Inbox () {
   $currMsgList.current = currMsgList
   const $msgInput = useRef()
   useWs(privateMsgId, $currMsgList, setCurrMsgList)
+  const [loadEmojiKeyboard, setLoadEmojiKeyboard] = useState(false)
+
+  useEffect(() => {
+    setLoadEmojiKeyboard(true)
+  }, [])
 
   useEffect(() => {
     // initiate input
@@ -66,6 +72,10 @@ export default function Inbox () {
     }
   }
 
+  function onClickEmoji (emojiOjb) {
+    $msgInput.current.value += emojiOjb.emoji
+  }
+
   return (
     <HomeDashboard>
       <div className='p-3 w-full h-full flex flex-col'>
@@ -81,7 +91,12 @@ export default function Inbox () {
             return <SingleMsg className='text-white' key={idx} content={m.content} sendByMyself={m.sendByMyself} email={'unsetEmail'}/>
           })}
         </div>
-        <input className='break-all h-14 px-10 py-4 rounded-2xl text-white bg-[#36383e]' ref={$msgInput} onKeyDown={onKeyDownMessaging}/>
+        <div className='fixed right-20 bottom-32'>{ loadEmojiKeyboard && <EmojiPicker searchDisabled={true} theme='dark' emojiStyle='native' onEmojiClick={onClickEmoji}/> }
+        </div>
+        <div className='flex items-center'>
+          <input className='break-all h-14 w-full px-10 py-4 rounded-2xl text-white bg-[#36383e]' ref={$msgInput} onKeyDown={onKeyDownMessaging}/>
+          <button className='w-10 h-10' onClick={() => setLoadEmojiKeyboard(!loadEmojiKeyboard)}>😊</button>
+        </div>
       </div>
     </HomeDashboard>
   )

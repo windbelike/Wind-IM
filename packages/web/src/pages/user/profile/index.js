@@ -1,4 +1,6 @@
 import axios from '@/utils/axiosUtils'
+import EmojiPicker from 'emoji-picker-react'
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 
 async function whoami () {
@@ -8,9 +10,12 @@ async function whoami () {
 
 export default function Profile () {
   const { isLoading, error, data } = useQuery('whoami', whoami)
+
   return (
     <>
+
       {isLoading && <p>Loading</p>}
+
       {data &&
       <div>
         <h1>Hello, {data.data?.email}</h1>
