@@ -4,6 +4,10 @@ import { useEffect, useRef, useState } from 'react'
 import HomeDashboard from '../HomeDashboard'
 import EmojiPicker from 'emoji-picker-react'
 
+// todo implement client side msg storage with offset
+
+const defaultRetryTimes = 3
+
 let socket
 
 export default function Inbox () {
@@ -15,10 +19,6 @@ export default function Inbox () {
   const $msgInput = useRef()
   useWs(privateMsgId, $currMsgList, setCurrMsgList)
   const [loadEmojiKeyboard, setLoadEmojiKeyboard] = useState(false)
-
-  useEffect(() => {
-    setLoadEmojiKeyboard(true)
-  }, [])
 
   useEffect(() => {
     // initiate input
@@ -43,24 +43,31 @@ export default function Inbox () {
       return
     }
     const msg2Send = {
-      content: msgInput
+      content: msgInput,
+      ext: { retryTimes: defaultRetryTimes }
     }
     cleanInputMsg()
     emit(msg2Send)
   }
 
+  // At least once message arrival
   function emit (msg) {
+    if (msg.ext?.retryTimes < 0) {
+      console.log('Ran out of retry times.')
+      return
+    }
     if (socket && socket.connected) {
       const privateMsgEvent = 'privateMsgEvent_' + privateMsgId
       // todo guarantee the msg won't miss, we need to impl ack mechanism with https://socket.io/docs/v4/emitting-events/#acknowledgements
       socket.timeout(2000).emit(privateMsgEvent, msg, (err, resp) => {
         if (err) {
-          // the other side did not acknowledge the event in the given delay
-          // retry emit
+          // retry sending msg, cuz the other side did not acknowledge the event in the given delay
           console.log('emit error, going to retry, e=' + JSON.stringify(err))
+          msg.ext.retryTimes--
           emit(msg)
         } else {
-          renderMsg({ ...msg, sendByMyself: true }, currMsgList, setCurrMsgList)
+          msg.sendByMyself = true
+          renderMsg(msg, currMsgList, setCurrMsgList)
         }
       })
     }
@@ -103,26 +110,23 @@ export default function Inbox () {
 }
 
 function SingleMsg ({ email, content, sendByMyself = false }) {
-  if (sendByMyself) {
-    return (
-      <div className='mx-2 px-2 text-white rounded-lg hover:bg-[#323437]'>
-        <p className='text-right  break-words'>{content}</p>
-      </div>
-    )
-  }
   return (
-    <div className='mx-2 px-2  text-white rounded-lg hover:bg-[#323437]'>
-      <p className='break-words'>{content}</p>
+    <div className='mx-2 px-2 text-white rounded-lg hover:bg-[#323437]'>
+      {/* <img className='w-12 h-12 bg-white rounded-full' src="https://avatars.githubusercontent.com/u/33996345?v=4" alt="" /> */}
+      <p className={'break-all ' + (sendByMyself ? 'text-right' : '')}>{content}</p>
     </div>
   )
 }
 
 // render the msg panel
-function renderMsg (msg, currMsgList, setCurrMsgList) {
-  if (Array.isArray(msg)) {
-    setCurrMsgList([...currMsgList, ...msg])
+function renderMsg (newMsg, currMsgList, setCurrMsgList) {
+  if (!newMsg) {
+    return
+  }
+  if (Array.isArray(newMsg)) {
+    setCurrMsgList([...currMsgList, ...newMsg])
   } else {
-    setCurrMsgList([...currMsgList, msg])
+    setCurrMsgList([...currMsgList, newMsg])
   }
   // wait for next tick
   setTimeout(() => {
@@ -156,13 +160,11 @@ function useWs (privateMsgId, $currMsgList, setCurrMsgList) {
       const privateMsgEvent = 'privateMsgEvent_' + privateMsgId
       const privateMsgInitEvent = 'privateMsgInitEvent_' + privateMsgId
       socket.on(privateMsgInitEvent, function (msgList) {
-        if (msgList) {
-          renderMsg(msgList, $currMsgList.current, setCurrMsgList)
-        }
+        renderMsg(msgList, $currMsgList.current, setCurrMsgList)
       })
       socket.on(privateMsgEvent, function (msg) {
-        console.log(`received msg:${JSON.stringify(msg)} for privateMsgId:${privateMsgId}`)
-        renderMsg({ ...msg, sendByMyself: false }, $currMsgList.current, setCurrMsgList)
+        msg.sendByMyself = false
+        renderMsg(msg, $currMsgList.current, setCurrMsgList)
       })
     }
     return () => { socket?.disconnect() }
