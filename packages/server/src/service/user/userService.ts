@@ -1,13 +1,18 @@
 import { prisma } from '@/utils/prismaHolder'
 import bcrypt from 'bcrypt'
 
-export async function signup (username: string, tag: string, pwd: string) {
-  if (!username || !tag || !pwd) {
+export async function signup (username: string, pwd: string) {
+  if (!username || !pwd) {
     console.error('Invalid signup params.')
     return
   }
   if (username.length > 12) {
     console.error('Invalid legnth of signup username:' + username)
+    return
+  }
+  const tag = await generateTag(username)
+  if (!tag) {
+    console.error('Failed to generate a tag for username:' + username)
     return
   }
   const created = await prisma.user.create({
@@ -30,7 +35,20 @@ async function generateTag (username: string) {
   if (!username) {
     return
   }
-
-  const tag = Math.floor(Math.random() * 10000).toString().padStart(4, '0')
-  console.log(tag)
+  let retryTimes = 5
+  while (retryTimes > 0) {
+    const tag = Math.floor(Math.random() * 10000).toString().padStart(4, '0')
+    const userExisted = await prisma.user.findUnique({
+      where: {
+        usernameAndTagIdx: {
+          username,
+          tag
+        }
+      }
+    })
+    if (!userExisted) {
+      return tag
+    }
+    retryTimes--
+  }
 }
