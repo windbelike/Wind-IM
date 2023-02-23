@@ -4,7 +4,7 @@ export async function signupPost (req, res, next) {
   try {
     const body = req.body
 
-    const created = await signup(body.username, body.tag, body.pwd)
+    const created = await signup(body.email, body.username, body.pwd)
     if (created) {
       res.json({
         code: 0,

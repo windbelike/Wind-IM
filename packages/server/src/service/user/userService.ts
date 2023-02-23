@@ -1,26 +1,19 @@
 import { prisma } from '@/utils/prismaHolder'
 import bcrypt from 'bcrypt'
+import * as Boom from '@hapi/boom'
 
-export async function signup (username: string, pwd: string) {
-  if (!username || !pwd) {
-    console.error('Invalid signup params.')
-    return
-  }
-  if (username.length > 12) {
-    console.error('Invalid legnth of signup username:' + username)
-    return
-  }
-  const tag = await generateTag(username)
+export async function signup (email:string, username: string, pwd: string) {
+  checkSignupParam(email, username, pwd)
+  const tag = await generateUserTag(username)
   if (!tag) {
-    console.error('Failed to generate a tag for username:' + username)
-    return
+    throw Boom.badRequest('Failed to generate a tag for username:' + username)
   }
   const created = await prisma.user.create({
     data: {
       username,
       tag,
-      pwd: bcrypt.hashSync(pwd, 10),
-      email: ''
+      email,
+      pwd: bcrypt.hashSync(pwd, 10)
     },
     select: {
       username: true,
@@ -31,7 +24,27 @@ export async function signup (username: string, pwd: string) {
   return created
 }
 
-async function generateTag (username: string) {
+function checkSignupParam (email: string, username: string, pwd: string) {
+  if (!email ||
+    !username ||
+    !pwd ||
+    !email.trim() ||
+    !username.trim() ||
+    !pwd.trim()) {
+    throw Boom.badRequest('Invalid signup params.')
+  }
+  if (username.length > 12 || pwd.length > 16 || email.length > 50) {
+    throw Boom.badRequest('Invalid legnth of signup params.')
+  }
+  // const emailReg = /'^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$'/
+  // const emailIsValid = emailReg.test(email)
+  // if (!emailIsValid) {
+  //   throw Boom.badRequest('Invalid email' + email)
+  // }
+}
+
+// tag format: 0000-9999
+async function generateUserTag (username: string) {
   if (!username) {
     return
   }

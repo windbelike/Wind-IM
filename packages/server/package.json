@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "jest",
+    "test": "tsc && tsc-alias && jest /test",
     "dev": "npx prisma generate && npx tsc && npx tsc-alias && node dist/index.js",
     "ts": "concurrently \"npx tsc --watch\" \"npx tsc-alias --watch\" \"nodemon -q dist/index.js\"",
     "migrate": "npx prisma migrate dev && npx prisma migrate deploy && npx prisma generate"
