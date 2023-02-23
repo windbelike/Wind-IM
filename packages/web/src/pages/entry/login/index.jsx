@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import { useMutation } from 'react-query'
 import { useRouter } from 'next/router'
 import axios from '@/utils/axiosUtils'
+import Link from 'next/link'
 
 async function login ({ email, pwd }) {
   // backendDomain + '/api/login'
@@ -29,22 +30,29 @@ export default function LoginForm () {
     setTimeout(() => {
       router.push('/')
     }, 500)
-    return (<>Login successfully !!! Redicting...</>)
   }
 
   return (
-    <div className='flex h-full justify-center items-center'>
-      <div className='flex flex-col bg-gray-100 p-8 rounded-lg'>
-        {loginMutation.error && <div style={{ color: 'red' }}>{loginMutation.error.response?.data.message}</div>}
-        <label>Email: </label>
-        <input type="text" autoComplete="on" ref={$email}/>
-        <br/>
-        <label >Password: </label>
-        <input className='rounded-sm' type="password" ref={$pwd}/>
-        <button onClick={onClickLogin} className='h-12 rounded-full bg-sky-500 text-white hover:bg-sky-600 m-5 px-5 shrink-0 focus:ring focus:ring-sky-300 active:bg-sky-700 focus:outline-none' >Login</button>
-        <div>{JSON.stringify(loginMutation) }</div>
+    <>
+      <div className='flex h-screen w-screen justify-center items-center bg-gradient-to-r from-sky-500 to-indigo-500'>
+        <div className='flex flex-col h-[432px] w-[408px] p-8 shadow-2xl rounded-md bg-[#313338]  text-white'>
+          <h1 className=' text-center text-2xl'>Welcome back!</h1>
+          <div className='flex flex-col pt-5'>
+            <p className='text-[#b8b9bf] font-bold text-sm mt-5 mb-1'>EMAIL</p>
+            <input className='bg-[#1e1f22] p-2' type="text" ref={$email}/>
+            <p className='text-[#b8b9bf] font-bold text-sm mt-5 mb-1'>PASSWORD</p>
+            <input className='bg-[#1e1f22] p-2' type="password" ref={$pwd}/>
+            <button onClick={onClickLogin} className='h-10 rounded-md bg-[#6161f1] mt-7 shrink-0' >Log In</button>
+            {loginMutation.error && <p className='mt-2 text-red-500'>Failed to Login.</p>}
+            {loginMutation.data?.ok && <p className='mt-2 text-green-400'>Login successfully !!! Redicting...</p>}
+          </div>
+          <Link href='/entry/signup'>
+            <a className='mt-3 underline text-blue-400'>Need an account? Register</a>
+          </Link>
+        </div>
       </div>
-    </div>
+    </>
+
   )
 }
 

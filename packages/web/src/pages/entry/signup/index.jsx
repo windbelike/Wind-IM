@@ -38,7 +38,7 @@ export default function SignUpForm () {
   return (
     <>
       <div className='flex h-screen w-screen justify-center items-center bg-gradient-to-r from-sky-500 to-indigo-500'>
-        <div className='flex flex-col h-[502px] w-[408px] p-8 bg-[#313338]  text-white'>
+        <div className='flex flex-col h-[502px] w-[408px] p-8 shadow-2xl rounded-md bg-[#313338]  text-white'>
           <h1 className=' text-center text-2xl'>Create an account</h1>
           <div className='flex flex-col pt-5'>
             <p className='text-[#b8b9bf] font-bold text-sm mt-5 mb-1'>EMAIL</p>
@@ -48,7 +48,7 @@ export default function SignUpForm () {
             <p className='text-[#b8b9bf] font-bold text-sm mt-5 mb-1'>PASSWORD</p>
             <input className='bg-[#1e1f22] p-2' ref={$pwd} type="password"/>
           </div>
-          <button disabled={createAccountMutation.isLoading} className='h-10 rounded-md bg-[#6161f1] mt-7 shrink-0' onClick={onClickCreateAccount}>Continue</button>
+          <button disabled={createAccountMutation.isLoading} className='h-10 rounded-md bg-[#6161f1] mt-7 shrink-0' onClick={onClickCreateAccount}>Sign Up</button>
           {createAccountMutation.error && <p className='mt-2 text-red-500'>Invalid input.</p>}
           <Link href='/entry/login'>
             <a className='mt-3 underline text-blue-400'>Already have an account?</a>
