@@ -85,7 +85,7 @@ export default function Inbox () {
 
   return (
     <HomeDashboard>
-      <div className='p-3 w-full h-full flex flex-col'>
+      <div className='p-3 w-full h-full flex flex-col overflow-hidden'>
         <div className='h-24 border-b-[1px] border-solid border-b-[#323437] text-white shrink-0'>
           Head
           <p className='text-white'>msgId: {privateMsgId}</p>

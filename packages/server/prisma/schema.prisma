@@ -15,11 +15,11 @@ datasource db {
 // 用户
 model User {
   id    Int    @id @default(autoincrement())
-  // todo 使用额外uid做业务逻辑，不使用主键id
 
   email String @unique
   pwd String
-  username String ?
+  username String 
+  tag String  // 四位数tag 0000-9999, username#tag 构成用户唯一标识
   bio String ? // 简介（个性签名）
   avatar String ? // 头像链接
 
@@ -37,6 +37,7 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+  @@unique(fields:[username, tag], name: "usernameAndTagIdx")
 }
 
 // 好友列表(用户-用户)，多对多关系表。注意：添加好友操作需要insert两次
