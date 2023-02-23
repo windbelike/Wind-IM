@@ -8,7 +8,7 @@ SignUpForm.isEntry = true
 
 async function createAccount ({ email, username, pwd }) {
   await axios.post('/api/signup', {
-    email, pwd
+    email, username, pwd
   })
 }
 
@@ -30,8 +30,9 @@ export default function SignUpForm () {
     const username = $username.current.value
     const pwd = $pwd.current.value
     console.log('email:' + email)
-    console.log('pwd:' + pwd)
-    createAccountMutation.mutate({ email, pwd })
+    console.log('username:' + username)
+    // console.log('pwd:' + pwd)
+    createAccountMutation.mutate({ email, username, pwd })
   }
 
   return (
@@ -48,6 +49,7 @@ export default function SignUpForm () {
             <input className='bg-[#1e1f22] p-2' ref={$pwd} type="password"/>
           </div>
           <button disabled={createAccountMutation.isLoading} className='h-10 rounded-md bg-[#6161f1] mt-7 shrink-0' onClick={onClickCreateAccount}>Continue</button>
+          {createAccountMutation.error && <p className='mt-2 text-red-500'>Invalid input.</p>}
           <Link href='/entry/login'>
             <a className='mt-3 underline text-blue-400'>Already have an account?</a>
           </Link>
