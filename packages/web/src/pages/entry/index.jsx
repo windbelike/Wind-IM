@@ -1,5 +1,4 @@
 import { useState, useRef } from 'react'
-import { getUserFromReq } from '../../utils/server-utils'
 import LoginForm from './login'
 import SignUpForm from './signup'
 
@@ -22,17 +21,17 @@ export default function Entry () {
 Entry.isEntry = true
 
 // if logined already, jump to profile.
-export async function getServerSideProps (ctx) {
-  const user = await getUserFromReq(ctx.req)
-  if (user) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/user/profile'
-      }
-    }
-  }
-  return {
-    props: {}
-  }
-}
+// export async function getServerSideProps (ctx) {
+//   const user = await getUserFromReq(ctx.req)
+//   if (user) {
+//     return {
+//       redirect: {
+//         permanent: false,
+//         destination: '/user/profile'
+//       }
+//     }
+//   }
+//   return {
+//     props: {}
+//   }
+// }
