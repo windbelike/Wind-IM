@@ -1,5 +1,5 @@
 import { getUserByEmail, isReqStatusValid } from '@/service/friend/friendService'
-import { getPendingFriendReqList, newFriendRequest, passFriendReq, refuseFriendReq } from '@/service/friend/newFriendReqService'
+import { getPendingFriendReqList, newFriendRequest, passFriendReq, refuseFriendReq } from '@/service/friend/friendReqService'
 import { statusPass } from '@/utils/friend-enums'
 import * as Boom from '@hapi/boom'
 

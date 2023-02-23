@@ -1,20 +1,21 @@
-import { prisma } from '@/utils/prismaHolder'
-import bcrypt from 'bcrypt'
+import { signup } from '@/service/user/userService'
 
 export async function signupPost (req, res, next) {
   try {
     const body = req.body
-    console.log(body)
-    const created = await prisma.user.create({
-      data: {
-        email: body.email,
-        pwd: bcrypt.hashSync(body.pwd, 10)
-      }
-    })
-    res.json({
-      code: 200,
-      message: 'success'
-    })
+
+    const created = await signup(body.username, body.tag, body.pwd)
+    if (created) {
+      res.json({
+        code: 0,
+        message: 'signup success'
+      })
+    } else {
+      res.json({
+        code: 1,
+        message: 'signup error'
+      })
+    }
   } catch (e) {
     next(e)
   }

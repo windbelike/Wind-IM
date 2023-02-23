@@ -15,11 +15,11 @@ datasource db {
 // 用户
 model User {
   id    Int    @id @default(autoincrement())
-
-  email String @unique
-  pwd String
   username String 
   tag String  // 四位数tag 0000-9999, username#tag 构成用户唯一标识
+  pwd String
+
+  email String ?
   bio String ? // 简介（个性签名）
   avatar String ? // 头像链接
 

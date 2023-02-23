@@ -50,7 +50,8 @@ export async function refuseFriendReq (reqId) {
   if (!reqId) {
     return
   }
-  // 不想用事务，直接updateMany保证原子性
+  // 不想用事务，直接update where保证原子性
+  // 因为prisma的update只能在uniq idx情况下使用，所以updateMany
   const res = await prisma.friendRequest.updateMany({
     where: {
       id: reqId,
