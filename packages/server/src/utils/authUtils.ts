@@ -23,13 +23,15 @@ export async function getUserFromCookieToken (token): Promise<User> {
   }
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET)
+    // todo cache
     // find user in database
     const user = await prisma.user.findUnique({
       select: {
         id: true,
         email: true,
         bio: true,
-        username: true
+        username: true,
+        tag: true
       },
       where: {
         email: payload.email

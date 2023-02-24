@@ -40,6 +40,9 @@ app.use(cors(corsOptions))
   .get('/', (req, res) => {
     res.send('Hello Wind-IM.')
   })
+  .get('/r', (req, res) => {
+    res.redirect('/api/whoami')
+  })
   .get('/error', (req, res, next) => {
     next(Boom.forbidden('hello Boom'))
   })

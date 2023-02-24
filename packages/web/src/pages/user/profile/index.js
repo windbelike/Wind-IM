@@ -1,19 +1,21 @@
 import axios from '@/utils/axiosUtils'
-import EmojiPicker from 'emoji-picker-react'
-import { useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
 
-async function whoami () {
-  const data = await axios.get('/api/whoami')
+async function whoami (req) {
+  const data = await axios.get('/api/whoami', {
+    headers: {
+      Cookie: req.headers.cookie
+    }
+  })
   return data.data
 }
 
-export default function Profile () {
-  const { isLoading, error, data } = useQuery('whoami', whoami)
+export default function Profile ({ user }) {
+  // const { isLoading, error, data } = useQuery('whoami', whoami)
 
   return (
     <>
-
+      <p>Hello, {user.username}</p>
+      {/*
       {isLoading && <p>Loading</p>}
 
       {data &&
@@ -21,27 +23,31 @@ export default function Profile () {
         <h1>Hello, {data.data?.email}</h1>
       </div>
       }
-      {error && <p>error</p>}
+      {error && <p>error</p>} */}
     </>
 
   )
 }
 
-// export async function getServerSideProps (ctx) {
-//   const user = await getUserFromReq(ctx.req)
-//   if (!user) {
-//     return {
-//       redirect: {
-//         permanent: false,
-//         destination: '/entry'
-//       }
-//     }
-//   }
-//   return {
-//     props: {
-//       user: {
-//         email: user.email
-//       }
-//     }
-//   }
-// }
+export async function getServerSideProps ({ req }) {
+  let data
+  try {
+    data = await whoami(req)
+  } catch (e) {
+    console.log('#getServerSideProps error')
+  }
+
+  if (data?.code != 0) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/entry'
+      }
+    }
+  }
+  return {
+    props: {
+      user: data.data
+    }
+  }
+}
