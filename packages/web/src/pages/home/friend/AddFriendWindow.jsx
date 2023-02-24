@@ -2,9 +2,9 @@ import axios from '@/utils/axiosUtils'
 import { useRef } from 'react'
 import { useMutation } from 'react-query'
 
-async function addFriend ({ email }) {
+async function addFriend ({ usernameAndTag }) {
   const result = await axios.post('/api/friendRequest', {
-    email,
+    usernameAndTag,
     opType: 0,
     content: 'You have a new friend request.'
   })
@@ -16,7 +16,7 @@ export default function AddFriendWindow ({ openAddFriendWindow, setOpenAddFriend
   const bgElementId = 'addFriendWindow'
   const cancelElementId = 'cancelButton'
   const addFriendMutation = useMutation(addFriend)
-  const $email = useRef(null)
+  const $usernameAndTag = useRef(null)
 
   function onClickCloseWindow (e) {
     if (e.target.id === bgElementId || e.target.id === cancelElementId) {
@@ -25,8 +25,8 @@ export default function AddFriendWindow ({ openAddFriendWindow, setOpenAddFriend
   }
 
   function onClickSubmit () {
-    const email = $email.current.value
-    addFriendMutation.mutate({ email })
+    const usernameAndTag = $usernameAndTag.current.value
+    addFriendMutation.mutate({ usernameAndTag })
     // setOpenAddFriendWindow(false)
   }
 
@@ -39,7 +39,7 @@ export default function AddFriendWindow ({ openAddFriendWindow, setOpenAddFriend
       <div className="mx-auto flex flex-col w-[440px] h-[231px] bg-[#25262a] rounded-2xl p-5 ">
         <h1 className="text-white text-xl font-bold">ADD FRIEND</h1>
         <p className="text-[#717579] mt-2">You can add a friend with their tag.</p>
-        <input type="text" className="m-4 text-white rounded-xl p-2 border-solid border-2 border-[#323437] focus:border-[#6bc001] bg-transparent" placeholder="Enter a Username#Tag" ref={$email}></input>
+        <input type="text" className="m-4 text-white rounded-xl p-2 border-solid border-2 border-[#323437] focus:border-[#6bc001] bg-transparent" placeholder="Enter a Username#Tag" ref={$usernameAndTag}></input>
         {addFriendMutation.error && <div className='ml-4 text-red-600'>{addFriendMutation.error.response.data.message}</div>}
         {addFriendMutation.data && <div className='ml-4 text-white'>{JSON.stringify(addFriendMutation.data)}</div>}
         <div className='flex ml-auto mt-auto gap-3 text-white'>

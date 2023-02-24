@@ -12,7 +12,9 @@ export async function getPendingFriendReqList (uid) {
     include: {
       fromUidRel: {
         select: {
-          email: true
+          email: true,
+          username: true,
+          tag: true
         }
       }
     }

@@ -12,6 +12,26 @@ export function isReqStatusValid (status) {
   return status == statusPass || status == statusRefuse
 }
 
+export async function getUserByUsernameAndTag (username:string, tag:string) {
+  if (!username || !tag) {
+    return
+  }
+
+  return await prisma.user.findUnique({
+    select: {
+      id: true,
+      username: true,
+      tag: true
+    },
+    where: {
+      usernameAndTagIdx: {
+        username,
+        tag
+      }
+    }
+  })
+}
+
 export async function getUserByEmail (email) {
   if (email == null || email == undefined) {
     return
@@ -46,7 +66,8 @@ export async function getFirendList (uid) {
           id: true,
           email: true,
           bio: true,
-          username: true
+          username: true,
+          tag: true
         }
       },
       friendRel: {
@@ -54,7 +75,8 @@ export async function getFirendList (uid) {
           id: true,
           email: true,
           bio: true,
-          username: true
+          username: true,
+          tag: true
         }
       }
     }

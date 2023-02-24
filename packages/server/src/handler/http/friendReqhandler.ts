@@ -1,4 +1,4 @@
-import { getUserByEmail, isReqStatusValid } from '@/service/friend/friendService'
+import { getUserByEmail, getUserByUsernameAndTag, isReqStatusValid } from '@/service/friend/friendService'
 import { getPendingFriendReqList, newFriendRequest, passFriendReq, refuseFriendReq } from '@/service/friend/friendReqService'
 import { statusPass } from '@/utils/friend-enums'
 import * as Boom from '@hapi/boom'
@@ -41,15 +41,23 @@ export async function friendReqGet (req, res, next) {
 */
 async function createNewFriendReq (req) {
   const fromUid = req.windImUser?.id
-  const email = req.body?.email
-  const toUser = await getUserByEmail(email) // todo use cache instead of requesting db directly.
+  const usernameAndTag = req.body?.usernameAndTag
+  if (!usernameAndTag || !usernameAndTag.trim()) {
+    throw Boom.badRequest('User not found.')
+  }
+  const username = usernameAndTag.split('#')[0]
+  const tag = usernameAndTag.split('#')[1]
+  if (!username || !tag) {
+    throw Boom.badRequest('User not found.')
+  }
+  const toUser = await getUserByUsernameAndTag(username, tag) // todo use cache instead of requesting db directly.
   if (!toUser) {
     throw Boom.badRequest('User not found.')
   }
   const toUid = toUser.id
   const content = req.body?.content
   if (!fromUid || !toUid || toUid == fromUid) {
-    throw Boom.badRequest('Invalid param error')
+    throw Boom.badRequest('Invalid params error')
   }
   return await newFriendRequest(fromUid, toUid, content)
 }

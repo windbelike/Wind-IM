@@ -54,7 +54,7 @@ export default function FriendCard ({ friendReq }) {
     <div className='flex flex-col h-32 w-72 m-3 p-4 bg-[#36383e] rounded-3xl'>
       <div className='flex items-center'>
         <img className='w-12 h-12 bg-white rounded-full' src="https://avatars.githubusercontent.com/u/33996345?v=4" alt="" />
-        <p className='ml-3 text-[#e6eaf0]'>{friendReq?.fromUidRel?.email}</p>
+        <p className='ml-3 text-[#e6eaf0]'>{friendReq?.fromUidRel?.username}#{friendReq?.fromUidRel?.tag}</p>
       </div>
       <div className='flex gap-2 ml-auto mt-auto text-[#7b8086] '>
         <AiOutlineCheckCircle onClick={onClickPass} className='hover:cursor-pointer' size="24"/>

@@ -33,7 +33,7 @@ export default function All () {
           {isLoading && <p>Loading</p>
           }
           {data && data.data?.map((rel, idx) => {
-            return <FriendCard key={idx} email={rel.friendRel?.email}/>
+            return <FriendCard key={idx} usernameAndTag={`${rel.friendRel?.username}#${rel.friendRel?.tag}`}/>
           })}
         </div>
       </div>

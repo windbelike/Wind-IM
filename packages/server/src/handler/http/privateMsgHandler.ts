@@ -1,4 +1,4 @@
-import { getUserByEmail } from '@/service/friend/friendService'
+import { getUserByEmail, getUserByUsernameAndTag } from '@/service/friend/friendService'
 import { getAllPrivateMsg, createPrivateMsg } from '@/service/msg/msgService'
 import * as Boom from '@hapi/boom'
 
@@ -11,10 +11,12 @@ export async function privateMsgGet (req, res) {
 export async function privateMsgPost (req, res) {
   const user = req.windImUser
   const fromUid = user.id
-  const toEmail = req.body.email
-  const remoteUser = await getUserByEmail(toEmail)
+  const toUsernameAndTag = req.body.usernameAndTag
+  const username = toUsernameAndTag.split('#')[0]
+  const tag = toUsernameAndTag.split('#')[1]
+  const remoteUser = await getUserByUsernameAndTag(username, tag)
   if (!remoteUser?.id) {
-    throw Boom.badRequest('Invalid params.')
+    throw Boom.badRequest('No such user.')
   }
   const toUid = remoteUser.id
 
@@ -24,9 +26,9 @@ export async function privateMsgPost (req, res) {
 function wrapPrivateMsg (uid, allPrivateMsg) {
   return allPrivateMsg.map(m => {
     if (m.fromUid == uid) {
-      m.msgTitle = m.toUidRel.email
+      m.msgTitle = m.toUidRel.username + '#' + m.toUidRel.tag
     } else {
-      m.msgTitle = m.fromUidRel.email
+      m.msgTitle = m.fromUidRel.username + '#' + m.fromUidRel.tag
     }
     return m
   })

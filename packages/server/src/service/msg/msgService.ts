@@ -123,8 +123,8 @@ export async function getAllPrivateMsg (uid) {
       ]
     },
     include: {
-      fromUidRel: { select: { email: true } },
-      toUidRel: { select: { email: true } }
+      fromUidRel: { select: { email: true, username: true, tag: true } },
+      toUidRel: { select: { email: true, username: true, tag: true } }
     }
   })
 }

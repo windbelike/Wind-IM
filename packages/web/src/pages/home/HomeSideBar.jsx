@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { useState } from 'react'
 import { useQuery } from 'react-query'
 import axios from '@/utils/axiosUtils'
 
@@ -13,7 +12,7 @@ export default function HomeSideBar () {
     <div className="p-2 shrink-0 flex flex-col h-full w-64 border-r-[1px] border-solid border-r-[#323437] overflow-y-hidden">
       <UserInfoPanel />
       <FriendPanel />
-      <InboxPanel />
+      <DirectMsgPanel />
     </div>
   )
 }
@@ -23,7 +22,7 @@ function UserInfoPanel () {
   return (
     <div className="">
       {isLoading && <p className="text-[#e6eaf0] font-bold">Anonymous</p>}
-      {data && <p className="text-[#e6eaf0] font-bold">{data.data?.username}</p>}
+      {data && <p className="text-[#e6eaf0] font-bold">{data.data?.username}#{data.data?.tag}</p>}
     </div>
   )
 }
@@ -35,7 +34,7 @@ function FriendPanel () {
       <div className='ml-4 mt-1'>
         <FriendSelection name='Online' to='/home/friend/online'/>
         <FriendSelection name='All' to='/home/friend/all'/>
-        <FriendSelection name='Pending' to='/home/friend/request'/>
+        <FriendSelection name='Pending' to='/home/friend/pending'/>
       </div>
     </div>
   )
@@ -55,7 +54,7 @@ async function getPrivateMsg () {
   const result = await axios.get('/api/msg/privateMsg')
   return result.data
 }
-function InboxPanel () {
+function DirectMsgPanel () {
   const { error, isLoading, data } = useQuery('getPrivateMsg', getPrivateMsg)
   return (
     <div className='mt-3'>
@@ -63,14 +62,14 @@ function InboxPanel () {
       <div className='ml-4 mt-1'>
         {/* <InboxSelection name='系统通知'/> */}
         {data && data.data?.map((pm, idx) => {
-          return <InboxSelection key={idx} name={pm.msgTitle} to={`/home/inbox/${pm.id}`}/>
+          return <DirectMsgSelection key={idx} name={pm.msgTitle} to={`/home/inbox/${pm.id}`}/>
         })}
       </div>
     </div>
   )
 }
 
-function InboxSelection ({ icon, name, cnt, to }) {
+function DirectMsgSelection ({ icon, name, cnt, to }) {
   return (
     <>
       <Link href={to}>
