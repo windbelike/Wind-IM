@@ -19,7 +19,7 @@ export default function Request () {
     <HomeDashboard>
       <div className='p-5'>
         <div className='flex'>
-          <h1 className='text-white'>请求&nbsp;-&nbsp;0</h1>
+          <h1 className='text-white'>Pending&nbsp;-&nbsp;0</h1>
           <AddFriendButton setOpenAddFriendWindow={setOpenAddFriendWindow}/>
         </div>
 

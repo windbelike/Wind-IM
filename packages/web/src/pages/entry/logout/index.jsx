@@ -1,6 +1,15 @@
-import axios from '@/utils/axiosUtils'
 import { useRouter } from 'next/router'
 import { useMutation } from 'react-query'
+import axios from '@/utils/axiosUtils'
+
+async function whoami (req) {
+  const data = await axios.get('/api/whoami', {
+    headers: {
+      Cookie: req.headers.cookie
+    }
+  })
+  return data.data
+}
 
 async function logout () {
   const result = await axios.post('/api/logout', {
@@ -37,4 +46,27 @@ export default function LogoutForm () {
       </div>
     </>
   )
+}
+
+export async function getServerSideProps ({ req }) {
+  let data
+  try {
+    data = await whoami(req)
+  } catch (e) {
+    console.log('#getServerSideProps error')
+  }
+
+  if (data?.code != 0) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/entry'
+      }
+    }
+  }
+  return {
+    props: {
+      user: data.data
+    }
+  }
 }

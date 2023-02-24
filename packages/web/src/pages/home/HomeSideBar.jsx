@@ -23,7 +23,7 @@ function UserInfoPanel () {
   return (
     <div className="">
       {isLoading && <p className="text-[#e6eaf0] font-bold">Anonymous</p>}
-      {data && <p className="text-[#e6eaf0] font-bold">{data.data?.email}</p>}
+      {data && <p className="text-[#e6eaf0] font-bold">{data.data?.username}</p>}
     </div>
   )
 }
@@ -31,11 +31,11 @@ function UserInfoPanel () {
 function FriendPanel () {
   return (
     <div className='mt-3'>
-      <p className='text-[#e6eaf0] text-sm mt-2'>好友</p>
+      <p className='text-[#e6eaf0] text-sm mt-2'>Friends</p>
       <div className='ml-4 mt-1'>
-        <FriendSelection name='在线' to='/home/friend/online'/>
-        <FriendSelection name='全部' to='/home/friend/all'/>
-        <FriendSelection name='请求' to='/home/friend/request'/>
+        <FriendSelection name='Online' to='/home/friend/online'/>
+        <FriendSelection name='All' to='/home/friend/all'/>
+        <FriendSelection name='Pending' to='/home/friend/request'/>
       </div>
     </div>
   )
@@ -59,7 +59,7 @@ function InboxPanel () {
   const { error, isLoading, data } = useQuery('getPrivateMsg', getPrivateMsg)
   return (
     <div className='mt-3'>
-      <p className='text-[#e6eaf0] text-sm mt-2'>收件箱</p>
+      <p className='text-[#e6eaf0] text-sm mt-2'>Direct Message</p>
       <div className='ml-4 mt-1'>
         {/* <InboxSelection name='系统通知'/> */}
         {data && data.data?.map((pm, idx) => {

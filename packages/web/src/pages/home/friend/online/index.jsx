@@ -19,7 +19,7 @@ export default function Online () {
     <HomeDashboard>
       <div className='p-5'>
         <div className='flex'>
-          <h1 className='text-white'>在线&nbsp;-&nbsp;0</h1>
+          <h1 className='text-white'>Online&nbsp;-&nbsp;0</h1>
           <AddFriendButton setOpenAddFriendWindow={setOpenAddFriendWindow}/>
         </div>
 
