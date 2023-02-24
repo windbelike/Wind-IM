@@ -13,7 +13,7 @@ export default function SideBar () {
           <img className="h-12 w-12 rounded-full" src="https://avatars.githubusercontent.com/u/33996345?v=4" alt="ChitChat Logo" />
         </div> */}
         {/* Main Functions */}
-        <div className=''>
+        <div className='mt-2'>
           <SideBarIcon linkTo='/' text='Home' icon={<AiOutlineHome size="28" />} />
           <div className=' w-[40px] h-[1px] bg-[#2f2f30] mx-4 my-2'></div>
           <SideBarIcon linkTo='/channel' text='Add a Channel' icon={<AiOutlinePlus size="28" />} />
