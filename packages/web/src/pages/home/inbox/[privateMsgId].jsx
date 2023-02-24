@@ -109,7 +109,7 @@ export default function Inbox () {
   )
 }
 
-function SingleMsg ({ email, content, sendByMyself = false }) {
+function SingleMsg ({ username, content, sendByMyself = false }) {
   return (
     <div className='mx-2 px-2 text-white rounded-lg hover:bg-[#323437]'>
       {/* <img className='w-12 h-12 bg-white rounded-full' src="https://avatars.githubusercontent.com/u/33996345?v=4" alt="" /> */}

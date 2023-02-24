@@ -19,7 +19,7 @@ export default function All () {
     <HomeDashboard>
       <div className='p-5'>
         <div className='flex'>
-          <h1 className='text-white'>ALL&nbsp;-&nbsp;0</h1>
+          <h1 className='text-white'>ALL&nbsp;-&nbsp;{data ? data.data?.length : 0}</h1>
           <AddFriendButton setOpenAddFriendWindow={setOpenAddFriendWindow}/>
         </div>
 
