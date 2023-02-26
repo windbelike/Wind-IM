@@ -17,9 +17,11 @@ Private Msg Sending  [http://localhost:3000/home/](http://localhost:3000/home/)
 
 ## Test Accounts
 
-account15: email: 15 password: 1
+account1: email: 1@gmail.com password: 1
 
-account16: email: 16 password: 1
+account2: email: 1@gmail.com password: 1
+
+...
 
 ## DB Schema
 
