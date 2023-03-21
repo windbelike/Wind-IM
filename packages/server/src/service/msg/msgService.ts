@@ -67,6 +67,7 @@ export async function persistPrivateMsg (privateMsgId, fromUid, toUid, content) 
         fromUid: true,
         content: true,
         toUid: true,
+        createdAt: true,
         fromUidRel: {
           select: {
             username: true
@@ -90,6 +91,7 @@ export async function fetchAllMissedPrivateMsg (privateMsgId, offset) {
             username: true
           }
         },
+        createdAt: true,
         toUid: true,
         content: true
       },

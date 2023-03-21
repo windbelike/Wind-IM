@@ -12,11 +12,14 @@ async function whoami (req) {
 export default function Profile ({ user }) {
   // const { isLoading, error, data } = useQuery('whoami', whoami)
 
+  // todo
+  // hash取颜色
+  // 取username首字符
   return (
     <>
       <p>Hello, {user.username}</p>
-      <div className='rounded-full w-28 h-28 bg-green-400 flex text-white text-5xl items-center justify-center'>
-        <p>a</p>
+      <div className='rounded-full w-14 h-14 bg-green-400 flex text-white text-2xl items-center justify-center'>
+        <p>w</p>
       </div>
       {/*
       {isLoading && <p>Loading</p>}

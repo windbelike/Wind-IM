@@ -44,7 +44,7 @@ function FriendSelection ({ icon, name, cnt, to }) {
   return (
     <>
       <Link href={to}>
-        <div className='text-gray-400 p-1 rounded-md hover:bg-gray-200 hover:cursor-pointer'>{name}</div>
+        <div className='text-gray-400 p-1 rounded-md hover:bg-[#3b3c3f] hover:cursor-pointer'>{name}</div>
       </Link>
     </>
   )
@@ -73,7 +73,7 @@ function DirectMsgSelection ({ icon, name, cnt, to }) {
   return (
     <>
       <Link href={to}>
-        <div className='text-gray-400 p-1 rounded-md hover:bg-gray-200 hover:cursor-pointer'>{name}</div>
+        <div className='text-gray-400 p-1 rounded-md hover:bg-[#3b3c3f] hover:cursor-pointer'>{name}</div>
       </Link>
     </>
   )

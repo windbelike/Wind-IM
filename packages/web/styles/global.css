@@ -9,7 +9,7 @@
     @apply relative flex items-center justify-center 
       h-[48px] w-[48px] my-2 mx-auto shadow-lg
       bg-gray-800 text-white
-      hover:bg-sky-400 hover:text-white
+      hover:bg-[#3b3c3f] hover:text-white
       rounded-3xl hover:rounded-xl
       transition-all duration-300 ease-linear
       cursor-pointer

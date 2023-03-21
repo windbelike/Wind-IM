@@ -61,6 +61,7 @@ export async function wsOnConnect (socket) {
       const msg2Send = {
         content: msgModel.content,
         senderUsername: msgModel.fromUidRel.username,
+        createdAt: msgModel.createdAt,
         id: msgModel.id
       }
       // ...
@@ -93,6 +94,7 @@ async function sendAllMissedMsg (socket, privateMsgId, offset) {
       id: m.id,
       content: m.content,
       senderUsername: m.fromUidRel.username,
+      createdAt: m.createdAt,
       sendByMyself: socket.data?.user?.id == m.fromUid
     }
     return msg2Send
