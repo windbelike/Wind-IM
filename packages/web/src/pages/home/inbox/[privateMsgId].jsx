@@ -5,6 +5,7 @@ import HomeDashboard from '../HomeDashboard'
 import EmojiPicker from 'emoji-picker-react'
 import axios from '@/utils/axiosUtils'
 import { useQuery } from 'react-query'
+import Avatar from '@/components/Avatar'
 
 // todo implement client side msg storage with offset
 
@@ -123,7 +124,8 @@ function SingleMsg ({ username, content, sendByMyself = false }) {
   return (
     <>
       <div className='flex mx-2 p-3 text-white rounded-lg hover:bg-[#323437]'>
-        <img className='w-12 h-12 bg-white rounded-full' src="https://avatars.githubusercontent.com/u/33996345?v=4" alt="" />
+        {/* <img className='w-12 h-12 bg-white rounded-full' src="https://avatars.githubusercontent.com/u/33996345?v=4" alt="" /> */}
+        <Avatar username={username} />
         <div className='flex flex-col items-start mx-2'>
           <p className='font-bold'>{username}</p>
           <p className={'break-all '}>{content}</p>
