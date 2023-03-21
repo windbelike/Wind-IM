@@ -19,7 +19,7 @@ Private Msg Sending  [http://localhost:3000/home/](http://localhost:3000/home/)
 
 account1: email: 1@gmail.com password: 1
 
-account2: email: 1@gmail.com password: 1
+account2: email: 2@gmail.com password: 1
 
 ...
 
