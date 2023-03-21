@@ -3,14 +3,22 @@ import { io } from 'socket.io-client'
 import { useEffect, useRef, useState } from 'react'
 import HomeDashboard from '../HomeDashboard'
 import EmojiPicker from 'emoji-picker-react'
+import axios from '@/utils/axiosUtils'
+import { useQuery } from 'react-query'
 
 // todo implement client side msg storage with offset
+
+async function getWhoami () {
+  const result = await axios.get('/api/whoami')
+  return result.data
+}
 
 const defaultRetryTimes = 3
 
 let socket
 
 export default function Inbox () {
+  const { isLoading, data, error } = useQuery('whoami', getWhoami)
   const router = useRouter()
   const { privateMsgId } = router.query
   const [currMsgList, setCurrMsgList] = useState([])
@@ -42,8 +50,11 @@ export default function Inbox () {
       console.log('invalid input:' + msgInput)
       return
     }
+    const whoami = data?.data?.username || 'Yourself'
     const msg2Send = {
       content: msgInput,
+      sendByMyself: true,
+      senderUsername: whoami,
       ext: { retryTimes: defaultRetryTimes }
     }
     cleanInputMsg()
@@ -66,7 +77,6 @@ export default function Inbox () {
           msg.ext.retryTimes--
           emit(msg)
         } else {
-          msg.sendByMyself = true
           renderMsg(msg, currMsgList, setCurrMsgList)
         }
       })
@@ -95,7 +105,7 @@ export default function Inbox () {
           <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'} sendByMyself={true}/>
           <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'}/> */}
           {currMsgList.map((m, idx) => {
-            return <SingleMsg className='text-white' key={idx} content={m.content} sendByMyself={m.sendByMyself} email={'unsetEmail'}/>
+            return <SingleMsg className='text-white' key={idx} content={m.content} sendByMyself={m.sendByMyself} username={m.senderUsername}/>
           })}
         </div>
         <div className='fixed right-20 bottom-32'>{ loadEmojiKeyboard && <EmojiPicker searchDisabled={true} theme='dark' emojiStyle='native' onEmojiClick={onClickEmoji}/> }
@@ -111,10 +121,15 @@ export default function Inbox () {
 
 function SingleMsg ({ username, content, sendByMyself = false }) {
   return (
-    <div className='mx-2 px-2 text-white rounded-lg hover:bg-[#323437]'>
-      {/* <img className='w-12 h-12 bg-white rounded-full' src="https://avatars.githubusercontent.com/u/33996345?v=4" alt="" /> */}
-      <p className={'break-all ' + (sendByMyself ? 'text-right' : '')}>{content}</p>
-    </div>
+    <>
+      <div className='flex mx-2 p-3 text-white rounded-lg hover:bg-[#323437]'>
+        <img className='w-12 h-12 bg-white rounded-full' src="https://avatars.githubusercontent.com/u/33996345?v=4" alt="" />
+        <div className='flex flex-col items-start mx-2'>
+          <p className='font-bold'>{username}</p>
+          <p className={'break-all '}>{content}</p>
+        </div>
+      </div>
+    </>
   )
 }
 
@@ -156,7 +171,7 @@ function useWs (privateMsgId, $currMsgList, setCurrMsgList) {
         console.log(privateMsgId + ' disconnected.')
       })
 
-      // on receive private msg
+      // on initiating & receiving private msg
       const privateMsgEvent = 'privateMsgEvent_' + privateMsgId
       const privateMsgInitEvent = 'privateMsgInitEvent_' + privateMsgId
       socket.on(privateMsgInitEvent, function (msgList) {
