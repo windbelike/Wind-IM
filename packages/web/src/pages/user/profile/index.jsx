@@ -15,6 +15,9 @@ export default function Profile ({ user }) {
   return (
     <>
       <p>Hello, {user.username}</p>
+      <div className='rounded-full w-28 h-28 bg-green-400 flex text-white text-5xl items-center justify-center'>
+        <p>a</p>
+      </div>
       {/*
       {isLoading && <p>Loading</p>}
 

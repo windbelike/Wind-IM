@@ -32,7 +32,8 @@ export default function FriendCard ({ usernameAndTag }) {
       </div>
       <div className='flex gap-2 ml-auto mt-auto text-[#7b8086] '>
         <AiOutlineMessage onClick={onClickCreatePrivateMsg} className='hover:cursor-pointer' size="24"/>
-        <AiOutlineUserDelete className='hover:cursor-pointer' size="24"/>
+        {/* Unsupported */}
+        {/* <AiOutlineUserDelete className='hover:cursor-pointer' size="24"/> */}
       </div>
     </div>
   )
