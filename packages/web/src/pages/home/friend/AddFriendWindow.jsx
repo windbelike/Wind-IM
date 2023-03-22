@@ -35,7 +35,7 @@ export default function AddFriendWindow ({ openAddFriendWindow, setOpenAddFriend
   }
 
   return (
-    <div id={bgElementId} className='fixed flex items-center z-20 w-full h-full left-0 top-0 bg-[rgba(0,0,0,0.5)]' onClick={onClickCloseWindow}>
+    <div id={bgElementId} className='fixed z-20 flex items-center w-full h-full left-0 top-0 bg-[rgba(0,0,0,0.5)]' onClick={onClickCloseWindow}>
       <div className="mx-auto flex flex-col w-[440px] h-[231px] bg-[#25262a] rounded-2xl p-5 ">
         <h1 className="text-white text-xl font-bold">ADD FRIEND</h1>
         <p className="text-[#717579] mt-2">You can add a friend with their tag.</p>
