@@ -48,19 +48,54 @@ export default function SideBar () {
 }
 
 function AddAServer ({ id, onClickCloseAddAServer }) {
-  const [nextPageFlag, useNextPageFlag] = useState(false)
-  const onNextPageClick = () => {
+  const [nextPageFlag, setNextPageFlag] = useState(false)
+  const createMyOwnElementId = 'createMyOwnElement'
+  const joinAServerElementId = 'joinAServerElement'
+  const [currentHit, setCurrentHit] = useState(createMyOwnElementId)
+  const onNextPageClick = (e) => {
     console.log('onNextPageClick')
-    useNextPageFlag(true)
+    if (e.target.id === createMyOwnElementId) {
+      console.log('createMyOwnElementId')
+      setCurrentHit(createMyOwnElementId)
+    } else if (e.target.id === joinAServerElementId) {
+      console.log('joinAServerElementId')
+      setCurrentHit(joinAServerElementId)
+    } else {
+      console.error('invalid click')
+    }
+    setNextPageFlag(true)
   }
   const onLastPageClick = () => {
     console.log('onLastPageClick')
-    useNextPageFlag(false)
+    setNextPageFlag(false)
   }
+
+  function CreateMyOwn () {
+    return (
+      <div className="flex flex-col p-2 w-[440px] h-[436px]">
+        <div>CreateMyOwn</div>
+        <div className="button2 mt-auto mr-auto  p-3" onClick={onLastPageClick}>
+          <button>Back</button>
+        </div>
+      </div>
+    )
+  }
+
+  function JoinAServer () {
+    return (
+      <div className="flex flex-col p-2 w-[440px] h-[436px]">
+        <div>JoinAServer</div>
+        <div className="button2 mt-auto mr-auto  p-3" onClick={onLastPageClick}>
+          <button>Back</button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <>
-      <div onClick={onClickCloseAddAServer} id={id} className='fixed z-50 flex items-center justify-center bg-[rgba(0,0,0,0.5)] h-screen w-screen'>
-        <div className={' bg-white rounded-md duration-200 overflow-hidden ' + (nextPageFlag ? 'w-[440px] h-[436px]' : 'w-[440px] h-[558px]')}>
+      <div onClick={onClickCloseAddAServer} id={id} className='fixed z-50 flex items-center justify-center bg-[rgba(0,0,0,0.5)] h-screen w-screen '>
+        <div className={'bg-white rounded-md duration-200 overflow-hidden ' + (nextPageFlag ? 'w-[440px] h-[436px]' : 'w-[440px] h-[558px]')}>
           {/* flipping page */}
           <div
             className="w-[880px] duration-200 flex flex-nowrap"
@@ -72,22 +107,19 @@ function AddAServer ({ id, onClickCloseAddAServer }) {
             <div className=" flex flex-col items-center w-[440px] h-[558px]">
               {/* Header */}
               <div className='text-xl text-center font-bold w-[408px] h-[87px]'>
-                <p className='mt-10'>Create a server</p>
+                <p className='mt-10'>Wanna add a channel ?</p>
               </div>
-              <button className="hover:bg-gray-100 font-bold my-3 w-[406px] h-[64px] text-center rounded-3xl border-black border-[1px] " onClick={onNextPageClick}>
+              <button id={createMyOwnElementId} className="hover:bg-gray-100 font-bold my-3 w-[406px] h-[64px] text-center rounded-3xl border-black border-[1px] " onClick={onNextPageClick}>
                 Create My Own
               </button>
-              <button className="hover:bg-gray-100 font-bold my-3 w-[406px] h-[64px] text-center rounded-3xl border-black border-[1px] " onClick={onNextPageClick}>
+              <button id={joinAServerElementId} className="hover:bg-gray-100 font-bold my-3 w-[406px] h-[64px] text-center rounded-3xl border-black border-[1px] " onClick={onNextPageClick}>
                Join A Server
               </button>
             </div>
             {/* second page */}
-            <div className="flex flex-col p-2 w-[440px] h-[436px]">
-              <div>一些内容1111111123123123123</div>
-              <div className="button2 mt-auto mr-auto  p-3" onClick={onLastPageClick}>
-                <button>Back</button>
-              </div>
-            </div>
+            {/* create my own Or join a server */}
+            { currentHit === createMyOwnElementId && <CreateMyOwn />}
+            { currentHit === joinAServerElementId && <JoinAServer />}
           </div>
         </div>
       </div>
