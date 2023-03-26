@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { React, useEffect, useState } from 'react'
+import { React, useEffect, useRef, useState } from 'react'
 import { AiOutlineSetting, AiOutlineMessage, AiOutlineHome, AiOutlineUser, AiOutlineLogin, AiOutlinePlus } from 'react-icons/ai'
 
 export default function SideBar () {
@@ -71,11 +71,20 @@ function AddAServer ({ id, onClickCloseAddAServer }) {
   }
 
   function CreateMyOwn () {
+    const $channelName = useRef()
+
+    function onClickCreate () {
+
+    }
+
     return (
-      <div className="flex flex-col p-2 w-[440px] h-[436px]">
+      <div className="flex flex-col p-4 w-[440px] h-[436px]">
         <div>CreateMyOwn</div>
-        <div className="button2 mt-auto mr-auto  p-3" onClick={onLastPageClick}>
+        <div className='font-semibold text-xs mt-20 mb-2'>CHANNEL NAME</div>
+        <input type="text" className=" text-white rounded-sm p-2 border-solid border-2 border-gray-200 focus:border-[#6bc001] bg-transparent" placeholder="Enter a channel name" ref={$channelName}></input>
+        <div className="flex mt-auto ml-auto" onClick={onLastPageClick}>
           <button>Back</button>
+          <button className='m-2 rounded-lg w-[81px] h-[36px] bg-[#6bc001] text-white' onClick={onClickCreate}>Create</button>
         </div>
       </div>
     )
@@ -83,7 +92,7 @@ function AddAServer ({ id, onClickCloseAddAServer }) {
 
   function JoinAServer () {
     return (
-      <div className="flex flex-col p-2 w-[440px] h-[436px]">
+      <div className="flex flex-col p-4 w-[440px] h-[436px]">
         <div>JoinAServer</div>
         <div className="button2 mt-auto mr-auto  p-3" onClick={onLastPageClick}>
           <button>Back</button>
@@ -95,7 +104,7 @@ function AddAServer ({ id, onClickCloseAddAServer }) {
   return (
     <>
       <div onClick={onClickCloseAddAServer} id={id} className='fixed z-50 flex items-center justify-center bg-[rgba(0,0,0,0.5)] h-screen w-screen '>
-        <div className={'bg-white rounded-md duration-200 overflow-hidden ' + (nextPageFlag ? 'w-[440px] h-[436px]' : 'w-[440px] h-[558px]')}>
+        <div className={'bg-white rounded-lg duration-200 overflow-hidden ' + (nextPageFlag ? 'w-[440px] h-[436px]' : 'w-[440px] h-[330px]')}>
           {/* flipping page */}
           <div
             className="w-[880px] duration-200 flex flex-nowrap"
@@ -104,16 +113,16 @@ function AddAServer ({ id, onClickCloseAddAServer }) {
             }}
           >
             {/* first page */}
-            <div className=" flex flex-col items-center w-[440px] h-[558px]">
+            <div className=" flex flex-col items-center w-[440px] h-[330px]">
               {/* Header */}
               <div className='text-xl text-center font-bold w-[408px] h-[87px]'>
                 <p className='mt-10'>Wanna add a channel ?</p>
               </div>
-              <button id={createMyOwnElementId} className="hover:bg-gray-100 font-bold my-3 w-[406px] h-[64px] text-center rounded-3xl border-black border-[1px] " onClick={onNextPageClick}>
-                Create My Own
+              <button id={createMyOwnElementId} className="hover:bg-gray-100 font-bold my-3 w-[406px] h-[64px] text-center rounded-3xl border-gray-300 border-[1px] " onClick={onNextPageClick}>
+              Create My Own
               </button>
-              <button id={joinAServerElementId} className="hover:bg-gray-100 font-bold my-3 w-[406px] h-[64px] text-center rounded-3xl border-black border-[1px] " onClick={onNextPageClick}>
-               Join A Server
+              <button id={joinAServerElementId} className="hover:bg-gray-100 font-bold my-3 w-[406px] h-[64px] text-center rounded-3xl border-gray-300 border-[1px] " onClick={onNextPageClick}>
+              Join A Server
               </button>
             </div>
             {/* second page */}
