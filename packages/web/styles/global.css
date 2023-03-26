@@ -43,6 +43,7 @@
     outline: none;
   }
 
+  /* 聊天框ScrollBar */
   /* custom scroll bar */
   .scrollbar::-webkit-scrollbar {
     width: 8px;
@@ -60,4 +61,10 @@
   .scrollbar::-webkit-scrollbar-thumb:hover {
     background: #3c3e45;
   }
+
+  /* 侧边栏ScrollBar */
+  .sideScrollbar::-webkit-scrollbar {
+    width: 0px;
+  }
+
 }

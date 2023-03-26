@@ -40,8 +40,9 @@ export default function SideBar () {
   }
 
   return (
-    <div>
+    <div className='overflow-x-visible'>
       {addServerFlag && <AddAChannelBg id={bgElementId} onClickCloseAddAServer={onClickCloseAddAServer} />}
+      {/* todo 解决overflow icon不展示的问题 && overflow-hidden icon的tooltip不展示 */}
       <div className='h-screen w-[72px]
       flex flex-col items-center
       bg-[#17181a] text-white shadow-lg'>
@@ -73,9 +74,12 @@ function ChannelIconList ({ data }) {
     <div className='flex flex-col items-center'>
       {data?.data?.map((channel) => {
         return (
-          <div key={channel.channelId} className='m-1 hover:cursor-pointer'>
-            <ChannelAvatar name={channel.channelRel.name}/>
-          </div>
+          <Link href={'/channel/' + channel.channelId} key={channel.channelId}>
+            <div className='hover:cursor-pointer sidebar-icon group m-1'>
+              <ChannelAvatar name={channel.channelRel.name}/>
+              <span className="sidebar-tooltip group-hover:scale-100">{channel.channelRel.name}</span>
+            </div>
+          </Link>
         )
       })}
     </div>
