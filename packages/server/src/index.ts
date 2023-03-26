@@ -18,6 +18,7 @@ import cookieParser from 'cookie-parser'
 import { logoutPost } from './handler/http/logoutHandler'
 import { friendReqGet, friendReqPost } from './handler/http/friendReqhandler'
 import { friendGet } from './handler/http/friendHandler'
+import { channelGet, channelPost } from './handler/http/channelHandler'
 
 dotenv.config()
 const FRONTEND_HOST = process.env.FRONTEND_HOST
@@ -55,6 +56,8 @@ app.use(cors(corsOptions))
   .get('/api/friendRequest', loginValidator, friendReqGet)
   .post('/api/friendRequest', loginValidator, friendReqPost)
   .get('/api/friend', loginValidator, friendGet)
+  .post('/api/channel', loginValidator, channelPost)
+  .get('/api/channel', loginValidator, channelGet)
 
   .use(errorHandler) // for handling global error
 

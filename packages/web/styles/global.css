@@ -8,8 +8,8 @@
   .sidebar-icon {
     @apply relative flex items-center justify-center 
       h-[48px] w-[48px] my-2 mx-auto shadow-lg
-      bg-gray-800 text-white
-      hover:bg-sky-400 hover:text-white
+       text-white
+      hover:bg-[#3b3c3f] hover:text-white
       rounded-3xl hover:rounded-xl
       transition-all duration-300 ease-linear
       cursor-pointer
@@ -43,6 +43,7 @@
     outline: none;
   }
 
+  /* 聊天框ScrollBar */
   /* custom scroll bar */
   .scrollbar::-webkit-scrollbar {
     width: 8px;
@@ -60,4 +61,10 @@
   .scrollbar::-webkit-scrollbar-thumb:hover {
     background: #3c3e45;
   }
+
+  /* 侧边栏ScrollBar */
+  .sideScrollbar::-webkit-scrollbar {
+    width: 0px;
+  }
+
 }

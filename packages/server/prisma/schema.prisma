@@ -30,6 +30,7 @@ model User {
   msgSendRel Message[] @relation("msgSendRel") // 发送的消息，外键关系
   msgReceiveRel Message[] @relation("msgReceiveRel") // 接受的消息，外键关系
   channelsRel UsersOnChannels[] // 加入的频道，外键关系
+  channelsOwnerRel Channel[] @relation("channelsOwnerRel")  // 拥有的频道，外键关系
   friendsRel Friend[] @relation("friendsRel")  // 我的朋友，外键关系
   friendsToRel Friend[] @relation("friendsToRel") // 我是谁的朋友，外键关系
 
@@ -108,6 +109,7 @@ model Channel {
   name String // 频道名称
   desc String // 频道描述
   ownerUid Int // 拥有者id
+  ownerUidRel User @relation(name: "channelsOwnerRel", fields: [ownerUid], references: [id]) // 拥有者外键关系
   usersRel UsersOnChannels[]
   status Int // 频道状态。0：正常 1：关闭
   createdAt DateTime @default(now()) // 创建时间

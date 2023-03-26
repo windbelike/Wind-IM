@@ -61,6 +61,18 @@ export async function persistPrivateMsg (privateMsgId, fromUid, toUid, content) 
         msgType: privateMsgType,
         pushed: true,
         read: true
+      },
+      select: {
+        id: true,
+        fromUid: true,
+        content: true,
+        toUid: true,
+        createdAt: true,
+        fromUidRel: {
+          select: {
+            username: true
+          }
+        }
       }
     })
   } catch (e) {
@@ -74,6 +86,12 @@ export async function fetchAllMissedPrivateMsg (privateMsgId, offset) {
       select: {
         id: true,
         fromUid: true,
+        fromUidRel: {
+          select: {
+            username: true
+          }
+        },
+        createdAt: true,
         toUid: true,
         content: true
       },

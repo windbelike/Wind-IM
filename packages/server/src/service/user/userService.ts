@@ -2,6 +2,14 @@ import { prisma } from '@/utils/prismaHolder'
 import bcrypt from 'bcrypt'
 import * as Boom from '@hapi/boom'
 
+export async function queryUserById (id:number) {
+  return await prisma.user.findUnique({
+    where: {
+      id
+    }
+  })
+}
+
 export async function signup (email:string, username: string, pwd: string) {
   checkSignupParam(email, username, pwd)
   const tag = await generateUserTag(username)

@@ -1,3 +1,4 @@
+import { isEmail } from '@/utils/validateUtils'
 import axios from 'axios'
 import Link from 'next/link'
 import { useRef, useState } from 'react'
@@ -13,6 +14,7 @@ async function createAccount ({ email, username, pwd }) {
 }
 
 export default function SignUpForm () {
+  const [emailIsInvalid, setEmailIsInvalid] = useState(false)
   // useRef don't cause a rerender
   const $email = useRef()
   const $username = useRef()
@@ -31,8 +33,14 @@ export default function SignUpForm () {
     const pwd = $pwd.current.value
     console.log('email:' + email)
     console.log('username:' + username)
-    // console.log('pwd:' + pwd)
-    createAccountMutation.mutate({ email, username, pwd })
+    if (isEmail(email)) {
+      console.log('email is valid')
+      createAccountMutation.mutate({ email, username, pwd })
+      setEmailIsInvalid(false)
+    } else {
+      console.log('email is invalid')
+      setEmailIsInvalid(true)
+    }
   }
 
   return (
@@ -49,6 +57,7 @@ export default function SignUpForm () {
             <input className='bg-[#1e1f22] p-2' ref={$pwd} type="password"/>
           </div>
           <button disabled={createAccountMutation.isLoading} className='h-10 rounded-md bg-[#6161f1] mt-7 shrink-0' onClick={onClickCreateAccount}>Sign Up</button>
+          {emailIsInvalid && <p className='mt-2 text-red-500'>Invalid email.</p>}
           {createAccountMutation.error && <p className='mt-2 text-red-500'>Invalid input.</p>}
           <Link href='/entry/login'>
             <a className='mt-3 underline text-blue-400'>Already have an account?</a>

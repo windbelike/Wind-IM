@@ -4,6 +4,7 @@ import { getUserFromCookieToken } from '@/utils/authUtils'
 
 import type { User } from '@/utils/authUtils'
 import { getDestUserOfPrivateMsg, persistPrivateMsg, fetchAllMissedPrivateMsg } from '@/service/msg/msgService'
+import { queryUserById } from '../user/userService'
 
 export type SocketData = {
   user: User
@@ -56,8 +57,11 @@ export async function wsOnConnect (socket) {
     socket.on(privateMsgEvent, async (msg, ackFn) => {
       // todo save msg to db
       const msgModel = await persistPrivateMsg(parseInt(privateMsgId), user.id, toUid, msg.content)
+      // const senderUsername = await queryUserById(msgModel.fromUid)
       const msg2Send = {
         content: msgModel.content,
+        senderUsername: msgModel.fromUidRel.username,
+        createdAt: msgModel.createdAt,
         id: msgModel.id
       }
       // ...
@@ -89,6 +93,8 @@ async function sendAllMissedMsg (socket, privateMsgId, offset) {
     const msg2Send = {
       id: m.id,
       content: m.content,
+      senderUsername: m.fromUidRel.username,
+      createdAt: m.createdAt,
       sendByMyself: socket.data?.user?.id == m.fromUid
     }
     return msg2Send

@@ -1,3 +1,4 @@
+import Avatar from '@/components/Avatar'
 import axios from '@/utils/axiosUtils'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -27,7 +28,7 @@ export default function FriendCard ({ usernameAndTag }) {
   return (
     <div className='flex flex-col h-32 w-72 m-3 p-4 bg-[#36383e] rounded-3xl'>
       <div className='flex items-center'>
-        <img className='w-12 h-12 bg-white rounded-full' src="https://avatars.githubusercontent.com/u/33996345?v=4" alt="" />
+        <Avatar username={usernameAndTag.split(/#/)[0]} />
         <div><p className='ml-3 text-[#e6eaf0]'>{usernameAndTag}</p></div>
       </div>
       <div className='flex gap-2 ml-auto mt-auto text-[#7b8086] '>

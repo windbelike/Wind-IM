@@ -1,4 +1,5 @@
 import axios from '@/utils/axiosUtils'
+import Avatar from '@/components/Avatar'
 
 async function whoami (req) {
   const data = await axios.get('/api/whoami', {
@@ -12,21 +13,13 @@ async function whoami (req) {
 export default function Profile ({ user }) {
   // const { isLoading, error, data } = useQuery('whoami', whoami)
 
+  // todo
+  // hash取颜色
+  // 取username首字符
   return (
     <>
       <p>Hello, {user.username}</p>
-      <div className='rounded-full w-28 h-28 bg-green-400 flex text-white text-5xl items-center justify-center'>
-        <p>a</p>
-      </div>
-      {/*
-      {isLoading && <p>Loading</p>}
-
-      {data &&
-      <div>
-        <h1>Hello, {data.data?.email}</h1>
-      </div>
-      }
-      {error && <p>error</p>} */}
+      <Avatar username={user.username} />
     </>
 
   )
