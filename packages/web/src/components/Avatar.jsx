@@ -1,18 +1,18 @@
 import BoringAvt from 'boring-avatars'
 
 // classic Avatar
-export default function Avatar ({ username, useBoring = true }) {
+export default function Avatar ({ username }) {
   // BoringAvatar头像
-  if (useBoring) {
-    const colors = ['#FFD3B5', '#DCEDC2', '#FFD3B5', '#FFAAA6', '#FF8C94']
-    return (
-      <div className='shrink-0'>
-        <BoringAvt size={40} variant="beam" name={username} />
-      </div>
-    )
-  }
+  const colors = ['#FFD3B5', '#DCEDC2', '#FFD3B5', '#FFAAA6', '#FF8C94']
+  return (
+    <div className='shrink-0'>
+      <BoringAvt size={40} variant="beam" name={username} />
+    </div>
+  )
+}
 
-  // 首字符圆头像
+// Deprecated 首字符圆头像
+export function CircleAvatar (username) {
   const colorMap = {
     0: 'orange',
     1: 'cyan',
