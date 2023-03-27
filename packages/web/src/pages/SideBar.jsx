@@ -43,7 +43,7 @@ export default function SideBar () {
     <div className='overflow-x-visible'>
       {addServerFlag && <AddAChannelBg id={bgElementId} onClickCloseAddAServer={onClickCloseAddAServer} />}
       {/* todo 解决overflow icon不展示的问题 && overflow-hidden icon的tooltip不展示 */}
-      <div className='h-screen w-[72px]
+      <div className='h-screen w-[72px] overflow-hidden
       flex flex-col items-center
       bg-[#17181a] text-white shadow-lg'>
         {/* LOGO */}

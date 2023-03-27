@@ -1,5 +1,5 @@
 
-import { statusPass, statusRefuse } from '@/utils/friend-enums'
+import { statusPass, statusRefuse } from '@/utils/friendEnums'
 import axios from '@/utils/axiosUtils'
 import { AiOutlineUserAdd, AiOutlineCloseCircle, AiOutlineCheckCircle } from 'react-icons/ai'
 import { useMutation } from 'react-query'

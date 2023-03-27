@@ -29,11 +29,11 @@ export async function leaveChannel (uid, channelId) {
   })
 
   if (!channel) {
-    return Boom.badRequest('Not in channel.')
+    throw Boom.badRequest('Not in channel.')
   }
 
   if (channel.status == channelStatus.deleted) {
-    return Boom.badRequest('Channel already deleted.')
+    throw Boom.badRequest('Channel already deleted.')
   }
 
   const deleteRes = await prisma.usersOnChannels.update({
@@ -65,18 +65,73 @@ export async function getChannelListByUid (uid) {
 }
 
 // 加入Channel
+// todo 加锁
 export async function joinChannel (uid, channelId) {
-  return await prisma.usersOnChannels.create({
-    data: {
-      userRel: {
-        connect: { id: uid }
-      },
-      channelRel: {
-        connect: { id: channelId }
-      },
-      status: channelStatus.normal
+  // 检查入参
+  if (!uid || !channelId) {
+    throw Boom.badRequest('Illegal params.')
+  }
+  // 检查channelId为整数
+  if (!Number.isInteger(channelId)) {
+    throw Boom.badRequest('Illegal channelId.')
+  }
+
+  // 检查Channel存在
+  const channel = await prisma.channel.findUnique({
+    where: {
+      id: channelId
     }
   })
+  if (!channel) {
+    // 不存在此Channel
+    throw Boom.badRequest('Channel not exist.')
+  }
+
+  // 检查是否已经加入
+  const usersOnChannels = await prisma.usersOnChannels.findUnique({
+    where: {
+      uid_channelId: {
+        uid,
+        channelId
+      }
+    },
+    include: {
+      channelRel: true
+    }
+  })
+
+  if (!usersOnChannels) {
+    // 第一次加入
+    return await prisma.usersOnChannels.create({
+      data: {
+        userRel: {
+          connect: { id: uid }
+        },
+        channelRel: {
+          connect: { id: channelId }
+        },
+        status: channelStatus.normal
+      }
+    })
+  }
+
+  if (usersOnChannels.status == channelStatus.normal) {
+    // 已经加入
+    throw Boom.badRequest('Already in channel.')
+  } else if (usersOnChannels.status == channelStatus.deleted) {
+    // 加入过，但已经离开
+    return await prisma.usersOnChannels.update({
+      where: {
+        uid_channelId: {
+          uid,
+          channelId
+        }
+      },
+      data: {
+        status: channelStatus.normal
+      }
+    })
+  }
 }
 
 // create channel

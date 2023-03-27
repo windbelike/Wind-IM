@@ -123,7 +123,7 @@ export async function breakFriends (uid, friendId) {
 // 添加好友
 export async function makeFriends (reqId, uid, friendId) {
   if (!reqId || !uid || !friendId || friendId == uid) {
-    return Boom.badRequest('Illegal params.')
+    throw Boom.badRequest('Illegal params.')
   }
 
   // check if you were friends.

@@ -11,6 +11,15 @@ async function createChannel ({ name, desc }) {
   return result.data
 }
 
+// join a channel
+// todo 为了不暴露channelId主键，改成根据邀请码InviteId加入
+async function joinChannel ({ channelId }) {
+  const result = await axios.post('/api/channel/join', {
+    channelId
+  })
+  return result.data
+}
+
 async function getWhoami () {
   const result = await axios.get('/api/whoami')
   return result.data
@@ -46,7 +55,7 @@ export default function AddAChannelBg ({ id, onClickCloseAddAServer }) {
     const avatarName = channelName + data?.data?.username
 
     function onClickCreate () {
-      if (isChannelValid(channelName)) {
+      if (isChannelNameValid(channelName)) {
         createChannelMut.mutate({ name: channelName, desc: '' })
       } else {
         console.log('channelName is invalid')
@@ -67,7 +76,7 @@ export default function AddAChannelBg ({ id, onClickCloseAddAServer }) {
 
           {createChannelMut.error && (<div className='text-md m-1 text-red-500'>Channel create failed, {JSON.stringify(createChannelMut.error)}</div>)}
 
-          {!isChannelValid(channelName) && (<div className='text-md m-1 text-red-500'>Channel name is invalid</div>)}
+          {!isChannelNameValid(channelName) && (<div className='text-md m-1 text-red-500'>Channel name is invalid</div>)}
         </div>
         <div className="flex mt-auto ml-auto">
           <button onClick={onLastPageClick}>Back</button>
@@ -77,12 +86,28 @@ export default function AddAChannelBg ({ id, onClickCloseAddAServer }) {
     )
   }
 
-  function JoinAServer () {
+  function JoinChannel () {
+    const $channelId = useRef('')
+    const joinChannelMut = useMutation(joinChannel)
+
+    function onClickJoin () {
+      console.log('onClickJoin, channelId:' + $channelId.current.value)
+      joinChannelMut.mutate({ channelId: $channelId.current.value })
+    }
+
     return (
       <div className="flex flex-col p-4 w-[440px] h-[436px]">
-        <div>JoinAServer</div>
-        <div className="button2 mt-auto mr-auto  p-3" onClick={onLastPageClick}>
-          <button>Back</button>
+        <div>Join a channel</div>
+        <div className='font-semibold text-xs mt-10 mb-2 mx-1'>CHANNEL ID</div>
+        <input type="text" className=" rounded-sm p-2 border-solid border-2 border-gray-200 focus:border-[#6bc001] bg-transparent" placeholder="Enter a channel ID" ref={$channelId}></input>
+        <div className='overflow-hidden'>
+          {joinChannelMut.data?.code == 0 && (<div className='text-md m-1 text-green-500'>Succeed</div>)}
+
+          {joinChannelMut.error && (<div className='text-md m-1 text-red-500'>Channel join failed, {joinChannelMut.error.response.data.message}</div>)}
+        </div>
+        <div className="flex mt-auto ml-auto">
+          <button onClick={onLastPageClick}>Back</button>
+          <button className='m-2 rounded-lg w-[81px] h-[36px] bg-[#6bc001] text-white' onClick={onClickJoin}>Join</button>
         </div>
       </div>
     )
@@ -109,13 +134,13 @@ export default function AddAChannelBg ({ id, onClickCloseAddAServer }) {
               Create My Own
               </button>
               <button id={joinAServerElementId} className="hover:bg-gray-100 font-bold my-3 w-[406px] h-[64px] text-center rounded-3xl border-gray-300 border-[1px] " onClick={onNextPageClick}>
-              Join A Server
+              Join A Channel
               </button>
             </div>
             {/* second page */}
             {/* create my own Or join a server */}
             { currentHit === createMyOwnElementId && <CreateMyOwn />}
-            { currentHit === joinAServerElementId && <JoinAServer />}
+            { currentHit === joinAServerElementId && <JoinChannel />}
           </div>
         </div>
       </div>
@@ -123,7 +148,7 @@ export default function AddAChannelBg ({ id, onClickCloseAddAServer }) {
   )
 }
 
-function isChannelValid (channelName) {
+function isChannelNameValid (channelName) {
   if (!channelName || channelName.trim().length === 0) {
     return false
   }
