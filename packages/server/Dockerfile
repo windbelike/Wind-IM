@@ -6,6 +6,8 @@ WORKDIR /server_app
 
 RUN npm install -g pnpm
 
+RUN npm config set registry http://registry.npm.taobao.org
+
 RUN pnpm install
 
 CMD pnpm run dev

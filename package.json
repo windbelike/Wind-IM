@@ -4,10 +4,9 @@
   "private": true,
   "scripts": {
     "compose": "docker compose up --build",
-    "devMono": "npm run dev"
+    "dev": "npm run dev"
   },
   "devDependencies": {
-    
+    "nodemon": "^2.0.12"
   }
 }
-           
