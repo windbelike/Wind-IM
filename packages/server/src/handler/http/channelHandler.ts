@@ -1,4 +1,5 @@
-import { createChannel, getChannelListByUid, joinChannel, selectChannelById } from '@/service/channel/channelService'
+import { createChannel, getChannelListByUid, getChannelMembers, joinChannel, selectChannelById } from '@/service/channel/channelService'
+import * as Boom from '@hapi/boom'
 
 // create channel
 export async function channelPost (req, res, next) {
@@ -33,11 +34,30 @@ export async function channelJoinPost (req, res, next) {
 }
 
 // get all channel I joined info
-export async function channelGet (req, res, next) {
+export async function channelListGet (req, res, next) {
   try {
     const user = req.windImUser
     const body = req.body
-    res.json({ data: await getChannelListByUid(body.channelId) })
+    const result = await getChannelListByUid(user.id)
+    console.log(JSON.stringify(result))
+    res.json({ data: result })
+  } catch (e) {
+    next(e)
+  }
+}
+
+// get all crew by channelId
+export async function channelMembersGet (req, res, next) {
+  try {
+    console.log('channelMembersGet req:' + JSON.stringify(req.query))
+    const user = req.windImUser
+    const channelId = parseInt(req.query?.id)
+    // 校验channelId为Integer
+    if (isNaN(channelId)) {
+      throw Boom.badRequest('Invalid params error')
+    }
+
+    res.json({ data: await getChannelMembers(channelId) })
   } catch (e) {
     next(e)
   }

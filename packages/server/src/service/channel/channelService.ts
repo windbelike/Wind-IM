@@ -6,10 +6,29 @@ const channelStatus = {
   deleted: 1
 }
 
+// 查询channel
 export async function selectChannelById (id) {
   return await prisma.channel.findUnique({
     where: {
       id
+    }
+  })
+}
+
+// 获取Channel的所有成员
+export async function getChannelMembers (channelId) {
+  // todo 添加查询权限控制 & 校验参数
+  return await prisma.usersOnChannels.findMany({
+    where: {
+      channelId,
+      status: channelStatus.normal
+    },
+    include: {
+      userRel: {
+        select: {
+          username: true
+        }
+      }
     }
   })
 }
