@@ -4,10 +4,13 @@ import { useQuery } from 'react-query'
 
 // get channel members
 
+// todo 整合前端API方法
 // todo id undefined bug fix
 async function getChannelMembers (id) {
-  console.log('getChannelMembers id:' + id)
-  const params = new URLSearchParams([['id', 1]])
+  if (!id) {
+    return {}
+  }
+  const params = new URLSearchParams([['id', id]])
   const result = await axios.get('/api/channel/members', {
     params
   })
@@ -17,13 +20,12 @@ async function getChannelMembers (id) {
 export default function Channel () {
   const router = useRouter()
   const { id } = router.query
-  console.log('Channel, id:' + id)
-  const { data, error, isLoading } = useQuery('getChannelMembers', () => getChannelMembers(id))
-  console.log(data?.data)
+  const { data, error, isLoading } = useQuery(['getChannelMembers', id], () => getChannelMembers(id))
 
   return (
     <>
       <div>{id}</div>
+      <div>data:{JSON.stringify(data?.data)}</div>
     </>
   )
 }
