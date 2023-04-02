@@ -8,7 +8,7 @@ import cors from 'cors'
 
 import { SocketData, wsAuthMiddleware, wsOnConnect } from '@/service/ws/wsPrivateMsgService'
 import { loginValidator } from './utils/authUtils'
-import { privateMsgGet, privateMsgPost } from './handler/http/privateMsgHandler'
+import { privateMsgGet, privateMsgListGet, privateMsgPost } from './handler/http/privateMsgHandler'
 import { whoami } from './handler/http/userHandler'
 import { errorHandler } from './handler/http/errorHandler'
 import { loginPost } from './handler/http/loginHandler'
@@ -48,6 +48,7 @@ app.use(cors(corsOptions))
     next(Boom.forbidden('hello Boom'))
   })
   .get('/api/whoami', loginValidator, whoami)
+  .get('/api/msg/privateMsgList', loginValidator, privateMsgListGet)
   .get('/api/msg/privateMsg', loginValidator, privateMsgGet)
   .post('/api/msg/privateMsg', loginValidator, privateMsgPost)
   .post('/api/login', loginPost)

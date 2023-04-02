@@ -19,13 +19,11 @@
 
   .sidebar-tooltip {
     @apply 
-    /* left-14 overflow-scroll后展示不出来了，只能去掉这个left*/
-      left-14
+      left-14 z-50
       absolute w-auto p-2 m-2 min-w-max 
       rounded-md shadow-md
       text-white bg-black
       text-xs font-bold
-      z-50
       transition-all duration-100 scale-0 origin-left;
   }
 

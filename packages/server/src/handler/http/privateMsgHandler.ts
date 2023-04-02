@@ -1,26 +1,57 @@
 import { getUserByEmail, getUserByUsernameAndTag } from '@/service/friend/friendService'
-import { getAllPrivateMsg, createPrivateMsg } from '@/service/msg/msgService'
+import { getAllPrivateMsg, createPrivateMsg, getPrivateMsgById } from '@/service/msg/msgService'
 import * as Boom from '@hapi/boom'
 
-export async function privateMsgGet (req, res) {
-  const user = req.windImUser
-  const wrappedData = wrapPrivateMsg(user.id, await getAllPrivateMsg(user.id))
-  res.json({ data: wrappedData })
+// get private msg list
+export async function privateMsgListGet (req, res, next) {
+  try {
+    const user = req.windImUser
+    const wrappedData = wrapPrivateMsg(user.id, await getAllPrivateMsg(user.id))
+    res.json({ data: wrappedData })
+  } catch (e) {
+    next(e)
+  }
 }
 
-export async function privateMsgPost (req, res) {
-  const user = req.windImUser
-  const fromUid = user.id
-  const toUsernameAndTag = req.body.usernameAndTag
-  const username = toUsernameAndTag.split('#')[0]
-  const tag = toUsernameAndTag.split('#')[1]
-  const remoteUser = await getUserByUsernameAndTag(username, tag)
-  if (!remoteUser?.id) {
-    throw Boom.badRequest('No such user.')
-  }
-  const toUid = remoteUser.id
+// create private msg
+export async function privateMsgPost (req, res, next) {
+  try {
+    const user = req.windImUser
+    const fromUid = user.id
+    const toUsernameAndTag = req.body.usernameAndTag
+    const username = toUsernameAndTag.split('#')[0]
+    const tag = toUsernameAndTag.split('#')[1]
+    const remoteUser = await getUserByUsernameAndTag(username, tag)
+    if (!remoteUser?.id) {
+      throw Boom.badRequest('No such user.')
+    }
+    const toUid = remoteUser.id
 
-  res.json({ data: await createPrivateMsg(fromUid, toUid) })
+    res.json({ data: await createPrivateMsg(fromUid, toUid) })
+  } catch (e) {
+    next(e)
+  }
+}
+
+// get private msg by Id
+export async function privateMsgGet (req, res, next) {
+  try {
+    const user = req.windImUser
+    const msgId = parseInt(req.query?.id)
+    const msgInfo = await getPrivateMsgById(msgId)
+    if (!msgInfo) {
+      throw Boom.badRequest('No such msg.')
+    }
+    // just ignore this stupid warning
+    if (msgInfo.fromUid == user.id) {
+      msgInfo.msgTitle = msgInfo.toUidRel.username + '#' + msgInfo.toUidRel.tag
+    } else {
+      msgInfo.msgTitle = msgInfo.fromUidRel.username + '#' + msgInfo.fromUidRel.tag
+    }
+    res.json({ data: msgInfo })
+  } catch (e) {
+    next(e)
+  }
 }
 
 function wrapPrivateMsg (uid, allPrivateMsg) {

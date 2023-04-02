@@ -1,11 +1,7 @@
 import Link from 'next/link'
 import { useQuery } from 'react-query'
 import axios from '@/utils/axiosUtils'
-
-async function getWhoami () {
-  const result = await axios.get('/api/whoami')
-  return result.data
-}
+import { getWhoami } from '@/utils/apiUtils'
 
 export default function HomeSideBar () {
   return (
@@ -51,7 +47,7 @@ function FriendSelection ({ icon, name, cnt, to }) {
 }
 
 async function getPrivateMsg () {
-  const result = await axios.get('/api/msg/privateMsg')
+  const result = await axios.get('/api/msg/privateMsgList')
   return result.data
 }
 function DirectMsgPanel () {

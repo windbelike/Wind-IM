@@ -146,3 +146,19 @@ export async function getAllPrivateMsg (uid) {
     }
   })
 }
+
+export async function getPrivateMsgById (msgId) {
+  if (Number.isNaN(parseInt(msgId))) {
+    return null
+  }
+
+  return await prisma.privateMsg.findUnique({
+    where: {
+      id: parseInt(msgId)
+    },
+    include: {
+      fromUidRel: { select: { email: true, username: true, tag: true } },
+      toUidRel: { select: { email: true, username: true, tag: true } }
+    }
+  })
+}

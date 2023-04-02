@@ -6,11 +6,13 @@ import EmojiPicker from 'emoji-picker-react'
 import axios from '@/utils/axiosUtils'
 import { useQuery } from 'react-query'
 import Avatar from '@/components/Avatar'
+import { getWhoami } from '@/utils/apiUtils'
 
 // todo implement client side msg storage with offset
 
-async function getWhoami () {
-  const result = await axios.get('/api/whoami')
+async function getPrivateMsgInfo (id) {
+  const params = new URLSearchParams([['id', id]])
+  const result = await axios.get('/api/msg/privateMsg', { params })
   return result.data
 }
 
@@ -22,6 +24,7 @@ export default function Inbox () {
   const { isLoading, data, error } = useQuery('whoami', getWhoami)
   const router = useRouter()
   const { privateMsgId } = router.query
+  const privateMsgInfo = useQuery(['getPrivateMsgInfo', privateMsgId], () => getPrivateMsgInfo(privateMsgId))
   const [currMsgList, setCurrMsgList] = useState([])
   const $currMsgList = useRef([])
   $currMsgList.current = currMsgList
@@ -98,8 +101,9 @@ export default function Inbox () {
     <HomeDashboard>
       <div className='p-3 w-full h-full flex flex-col overflow-hidden'>
         <div className='h-24 border-b-[1px] border-solid border-b-[#323437] text-white shrink-0'>
-          Head
-          <p className='text-white'>msgId: {privateMsgId}</p>
+          <p className='font-bold text-2xl'>{privateMsgInfo?.data?.data?.msgTitle}</p>
+          {/* <p className='text-white'>msgId: {privateMsgId}</p> */}
+          <p>Private message with {privateMsgInfo?.data?.data?.msgTitle}</p>
         </div>
         <div id="msgScroll" className='overflow-y-scroll scrollbar h-full my-3'>
           {/* <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'}/>

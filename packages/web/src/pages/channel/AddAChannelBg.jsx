@@ -2,6 +2,7 @@ import ChannelAvatar from '@/components/ChannelAvatar'
 import { useRef, useState } from 'react'
 import axios from '@/utils/axiosUtils'
 import { useMutation, useQuery } from 'react-query'
+import { getWhoami } from '@/utils/apiUtils'
 
 async function createChannel ({ name, desc }) {
   const result = await axios.post('/api/channel', {
@@ -17,11 +18,6 @@ async function joinChannel ({ channelId }) {
   const result = await axios.post('/api/channel/join', {
     channelId
   })
-  return result.data
-}
-
-async function getWhoami () {
-  const result = await axios.get('/api/whoami')
   return result.data
 }
 
