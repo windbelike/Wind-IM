@@ -111,6 +111,7 @@ model Channel {
   ownerUid Int // 拥有者id
   ownerUidRel User @relation(name: "channelsOwnerRel", fields: [ownerUid], references: [id]) // 拥有者外键关系
   usersRel UsersOnChannels[]
+  roomRel Room[] // 房间列表
   status Int // 频道状态。0：正常 1：关闭
   createdAt DateTime @default(now()) // 创建时间
   updatedAt DateTime @default(now()) @updatedAt
@@ -129,4 +130,16 @@ model UsersOnChannels {
   updatedAt DateTime @default(now()) @updatedAt
 
   @@id([uid, channelId])
+}
+
+// 房间表，频道-房间关系：1对多
+model Room {
+  id Int @id @default(autoincrement())
+  name String // 房间名称
+  desc String // 房间描述
+  channelId Int // 频道Id
+  channelRel Channel @relation(fields: [channelId], references: [id])
+  status Int // 房间状态。0：正常 1：关闭
+  createdAt DateTime @default(now()) // 创建时间
+  updatedAt DateTime @default(now()) @updatedAt
 }
