@@ -33,6 +33,7 @@ model User {
   channelsOwnerRel Channel[] @relation("channelsOwnerRel")  // 拥有的频道，外键关系
   friendsRel Friend[] @relation("friendsRel")  // 我的朋友，外键关系
   friendsToRel Friend[] @relation("friendsToRel") // 我是谁的朋友，外键关系
+  roomsRel Room[] // 房间列表，外键关系
 
   privateMsgFromRel PrivateMsg[] @relation("privateMsgFromRel")
   privateMsgToRel PrivateMsg[] @relation("privateMsgToRel")
@@ -111,7 +112,7 @@ model Channel {
   ownerUid Int // 拥有者id
   ownerUidRel User @relation(name: "channelsOwnerRel", fields: [ownerUid], references: [id]) // 拥有者外键关系
   usersRel UsersOnChannels[]
-  roomRel Room[] // 房间列表
+  roomsRel Room[] // 房间列表
   status Int // 频道状态。0：正常 1：关闭
   createdAt DateTime @default(now()) // 创建时间
   updatedAt DateTime @default(now()) @updatedAt
@@ -137,8 +138,10 @@ model Room {
   id Int @id @default(autoincrement())
   name String // 房间名称
   desc String // 房间描述
-  channelId Int // 频道Id
+  channelId Int // 所属频道Id
   channelRel Channel @relation(fields: [channelId], references: [id])
+  creatorUid Int // 创建者id
+  creatorUidRel User @relation(fields: [creatorUid], references: [id])
   status Int // 房间状态。0：正常 1：关闭
   createdAt DateTime @default(now()) // 创建时间
   updatedAt DateTime @default(now()) @updatedAt
