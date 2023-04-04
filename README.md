@@ -1,4 +1,8 @@
 An IM (as Instant Messaging) made by Sawyer.
+
+## Demo
+![demo](readmeStuff/windimDemo.png)
+
 ## Getting Started
 
 First, run the development command:
