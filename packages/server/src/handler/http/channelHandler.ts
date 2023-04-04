@@ -1,4 +1,4 @@
-import { createChannel, getChannelListByUid, getChannelMembers, joinChannel, selectChannelById } from '@/service/channel/channelService'
+import { createChannel, deleteChannel, getChannelListByUid, getChannelMembers, joinChannel, selectChannelById } from '@/service/channel/channelService'
 import * as Boom from '@hapi/boom'
 
 // create channel
@@ -58,6 +58,30 @@ export async function channelMembersGet (req, res, next) {
     }
 
     res.json({ data: await getChannelMembers(channelId) })
+  } catch (e) {
+    next(e)
+  }
+}
+
+// delete channel
+export async function channelDelete (req, res, next) {
+  try {
+    const user = req.windImUser
+    const body = req.body
+    const channel = await selectChannelById(parseInt(body.channelId))
+    if (!channel) {
+      throw Boom.badRequest('Channel not exist.')
+    }
+    if (channel.ownerUid != user.id) {
+      throw Boom.badRequest('You are not the owner of this channel.')
+    }
+
+    const channelDeleted = await deleteChannel(parseInt(body.channelId))
+    if (channelDeleted) {
+      res.json({ code: 0, message: 'succeed' })
+    } else {
+      res.json({ code: 1, message: 'error' })
+    }
   } catch (e) {
     next(e)
   }

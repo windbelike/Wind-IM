@@ -1,5 +1,6 @@
 import { prisma } from '@/utils/prismaHolder'
 import * as Boom from '@hapi/boom'
+import { createDefaultRoom } from '../room/roomService'
 
 const channelStatus = {
   normal: 0,
@@ -83,8 +84,8 @@ export async function getChannelListByUid (uid) {
   })
 }
 
-// 加入Channel
-// todo 加锁
+// join a channel
+// todo add lock
 export async function joinChannel (uid, channelId) {
   // 检查入参
   if (!uid || !channelId) {
@@ -153,7 +154,19 @@ export async function joinChannel (uid, channelId) {
   }
 }
 
-// create channel
+// delete channel
+export async function deleteChannel (channelId) {
+  return await prisma.channel.update({
+    where: {
+      id: channelId
+    },
+    data: {
+      status: channelStatus.deleted
+    }
+  })
+}
+
+// create a channel, join thi channel, and then create a default room associated with it
 export async function createChannel (uid, name, desc) {
   if (!uid || !name || !name.trim()) {
     return Boom.badRequest('Illegal params.')
@@ -170,7 +183,16 @@ export async function createChannel (uid, name, desc) {
     }
   })
 
-  await joinChannel(uid, channel.id)
+  const joinChannelResult = await joinChannel(uid, channel.id)
+  if (!joinChannelResult) {
+    console.error('joinChannel failed, but channel created. channel id: ' + channel.id)
+  }
+
+  // create a default room
+  const createDefaultRoomResult = await createDefaultRoom({ creatorId: uid, channelId: channel.id })
+  if (!createDefaultRoomResult) {
+    console.error('createDefaultRoom failed, but channel created. channel id: ' + channel.id)
+  }
 
   return channel
 }
