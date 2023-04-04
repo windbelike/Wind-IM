@@ -56,6 +56,16 @@ export async function findRoom (roomId) {
   })
 }
 
+// find rooms by channelId
+export async function findRoomsByChannelId (channelId) {
+  return await prisma.room.findMany({
+    where: {
+      channelId,
+      status: roomStatus.normal
+    }
+  })
+}
+
 // create a default room
 export function createDefaultRoom ({ creatorId, channelId }) {
   const name = 'Default Room'

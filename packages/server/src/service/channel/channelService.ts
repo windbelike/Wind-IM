@@ -76,7 +76,9 @@ export async function getChannelListByUid (uid) {
   return await prisma.usersOnChannels.findMany({
     where: {
       uid,
-      status: channelStatus.normal
+      channelRel: {
+        status: channelStatus.normal
+      }
     },
     include: {
       channelRel: true
@@ -156,6 +158,12 @@ export async function joinChannel (uid, channelId) {
 
 // delete channel
 export async function deleteChannel (channelId) {
+  // check if channel exists
+  const channel = selectChannelById(channelId)
+  if (!channel) {
+    throw Boom.badRequest('Channel not exist.')
+  }
+
   return await prisma.channel.update({
     where: {
       id: channelId

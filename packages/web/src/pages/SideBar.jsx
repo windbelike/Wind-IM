@@ -1,19 +1,15 @@
 import Link from 'next/link'
 import { React, useEffect, useRef, useState } from 'react'
-import { AiOutlineSetting, AiOutlineMessage, AiOutlineHome, AiOutlineUser, AiOutlineLogin, AiOutlinePlus } from 'react-icons/ai'
+import { AiOutlineSetting, AiOutlineCompass, AiOutlineHome, AiOutlineUser, AiOutlineLogin, AiOutlinePlus } from 'react-icons/ai'
 import AddAChannelBg from './channel/AddAChannelBg'
 import axios from '@/utils/axiosUtils'
 import ChannelAvatar from '@/components/ChannelAvatar'
 import { useQuery } from 'react-query'
-
-async function getChannels () {
-  const result = await axios.get('/api/channel')
-  return result.data
-}
+import { getChannelList } from '@/utils/apiUtils'
 
 export default function SideBar () {
   const [addServerFlag, setAddServerFlag] = useState(false)
-  const { data, error, isLoading } = useQuery('getChannels', getChannels)
+  const { data, error, isLoading } = useQuery('getChannelList', getChannelList)
 
   function onAddAServerClick () {
     setAddServerFlag(true)
@@ -57,7 +53,7 @@ export default function SideBar () {
         <div className='shrink-0 w-[40px] h-[1px] bg-[#2f2f30] mx-4 my-2'></div>
         <ChannelIconList data={data}/>
         <AddAChannelIcon />
-        <SideBarIcon linkTo='/msg' text='Messages' icon={<AiOutlineMessage size="28" />} />
+        <SideBarIcon linkTo='/explore' text='Explore' icon={<AiOutlineCompass size="28" />} />
         <SideBarIcon linkTo='/user/profile' text='Profile' icon={<AiOutlineUser size="28" />} />
         {/* <SideBarIcon linkTo='/entry/login' text='Profile' icon={<AiOutlineUser size="28" />} /> */}
         <SideBarIcon linkTo='/entry/logout' text='Logout' icon={<AiOutlineLogin size="28" />} />

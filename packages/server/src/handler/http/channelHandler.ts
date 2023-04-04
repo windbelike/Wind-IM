@@ -39,7 +39,7 @@ export async function channelListGet (req, res, next) {
     const user = req.windImUser
     const body = req.body
     const result = await getChannelListByUid(user.id)
-    console.log(JSON.stringify(result))
+    console.log('#channelListGet channelList' + JSON.stringify(result))
     res.json({ data: result })
   } catch (e) {
     next(e)
@@ -77,6 +77,7 @@ export async function channelDelete (req, res, next) {
     }
 
     const channelDeleted = await deleteChannel(parseInt(body.channelId))
+    console.log('#channelDelete deleted channelId:' + body.channelId)
     if (channelDeleted) {
       res.json({ code: 0, message: 'succeed' })
     } else {

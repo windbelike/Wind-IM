@@ -2,9 +2,11 @@ import { getChannelList } from '@/utils/apiUtils'
 import axios from '@/utils/axiosUtils'
 import { useQuery } from 'react-query'
 
-// 获取用户所在Channel列表
+// get all channel list
 
-export default function ChannelHome () {
+// todo implement this
+
+export default function Explore () {
   const { data, error, isLoading } = useQuery('getChannelList', getChannelList)
   console.log(data?.data)
 

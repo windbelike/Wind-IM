@@ -19,6 +19,7 @@ import { logoutPost } from './handler/http/logoutHandler'
 import { friendReqGet, friendReqPost } from './handler/http/friendReqhandler'
 import { friendGet } from './handler/http/friendHandler'
 import { channelListGet, channelJoinPost, channelPost, channelMembersGet, channelDelete } from './handler/http/channelHandler'
+import { roomListGet } from './handler/http/roomHandler'
 
 dotenv.config()
 const FRONTEND_HOST = process.env.FRONTEND_HOST
@@ -58,10 +59,11 @@ app.use(cors(corsOptions))
   .post('/api/friendRequest', loginValidator, friendReqPost)
   .get('/api/friend', loginValidator, friendGet)
   .post('/api/channel', loginValidator, channelPost)
-  .get('/api/channel', loginValidator, channelListGet)
+  .get('/api/channelList', loginValidator, channelListGet)
   .post('/api/channel/join', loginValidator, channelJoinPost)
   .get('/api/channel/members', loginValidator, channelMembersGet)
   .post('/api/channel/delete', loginValidator, channelDelete)
+  .get('/api/roomList', loginValidator, roomListGet)
 
   .use(errorHandler) // for handling global error
 
