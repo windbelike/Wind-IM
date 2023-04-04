@@ -4,8 +4,7 @@ import { findRoomsByChannelId } from '@/service/room/roomService'
 export async function roomListGet (req, res, next) {
   try {
     const user = req.windImUser
-    const body = req.body
-    const result = await findRoomsByChannelId(body.channelId)
+    const result = await findRoomsByChannelId(parseInt(req.query?.channelId))
     console.log('#roomListGet roomListGet' + JSON.stringify(result))
     res.json({ data: result })
   } catch (e) {

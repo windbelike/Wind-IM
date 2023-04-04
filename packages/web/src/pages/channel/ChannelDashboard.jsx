@@ -15,7 +15,7 @@ export default function ChannelDashboard ({ children, channelId }) {
 function ChannelSidebar ({ channelId }) {
   const deleteChannelMut = useMutation('deleteChannel', deleteChannel)
   const leaveChannelMut = useMutation('leaveChannel', leaveChannel)
-  const { data, isLoading, error } = useQuery('getRoomList', getRoomList)
+  const { data, isLoading, error } = useQuery(['getRoomList', channelId], () => getRoomList(channelId))
   if (data) {
     console.log('roomList:' + JSON.stringify(data.data))
   }
@@ -36,7 +36,7 @@ function ChannelSidebar ({ channelId }) {
     <>
       <div className="p-5 shrink-0 flex flex-col h-full w-64 border-r-[1px] border-solid border-r-[#323437] overflow-y-hidden">
         <UserInfoPanel />
-        <div className='text-white'>{'roomList:' + JSON.stringify(data.data)}</div>
+        <div className='text-white'>{'roomList:' + JSON.stringify(data?.data)}</div>
         <TextPannel channelId={channelId}/>
         <VoicePannel channelId={channelId}/>
         <div className='mt-auto flex flex-col space-y-3'>

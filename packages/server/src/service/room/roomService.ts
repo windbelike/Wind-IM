@@ -58,6 +58,10 @@ export async function findRoom (roomId) {
 
 // find rooms by channelId
 export async function findRoomsByChannelId (channelId) {
+  if (!Number.isFinite(channelId)) {
+    throw new Error('Illegal channelId.')
+  }
+
   return await prisma.room.findMany({
     where: {
       channelId,

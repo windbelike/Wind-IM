@@ -3,24 +3,9 @@ import axios from '@/utils/axiosUtils'
 import { useQuery } from 'react-query'
 import { useRef, useState } from 'react'
 import EmojiPicker from 'emoji-picker-react'
-import { getPrivateMsg, getWhoami } from '@/utils/apiUtils'
+import { getChannelMembers, getPrivateMsg, getWhoami } from '@/utils/apiUtils'
 import Link from 'next/link'
 import ChannelDashboard from './ChannelDashboard'
-
-// get channel members
-
-// todo 整合前端API方法
-// todo id undefined bug fix
-async function getChannelMembers (id) {
-  if (!id) {
-    return {}
-  }
-  const params = new URLSearchParams([['id', id]])
-  const result = await axios.get('/api/channel/members', {
-    params
-  })
-  return result.data
-}
 
 export default function Channel () {
   const [loadEmojiKeyboard, setLoadEmojiKeyboard] = useState(false)
