@@ -8,6 +8,7 @@ export default function ChannelDashboard ({ children, channelId }) {
     <div className='h-full w-full bg-[#25272a] flex'>
       <ChannelSidebar channelId={channelId} />
       {children}
+      <ChannelRightSidebar channelId={channelId} />
     </div>
   )
 }
@@ -41,6 +42,12 @@ function ChannelSidebar ({ channelId }) {
         </div>
       </div>
     </>
+  )
+}
+
+function ChannelRightSidebar ({ channelId }) {
+  return (
+    <></>
   )
 }
 

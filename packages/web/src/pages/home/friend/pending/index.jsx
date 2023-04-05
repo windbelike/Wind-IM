@@ -1,7 +1,8 @@
+import Layout from '@/pages/Layout'
 import axios from '@/utils/axiosUtils'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
-import HomeDashboard from '../../HomeDashboard'
+import HomeLayout from '../../HomeDashboard'
 import AddFriendButton from '../AddFriendButton'
 import AddFriendWindow from '../AddFriendWindow'
 import FriendReqCard from '../FriendReqCard'
@@ -16,25 +17,31 @@ export default function Request () {
   const { isLoading, error, data } = useQuery('friendRequest', getFriendRequests)
 
   return (
-    <HomeDashboard>
-      <div className='p-5'>
-        <div className='flex'>
-          <h1 className='text-white'>Pending&nbsp;-&nbsp;{data ? data.data?.length : 0}</h1>
-          <AddFriendButton setOpenAddFriendWindow={setOpenAddFriendWindow}/>
-        </div>
-
-        {openAddFriendWindow &&
-          <AddFriendWindow openAddFriendWindow={openAddFriendWindow} setOpenAddFriendWindow={setOpenAddFriendWindow}/>
-        }
-
-        <div className='flex p-3 flex-wrap items-start content-start'>
-          {error && <p>{error}</p>}
-          {isLoading && <p>Loading</p>}
-          {data && data.data?.map(friendReq => {
-            return <FriendReqCard key={friendReq.id} friendReq={friendReq}/>
-          })}
-        </div>
+    <div className='p-5'>
+      <div className='flex'>
+        <h1 className='text-white'>Pending&nbsp;-&nbsp;{data ? data.data?.length : 0}</h1>
+        <AddFriendButton setOpenAddFriendWindow={setOpenAddFriendWindow}/>
       </div>
-    </HomeDashboard>
+
+      {openAddFriendWindow &&
+          <AddFriendWindow openAddFriendWindow={openAddFriendWindow} setOpenAddFriendWindow={setOpenAddFriendWindow}/>
+      }
+
+      <div className='flex p-3 flex-wrap items-start content-start'>
+        {error && <p>{error}</p>}
+        {isLoading && <p>Loading</p>}
+        {data && data.data?.map(friendReq => {
+          return <FriendReqCard key={friendReq.id} friendReq={friendReq}/>
+        })}
+      </div>
+    </div>
+  )
+}
+
+Request.getLayout = function getLayout (page) {
+  return (
+    <Layout>
+      <HomeLayout>{page}</HomeLayout>
+    </Layout>
   )
 }

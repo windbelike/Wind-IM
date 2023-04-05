@@ -1,7 +1,7 @@
-import HomeDashboard from './HomeDashboard'
+import HomeLayout from './HomeDashboard'
 
 export default function Home () {
   return (
-    <HomeDashboard />
+    <HomeLayout />
   )
 }
