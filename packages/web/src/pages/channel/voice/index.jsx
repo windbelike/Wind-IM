@@ -1,10 +1,12 @@
+import { useRouter } from 'next/router'
 import ChannelDashboard from '../ChannelDashboard'
 
 export default function Voice () {
+  const router = useRouter()
   return (
-    <ChannelDashboard>
+    <ChannelDashboard channelId={router.query.channelId}>
       <div>
-        hah
+        Unsupported yet
       </div>
     </ChannelDashboard>
   )

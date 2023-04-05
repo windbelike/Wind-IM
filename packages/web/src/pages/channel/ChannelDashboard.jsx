@@ -1,7 +1,7 @@
 import { deleteChannel, getPrivateMsg, getRoomList, getWhoami, leaveChannel } from '@/utils/apiUtils'
 import Link from 'next/link'
 import { useMutation, useQuery } from 'react-query'
-import axios from '@/utils/axiosUtils'
+import { AiOutlineNumber } from 'react-icons/ai'
 
 export default function ChannelDashboard ({ children, channelId }) {
   return (
@@ -15,10 +15,6 @@ export default function ChannelDashboard ({ children, channelId }) {
 function ChannelSidebar ({ channelId }) {
   const deleteChannelMut = useMutation('deleteChannel', deleteChannel)
   const leaveChannelMut = useMutation('leaveChannel', leaveChannel)
-  const { data, isLoading, error } = useQuery(['getRoomList', channelId], () => getRoomList(channelId))
-  if (data) {
-    console.log('roomList:' + JSON.stringify(data.data))
-  }
 
   function onClickDeleteChannel () {
     if (window.confirm('Do you really want to delete this channel?')) {
@@ -36,7 +32,6 @@ function ChannelSidebar ({ channelId }) {
     <>
       <div className="p-5 shrink-0 flex flex-col h-full w-64 border-r-[1px] border-solid border-r-[#323437] overflow-y-hidden">
         <UserInfoPanel />
-        <div className='text-white'>{'roomList:' + JSON.stringify(data?.data)}</div>
         <TextPannel channelId={channelId}/>
         <VoicePannel channelId={channelId}/>
         <div className='mt-auto flex flex-col space-y-3'>
@@ -60,11 +55,20 @@ function UserInfoPanel () {
 }
 
 function TextPannel ({ channelId }) {
+  const { data, isLoading, error } = useQuery(['getRoomList', channelId], () => getRoomList(channelId))
+  if (data) {
+    console.log('roomList:' + JSON.stringify(data.data))
+  }
   return (
     <div className='mt-3'>
-      <p className='text-[#e6eaf0] text-sm mt-2'>Text Rooms</p>
+      {/* <div className='text-white'>{'roomList:' + JSON.stringify(data?.data)}</div> */}
+      <p className='text-[#e6eaf0] text-sm mt-2'>TEXT ROOMS</p>
       <div className='ml-4 mt-1'>
-        <TextPannelSelection name='Default' to='/channel/text'/>
+        {data?.data?.map((room) => {
+          return (
+            <TextPannelSelection key={room.id} name={room.name} to={`/channel/${channelId}/${room.id}`}/>
+          )
+        })}
       </div>
     </div>
   )
@@ -74,7 +78,12 @@ function TextPannelSelection ({ icon, name, cnt, to }) {
   return (
     <>
       <Link href={to}>
-        <div className='text-gray-400 p-1 rounded-md hover:bg-[#3b3c3f] hover:cursor-pointer'>{name}</div>
+        <div className='text-gray-400 p-1 rounded-md hover:bg-[#3b3c3f] hover:cursor-pointer'>
+          <div className='flex items-center'>
+            <AiOutlineNumber size={24}/>
+            <span>{name}</span>
+          </div>
+        </div>
       </Link>
     </>
   )
@@ -84,7 +93,7 @@ function VoicePannel () {
   const { error, isLoading, data } = useQuery('getPrivateMsg', getPrivateMsg)
   return (
     <div className='mt-3'>
-      <p className='text-[#e6eaf0] text-sm mt-2'>Voice Rooms</p>
+      <p className='text-[#e6eaf0] text-sm mt-2'>VOICE ROOMS</p>
       <div className='ml-4 mt-1'>
         <VoiceSelection name="Default" to='/channel/voice'/>
       </div>
