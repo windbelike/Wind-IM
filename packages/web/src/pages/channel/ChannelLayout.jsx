@@ -6,7 +6,7 @@ import { AiOutlineNumber } from 'react-icons/ai'
 export default function ChannelLayout ({ children, channelId }) {
   console.log('ChannelLayout channelId:' + channelId)
   return (
-    <div className='h-screen w-screen bg-[#25272a] flex'>
+    <div className='h-full w-full bg-[#25272a] flex'>
       <ChannelSidebar channelId={channelId} />
       {children}
       <ChannelRightSidebar channelId={channelId} />

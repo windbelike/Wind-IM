@@ -21,7 +21,7 @@ const defaultRetryTimes = 3
 
 let socket
 
-Inbox.getLayout = function getLayout (page) {
+DirectMessage.getLayout = function getLayout (page) {
   return (
     <Layout>
       <HomeLayout>{page}</HomeLayout>
@@ -29,7 +29,7 @@ Inbox.getLayout = function getLayout (page) {
   )
 }
 
-export default function Inbox () {
+export default function DirectMessage () {
   const { isLoading, data, error } = useQuery('whoami', getWhoami)
   const router = useRouter()
   const { privateMsgId } = router.query

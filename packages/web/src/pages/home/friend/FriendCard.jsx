@@ -22,7 +22,7 @@ export default function FriendCard ({ usernameAndTag }) {
     const privateMsgId = createPrivateMsgMut.data.data?.id
     console.log(createPrivateMsgMut.data)
     if (privateMsgId) {
-      router.push(`/home/inbox/${privateMsgId}`)
+      router.push(`/home/directMessage/${privateMsgId}`)
     }
   }
   return (

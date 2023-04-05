@@ -81,9 +81,8 @@ function DirectMsgPanel ({ activeState }) {
     <div className='mt-3'>
       <p className='text-[#e6eaf0] text-sm mt-2'>DIRECT MESSAGES</p>
       <div className='ml-4 mt-1'>
-        {/* <InboxSelection name='系统通知'/> */}
         {data && data.data?.map((pm, idx) => {
-          return <DirectMsgSelection key={idx} name={pm.msgTitle} to={`/home/inbox/${pm.id}`}/>
+          return <DirectMsgSelection key={idx} name={pm.msgTitle} to={`/home/directMessage/${pm.id}`}/>
         })}
       </div>
     </div>
