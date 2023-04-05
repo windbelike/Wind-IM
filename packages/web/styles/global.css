@@ -27,6 +27,10 @@
       transition-all duration-100 scale-0 origin-left;
   }
 
+  .sidebar-active {
+    @apply bg-[#3b3c3f] hover:text-white rounded-xl
+  }
+
   .friend-active {
     @apply bg-black
   }

@@ -2,14 +2,14 @@ import Link from 'next/link'
 import { React, useEffect, useRef, useState } from 'react'
 import { AiOutlineSetting, AiOutlineCompass, AiOutlineHome, AiOutlineUser, AiOutlineLogin, AiOutlinePlus } from 'react-icons/ai'
 import AddAChannelBg from './channel/AddAChannelBg'
-import axios from '@/utils/axiosUtils'
 import ChannelAvatar from '@/components/ChannelAvatar'
 import { useQuery } from 'react-query'
 import { getChannelList } from '@/utils/apiUtils'
 
-export default function SideBar () {
+export default function Sidebar () {
   const [addServerFlag, setAddServerFlag] = useState(false)
   const { data, error, isLoading } = useQuery('getChannelList', getChannelList)
+  const tabState = useState('/')
 
   function onAddAServerClick () {
     setAddServerFlag(true)
@@ -49,16 +49,16 @@ export default function SideBar () {
           <img className="h-12 w-12 rounded-full" src="https://avatars.githubusercontent.com/u/33996345?v=4" alt="ChitChat Logo" />
         </div> */}
         {/* Main Functions */}
-        <SideBarIcon linkTo='/' text='Home' icon={<AiOutlineHome size="28" />} />
+        <SidebarIcon linkTo='/' text='Home' icon={<AiOutlineHome size="28" />} tabState ={tabState} />
         <div className='shrink-0 w-[40px] h-[1px] bg-[#2f2f30] mx-4 my-2'></div>
         <ChannelIconList data={data}/>
         <AddAChannelIcon />
-        <SideBarIcon linkTo='/explore' text='Explore' icon={<AiOutlineCompass size="28" />} />
-        <SideBarIcon linkTo='/user/profile' text='Profile' icon={<AiOutlineUser size="28" />} />
+        <SidebarIcon linkTo='/explore' text='Explore' icon={<AiOutlineCompass size="28"/>} tabState ={tabState}/>
+        <SidebarIcon linkTo='/user/profile' text='Profile' icon={<AiOutlineUser size="28"/>} tabState ={tabState}/>
         {/* <SideBarIcon linkTo='/entry/login' text='Profile' icon={<AiOutlineUser size="28" />} /> */}
-        <SideBarIcon linkTo='/entry/logout' text='Logout' icon={<AiOutlineLogin size="28" />} />
+        <SidebarIcon linkTo='/entry/logout' text='Logout' icon={<AiOutlineLogin size="28" />} tabState ={tabState}/>
         <div className="mt-auto">
-          <SideBarIcon linkTo='/settings' text="Settings" icon={<AiOutlineSetting size="28" />} />
+          <SidebarIcon linkTo='/settings' text="Settings" icon={<AiOutlineSetting size="28" />} tabState ={tabState}/>
         </div>
       </div>
     </div>
@@ -82,12 +82,21 @@ function ChannelIconList ({ data }) {
   )
 }
 
-const SideBarIcon = ({ icon, text = 'tooltip 💡', linkTo = '/' }) => (
-  <Link href={linkTo} >
-    <div className="sidebar-icon group overflow-x-visible">
-      {icon}
-      {/* Styling based on parent state (group-{modifier}) */}
-      <span className="sidebar-tooltip group-hover:scale-100">{text}</span>
+function SidebarIcon ({ icon, text = 'tooltip 💡', linkTo = '/', tabState }) {
+  const [tab, setTab] = tabState
+  function onSidebarIconClick () {
+    setTab(linkTo)
+  }
+
+  return (
+    <div onClick={onSidebarIconClick}>
+      <Link href={linkTo} >
+        <div className={`sidebar-icon group overflow-x-visible ${tab == linkTo ? 'sidebar-active' : ''}`}>
+          {icon}
+          {/* Styling based on parent state (group-{modifier}) */}
+          <span className="sidebar-tooltip group-hover:scale-100">{text}</span>
+        </div>
+      </Link>
     </div>
-  </Link>
-)
+  )
+}
