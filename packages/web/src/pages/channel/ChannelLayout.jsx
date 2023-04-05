@@ -1,4 +1,4 @@
-import { deleteChannel, getPrivateMsg, getRoomList, getWhoami, leaveChannel } from '@/utils/apiUtils'
+import { deleteChannel, getChannelMembers, getPrivateMsg, getRoomList, getWhoami, leaveChannel } from '@/utils/apiUtils'
 import Link from 'next/link'
 import { useMutation, useQuery } from 'react-query'
 import { AiOutlineNumber } from 'react-icons/ai'
@@ -47,8 +47,18 @@ function ChannelSidebar ({ channelId }) {
 }
 
 function ChannelRightSidebar ({ channelId }) {
+  const { data, error, isLoading } = useQuery(['getChannelMembers', channelId], () => getChannelMembers(channelId))
+
   return (
-    <></>
+    <div className='overflow-hidden w-[300px] border-l-[1px] border-solid border-l-[#323437] p-3 text-white'>
+      <div>
+        <div>ONLINE - 0</div>
+      </div>
+      <div>
+        <div>OFFLINE - 0</div>
+        <div className='break-words'>data:{JSON.stringify(data?.data)}</div>
+      </div>
+    </div>
   )
 }
 
