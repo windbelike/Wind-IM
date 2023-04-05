@@ -7,9 +7,10 @@ import ChannelLayout from './ChannelLayout'
 import Layout from '../Layout'
 
 Channel.getLayout = function getLayout (page) {
+  const router = useRouter()
   return (
     <Layout>
-      <ChannelLayout>{page}</ChannelLayout>
+      <ChannelLayout channelId={router.query.channelId}>{page}</ChannelLayout>
     </Layout>
   )
 }

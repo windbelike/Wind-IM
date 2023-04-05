@@ -51,7 +51,7 @@ export default function Sidebar () {
         {/* Main Functions */}
         <SidebarIcon linkTo='/' text='Home' icon={<AiOutlineHome size="28" />} tabState ={tabState} />
         <div className='shrink-0 w-[40px] h-[1px] bg-[#2f2f30] mx-4 my-2'></div>
-        <ChannelIconList data={data}/>
+        <ChannelIconList data={data} tabState={tabState}/>
         <AddAChannelIcon />
         <SidebarIcon linkTo='/explore' text='Explore' icon={<AiOutlineCompass size="28"/>} tabState ={tabState}/>
         <SidebarIcon linkTo='/user/profile' text='Profile' icon={<AiOutlineUser size="28"/>} tabState ={tabState}/>
@@ -65,17 +65,25 @@ export default function Sidebar () {
   )
 }
 
-function ChannelIconList ({ data }) {
+function ChannelIconList ({ data, tabState }) {
+  const [tab, setTab] = tabState
+
   return (
     <div className='flex flex-col items-center'>
       {data?.data?.map((channel) => {
+        const linkTo = '/channel/' + channel.channelId
+        function onChannelIconClick () {
+          setTab(linkTo)
+        }
         return (
-          <Link href={'/channel/' + channel.channelId} key={channel.channelId}>
-            <div className='hover:cursor-pointer sidebar-icon group m-1'>
-              <ChannelAvatar name={channel.channelRel.name}/>
-              <span className="sidebar-tooltip group-hover:scale-100">{channel.channelRel.name}</span>
-            </div>
-          </Link>
+          <div key={channel.channelId} onClick={onChannelIconClick}>
+            <Link href={linkTo} >
+              <div className={`hover:cursor-pointer sidebar-icon group m-1 ${tab == linkTo ? 'sidebar-active' : ''}`}>
+                <ChannelAvatar name={channel.channelRel.name}/>
+                <span className="sidebar-tooltip group-hover:scale-100">{channel.channelRel.name}</span>
+              </div>
+            </Link>
+          </div>
         )
       })}
     </div>
@@ -91,7 +99,7 @@ function SidebarIcon ({ icon, text = 'tooltip 💡', linkTo = '/', tabState }) {
   return (
     <div onClick={onSidebarIconClick}>
       <Link href={linkTo} >
-        <div className={`sidebar-icon group overflow-x-visible ${tab == linkTo ? 'sidebar-active' : ''}`}>
+        <div className={`sidebar-icon group ${tab == linkTo ? 'sidebar-active' : ''}`}>
           {icon}
           {/* Styling based on parent state (group-{modifier}) */}
           <span className="sidebar-tooltip group-hover:scale-100">{text}</span>

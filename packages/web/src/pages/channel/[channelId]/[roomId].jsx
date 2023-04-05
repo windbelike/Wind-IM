@@ -12,9 +12,10 @@ export default function ChannelRoom () {
 }
 
 ChannelRoom.getLayout = function getLayout (page) {
+  const router = useRouter()
   return (
     <Layout>
-      <ChannelLayout>{page}</ChannelLayout>
+      <ChannelLayout channelId={router.query.channelId}>{page}</ChannelLayout>
     </Layout>
   )
 }
