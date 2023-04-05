@@ -3,7 +3,8 @@ import Link from 'next/link'
 import { useMutation, useQuery } from 'react-query'
 import { AiOutlineNumber } from 'react-icons/ai'
 
-export default function ChannelDashboard ({ children, channelId }) {
+export default function ChannelLayout ({ children, channelId }) {
+  console.log('ChannelLayout channelId:' + channelId)
   return (
     <div className='h-full w-full bg-[#25272a] flex'>
       <ChannelSidebar channelId={channelId} />

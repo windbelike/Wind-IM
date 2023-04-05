@@ -1,11 +1,20 @@
+import Layout from '@/pages/Layout'
 import { useRouter } from 'next/router'
-import ChannelDashboard from '../ChannelDashboard'
+import ChannelLayout from '../ChannelLayout'
 
 export default function ChannelRoom () {
   const router = useRouter()
   return (
-    <ChannelDashboard channelId={router.query.channelId}>
+    <div>
       {router.query.channelId} and {router.query.roomId}
-    </ChannelDashboard>
+    </div>
+  )
+}
+
+ChannelRoom.getLayout = function getLayout (page) {
+  return (
+    <Layout>
+      <ChannelLayout>{page}</ChannelLayout>
+    </Layout>
   )
 }

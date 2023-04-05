@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery } from 'react-query'
-import HomeLayout from '../../HomeDashboard'
+import HomeLayout from '../../HomeLayout'
 import AddFriendButton from '../AddFriendButton'
 import AddFriendWindow from '../AddFriendWindow'
 import FriendCard from '../FriendCard'

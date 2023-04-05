@@ -7,13 +7,13 @@ const queryClient = new QueryClient()
 // https://nextjs.org/docs/basic-features/layouts
 export default function WindIM ({ Component, pageProps }) {
   // entry layout, to be refactored by per-page layouts as below
-  if (Component.isEntry) {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
-      </QueryClientProvider>
-    )
-  }
+  // if (Component.isEntry) {
+  //   return (
+  //     <QueryClientProvider client={queryClient}>
+  //       <Component {...pageProps} />
+  //     </QueryClientProvider>
+  //   )
+  // }
 
   // reference: per-page layouts(https://nextjs.org/docs/basic-features/layouts)
   const getLayout = Component.getLayout || ((page) => page)

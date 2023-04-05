@@ -1,12 +1,20 @@
+import HomeLayout from './home/HomeLayout'
 import Home from './home/index'
+import Layout from './Layout'
 
 export default function App () {
   return (
     <>
-      <Home />
-      {/* <div className="flex h-full w-full justify-center items-center">
-        <div className="p-8 rounded-md shadow-md text-9xl"><h1 >Welcome, XXX</h1></div>
-      </div> */}
+
     </>
+  )
+}
+
+App.getLayout = function getLayout (page) {
+  console.log('Home.getLayout')
+  return (
+    <Layout>
+      <HomeLayout>{page}</HomeLayout>
+    </Layout>
   )
 }

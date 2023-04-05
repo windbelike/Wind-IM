@@ -65,5 +65,3 @@ export default function LoginForm () {
 
   )
 }
-
-LoginForm.isEntry = true

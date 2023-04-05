@@ -6,10 +6,9 @@ import { useState } from 'react'
 
 export default function HomeSideBar () {
   const activeState = useState('')
-  console.log('activeSelection:', activeState[0])
 
   return (
-    <div className="p-2 shrink-0 flex flex-col h-full w-64 border-r-[1px] border-solid border-r-[#323437] overflow-y-hidden">
+    <div className="p-5 shrink-0 flex flex-col h-full w-64 border-r-[1px] border-solid border-r-[#323437] overflow-y-hidden">
       <UserInfoPanel />
       <FriendPanel activeState={activeState}/>
       <DirectMsgPanel activeState={activeState}/>
@@ -32,7 +31,6 @@ function FriendPanel ({ activeState }) {
 
   function FriendSelection ({ icon, name, cnt, to }) {
     function onClickFriendSelection () {
-      console.log('to:', to)
       setActiveSelection(to)
     }
 
@@ -62,7 +60,22 @@ async function getPrivateMsg () {
   return result.data
 }
 
-function DirectMsgPanel () {
+function DirectMsgPanel ({ activeState }) {
+  const [activeSelection, setActiveSelection] = activeState
+
+  function DirectMsgSelection ({ icon, name, cnt, to }) {
+    function onClickDirectMsgSelection () {
+      setActiveSelection(to)
+    }
+    return (
+      <div onClick={onClickDirectMsgSelection}>
+        <Link href={to}>
+          <div className={`text-gray-400 p-1 rounded-md hover:bg-[#3b3c3f] hover:cursor-pointer ${activeSelection == to ? 'bg-[#3b3c3f]' : ''}`}>{name}</div>
+        </Link>
+      </div>
+    )
+  }
+
   const { error, isLoading, data } = useQuery('getPrivateMsg', getPrivateMsg)
   return (
     <div className='mt-3'>
@@ -74,15 +87,5 @@ function DirectMsgPanel () {
         })}
       </div>
     </div>
-  )
-}
-
-function DirectMsgSelection ({ icon, name, cnt, to }) {
-  return (
-    <>
-      <Link href={to}>
-        <div className='text-gray-400 p-1 rounded-md hover:bg-[#3b3c3f] hover:cursor-pointer'>{name}</div>
-      </Link>
-    </>
   )
 }

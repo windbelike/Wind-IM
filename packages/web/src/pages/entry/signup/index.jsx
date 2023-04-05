@@ -4,9 +4,6 @@ import Link from 'next/link'
 import { useRef, useState } from 'react'
 import { useMutation } from 'react-query'
 
-// Custom nested route for _app.js
-SignUpForm.isEntry = true
-
 async function createAccount ({ email, username, pwd }) {
   await axios.post('/api/signup', {
     email, username, pwd

@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import { useMutation } from 'react-query'
 import axios from '@/utils/axiosUtils'
+import Layout from '@/pages/Layout'
 
 async function whoami (req) {
   const data = await axios.get('/api/whoami', {
@@ -16,6 +17,15 @@ async function logout () {
     withCredentials: true
   })
   return result.data
+}
+
+LogoutForm.getLayout = function getLayout (page) {
+  console.log('Home.getLayout')
+  return (
+    <Layout>
+      {page}
+    </Layout>
+  )
 }
 
 export default function LogoutForm () {

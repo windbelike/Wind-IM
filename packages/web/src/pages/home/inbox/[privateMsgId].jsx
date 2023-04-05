@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { io } from 'socket.io-client'
 import { useEffect, useRef, useState } from 'react'
-import HomeLayout from '../HomeDashboard'
+import HomeLayout from '../HomeLayout'
 import EmojiPicker from 'emoji-picker-react'
 import axios from '@/utils/axiosUtils'
 import { useQuery } from 'react-query'

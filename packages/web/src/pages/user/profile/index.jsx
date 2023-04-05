@@ -1,13 +1,14 @@
 import axios from '@/utils/axiosUtils'
 import Avatar from '@/components/Avatar'
+import Layout from '@/pages/Layout'
 
-async function whoami (req) {
-  const data = await axios.get('/api/whoami', {
-    headers: {
-      Cookie: req.headers.cookie
-    }
-  })
-  return data.data
+Profile.getLayout = function getLayout (page) {
+  console.log('Home.getLayout')
+  return (
+    <Layout>
+      {page}
+    </Layout>
+  )
 }
 
 export default function Profile ({ user }) {
@@ -26,6 +27,15 @@ export default function Profile ({ user }) {
 }
 
 export async function getServerSideProps ({ req }) {
+  async function whoami (req) {
+    const data = await axios.get('/api/whoami', {
+      headers: {
+        Cookie: req.headers.cookie
+      }
+    })
+    return data.data
+  }
+
   let data
   try {
     data = await whoami(req)
