@@ -8,7 +8,7 @@ export async function channelPost (req, res, next) {
     const body = req.body
     const channel = await createChannel(user.id, body.name, body.desc)
     if (channel) {
-      res.json({ code: 0, message: 'succeed' })
+      res.json({ code: 0, message: 'succeed', data: { channelId: channel.id } })
     } else {
       res.json({ code: 1, message: 'error' })
     }

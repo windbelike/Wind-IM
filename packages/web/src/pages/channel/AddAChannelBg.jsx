@@ -3,6 +3,7 @@ import { useRef, useState } from 'react'
 import axios from '@/utils/axiosUtils'
 import { useMutation, useQuery } from 'react-query'
 import { getWhoami } from '@/utils/apiUtils'
+import Router from 'next/router'
 
 async function createChannel ({ name, desc }) {
   const result = await axios.post('/api/channel', {
@@ -21,7 +22,7 @@ async function joinChannel ({ channelId }) {
   return result.data
 }
 
-export default function AddAChannelBg ({ id, onClickCloseAddAServer }) {
+export default function AddChannelBg ({ id, onClickCloseAddAServer, setAddServerFlag }) {
   const [nextPageFlag, setNextPageFlag] = useState(false)
   const createMyOwnElementId = 'createMyOwnElement'
   const joinAServerElementId = 'joinAServerElement'
@@ -55,6 +56,15 @@ export default function AddAChannelBg ({ id, onClickCloseAddAServer }) {
         createChannelMut.mutate({ name: channelName, desc: '' })
       } else {
         console.log('channelName is invalid')
+      }
+    }
+
+    if (createChannelMut.data?.code == 0) {
+      // todo 跳转到channel页面
+      const channelId = createChannelMut.data.data?.channelId
+      if (channelId) {
+        setAddServerFlag(false)
+        Router.push('/channel/' + channelId)
       }
     }
 
@@ -110,37 +120,35 @@ export default function AddAChannelBg ({ id, onClickCloseAddAServer }) {
   }
 
   return (
-    <>
-      <div onClick={onClickCloseAddAServer} id={id} className='fixed z-50 flex items-center justify-center bg-[rgba(0,0,0,0.5)] h-screen w-screen '>
-        <div className={'bg-white rounded-lg duration-200 overflow-hidden ' + (nextPageFlag ? 'w-[440px] h-[436px]' : 'w-[440px] h-[330px]')}>
-          {/* flipping page */}
-          <div
-            className="w-[880px] duration-200 flex flex-nowrap"
-            style={{
-              transform: nextPageFlag ? 'translateX(-440px)' : 'translateX(0)'
-            }}
-          >
-            {/* first page */}
-            <div className=" flex flex-col items-center w-[440px] h-[330px]">
-              {/* Header */}
-              <div className='text-xl text-center font-bold w-[408px] h-[87px]'>
-                <p className='mt-10'>Wanna add a channel ?</p>
-              </div>
-              <button id={createMyOwnElementId} className="hover:bg-gray-100 font-bold my-3 w-[406px] h-[64px] text-center rounded-3xl border-gray-300 border-[1px] " onClick={onNextPageClick}>
-              Create My Own
-              </button>
-              <button id={joinAServerElementId} className="hover:bg-gray-100 font-bold my-3 w-[406px] h-[64px] text-center rounded-3xl border-gray-300 border-[1px] " onClick={onNextPageClick}>
-              Join A Channel
-              </button>
+    <div onClick={onClickCloseAddAServer} id={id} className='fixed z-50 flex items-center justify-center bg-[rgba(0,0,0,0.5)] h-screen w-screen '>
+      <div className={'bg-white rounded-lg duration-200 overflow-hidden ' + (nextPageFlag ? 'w-[440px] h-[436px]' : 'w-[440px] h-[330px]')}>
+        {/* flipping page */}
+        <div
+          className="w-[880px] duration-200 flex flex-nowrap"
+          style={{
+            transform: nextPageFlag ? 'translateX(-440px)' : 'translateX(0)'
+          }}
+        >
+          {/* first page */}
+          <div className=" flex flex-col items-center w-[440px] h-[330px]">
+            {/* Header */}
+            <div className='text-xl text-center font-bold w-[408px] h-[87px]'>
+              <p className='mt-10'>Wanna add a channel ?</p>
             </div>
-            {/* second page */}
-            {/* create my own Or join a server */}
-            { currentHit === createMyOwnElementId && <CreateMyOwn />}
-            { currentHit === joinAServerElementId && <JoinChannel />}
+            <button id={createMyOwnElementId} className="hover:bg-gray-100 font-bold my-3 w-[406px] h-[64px] text-center rounded-3xl border-gray-300 border-[1px] " onClick={onNextPageClick}>
+              Create My Own
+            </button>
+            <button id={joinAServerElementId} className="hover:bg-gray-100 font-bold my-3 w-[406px] h-[64px] text-center rounded-3xl border-gray-300 border-[1px] " onClick={onNextPageClick}>
+              Join A Channel
+            </button>
           </div>
+          {/* second page */}
+          {/* create my own Or join a server */}
+          { currentHit === createMyOwnElementId && <CreateMyOwn />}
+          { currentHit === joinAServerElementId && <JoinChannel />}
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

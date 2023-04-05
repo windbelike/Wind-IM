@@ -177,7 +177,7 @@ export async function deleteChannel (channelId) {
 // create a channel, join thi channel, and then create a default room associated with it
 export async function createChannel (uid, name, desc) {
   if (!uid || !name || !name.trim()) {
-    return Boom.badRequest('Illegal params.')
+    throw Boom.badRequest('Illegal params.')
   }
 
   const channel = await prisma.channel.create({
@@ -188,6 +188,9 @@ export async function createChannel (uid, name, desc) {
         connect: { id: uid }
       },
       status: channelStatus.normal
+    },
+    select: {
+      id: true
     }
   })
 

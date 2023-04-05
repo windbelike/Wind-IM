@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { React, useEffect, useRef, useState } from 'react'
 import { AiOutlineSetting, AiOutlineCompass, AiOutlineHome, AiOutlineUser, AiOutlineLogin, AiOutlinePlus } from 'react-icons/ai'
-import AddAChannelBg from './channel/AddAChannelBg'
+import AddChannelBg from './channel/AddAChannelBg'
 import ChannelAvatar from '@/components/ChannelAvatar'
 import { useQuery } from 'react-query'
 import { getChannelList } from '@/utils/apiUtils'
@@ -11,9 +11,8 @@ export default function Sidebar () {
   const { data, error, isLoading } = useQuery('getChannelList', getChannelList)
   const tabState = useState('')
 
-  function onAddAServerClick () {
+  function onAddServerClick () {
     setAddServerFlag(true)
-    console.log('onAddAServerClick, addServerFlag:' + addServerFlag)
   }
 
   const bgElementId = 'AddAServerBg'
@@ -25,9 +24,9 @@ export default function Sidebar () {
     }
   }
 
-  function AddAChannelIcon () {
+  function AddChannelIcon () {
     return (
-      <div onClick={onAddAServerClick}><div className="sidebar-icon group">
+      <div onClick={onAddServerClick}><div className="sidebar-icon group">
         <AiOutlinePlus size="28" />
         {/* Styling based on parent state (group-{modifier}) */}
         <span className="sidebar-tooltip group-hover:scale-100">Add a channel</span>
@@ -37,7 +36,7 @@ export default function Sidebar () {
 
   return (
     <div>
-      {addServerFlag && <AddAChannelBg id={bgElementId} onClickCloseAddAServer={onClickCloseAddAServer} />}
+      {addServerFlag && <AddChannelBg id={bgElementId} onClickCloseAddAServer={onClickCloseAddAServer} setAddServerFlag={setAddServerFlag} />}
       {/* todo 解决overflow icon不展示的问题 && overflow-hidden icon的tooltip不展示 */}
       <div className='
       h-full
@@ -52,7 +51,7 @@ export default function Sidebar () {
         <SidebarIcon linkTo='/' text='Home' icon={<AiOutlineHome size="28" />} tabState ={tabState} />
         <div className='shrink-0 w-[40px] h-[1px] bg-[#2f2f30] mx-4 my-2'></div>
         <ChannelIconList data={data} tabState={tabState}/>
-        <AddAChannelIcon />
+        <AddChannelIcon />
         <SidebarIcon linkTo='/explore' text='Explore' icon={<AiOutlineCompass size="28"/>} tabState ={tabState}/>
         <SidebarIcon linkTo='/user/profile' text='Profile' icon={<AiOutlineUser size="28"/>} tabState ={tabState}/>
         {/* <SideBarIcon linkTo='/entry/login' text='Profile' icon={<AiOutlineUser size="28" />} /> */}
