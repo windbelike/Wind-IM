@@ -6,7 +6,7 @@ import { AiOutlineNumber } from 'react-icons/ai'
 export default function ChannelLayout ({ children, channelId }) {
   console.log('ChannelLayout channelId:' + channelId)
   return (
-    <div className='h-full w-full bg-[#25272a] flex'>
+    <div className='h-screen w-screen bg-[#25272a] flex'>
       <ChannelSidebar channelId={channelId} />
       {children}
       <ChannelRightSidebar channelId={channelId} />
@@ -32,7 +32,7 @@ function ChannelSidebar ({ channelId }) {
 
   return (
     <>
-      <div className="p-5 shrink-0 flex flex-col h-full w-64 border-r-[1px] border-solid border-r-[#323437] overflow-y-hidden">
+      <div className="p-4 shrink-0 flex flex-col h-full w-64 border-r-[1px] border-solid border-r-[#323437] overflow-y-hidden">
         <UserInfoPanel />
         <TextPannel channelId={channelId}/>
         <VoicePannel channelId={channelId}/>
@@ -55,9 +55,9 @@ function ChannelRightSidebar ({ channelId }) {
 function UserInfoPanel () {
   const { isLoading, data, error } = useQuery('getWhoami', getWhoami)
   return (
-    <div className="">
-      {isLoading && <p className="text-[#e6eaf0] font-bold">Anonymous</p>}
-      {data && <p className="text-[#e6eaf0] font-bold">{data.data?.username}#{data.data?.tag}</p>}
+    <div className="text-[#e6eaf0] font-bold text-xl">
+      {isLoading && <p >Anonymous</p>}
+      {data && <p>{data.data?.username}#{data.data?.tag}</p>}
     </div>
   )
 }

@@ -9,7 +9,7 @@ import { getChannelList } from '@/utils/apiUtils'
 export default function Sidebar () {
   const [addServerFlag, setAddServerFlag] = useState(false)
   const { data, error, isLoading } = useQuery('getChannelList', getChannelList)
-  const tabState = useState('/')
+  const tabState = useState('')
 
   function onAddAServerClick () {
     setAddServerFlag(true)
