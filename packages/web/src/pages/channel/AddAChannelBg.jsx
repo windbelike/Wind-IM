@@ -70,7 +70,7 @@ export default function AddChannelBg ({ id, onClickCloseAddAServer, setAddServer
 
     return (
       <div className="flex flex-col p-4 w-[440px] h-[436px]">
-        <div>CreateMyOwn</div>
+        <div className='font-bold text-lg'>CREATE MY OWN</div>
         {/* center div */}
         <div className='flex justify-center items-center mt-3 w-[408px] h-[87px]'>
           <ChannelAvatar name={avatarName} size={120} />
@@ -82,7 +82,7 @@ export default function AddChannelBg ({ id, onClickCloseAddAServer, setAddServer
 
           {createChannelMut.error && (<div className='text-md m-1 text-red-500'>Channel create failed, {JSON.stringify(createChannelMut.error)}</div>)}
 
-          {!isChannelNameValid(channelName) && (<div className='text-md m-1 text-red-500'>Channel name is invalid</div>)}
+          {channelName && !isChannelNameValid(channelName) && (<div className='text-md m-1 text-red-500'>Channel name is invalid</div>)}
         </div>
         <div className="flex mt-auto ml-auto">
           <button onClick={onLastPageClick}>Back</button>
@@ -103,7 +103,7 @@ export default function AddChannelBg ({ id, onClickCloseAddAServer, setAddServer
 
     return (
       <div className="flex flex-col p-4 w-[440px] h-[436px]">
-        <div>Join a channel</div>
+        <div className='font-bold text-lg'>JOIN A CHANNEL</div>
         <div className='font-semibold text-xs mt-10 mb-2 mx-1'>CHANNEL ID</div>
         <input type="text" className=" rounded-sm p-2 border-solid border-2 border-gray-200 focus:border-[#6bc001] bg-transparent" placeholder="Enter a channel ID" ref={$channelId}></input>
         <div className='overflow-hidden'>
@@ -136,10 +136,10 @@ export default function AddChannelBg ({ id, onClickCloseAddAServer, setAddServer
               <p className='mt-10'>Wanna add a channel ?</p>
             </div>
             <button id={createMyOwnElementId} className="hover:bg-gray-100 font-bold my-3 w-[406px] h-[64px] text-center rounded-3xl border-gray-300 border-[1px] " onClick={onNextPageClick}>
-              Create My Own
+              CREATE MY OWN
             </button>
             <button id={joinAServerElementId} className="hover:bg-gray-100 font-bold my-3 w-[406px] h-[64px] text-center rounded-3xl border-gray-300 border-[1px] " onClick={onNextPageClick}>
-              Join A Channel
+              JOIN A CHANNEL
             </button>
           </div>
           {/* second page */}
@@ -156,5 +156,5 @@ function isChannelNameValid (channelName) {
   if (!channelName || channelName.trim().length === 0) {
     return false
   }
-  return channelName.length < 10
+  return channelName.length < 16
 }

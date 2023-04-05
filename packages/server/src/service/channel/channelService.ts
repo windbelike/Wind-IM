@@ -89,7 +89,6 @@ export async function getChannelListByUid (uid) {
 // join a channel
 // todo add lock
 export async function joinChannel (uid, channelId) {
-  // 检查入参
   if (!uid || !channelId) {
     throw Boom.badRequest('Illegal params.')
   }
@@ -98,15 +97,14 @@ export async function joinChannel (uid, channelId) {
     throw Boom.badRequest('Illegal channelId.')
   }
 
-  // 检查Channel存在
   const channel = await prisma.channel.findUnique({
     where: {
       id: channelId
     }
   })
-  if (!channel) {
+  if (!channel || channel.status != channelStatus.normal) {
     // 不存在此Channel
-    throw Boom.badRequest('Channel not exist.')
+    throw Boom.badRequest('No such channel.')
   }
 
   // 检查是否已经加入
