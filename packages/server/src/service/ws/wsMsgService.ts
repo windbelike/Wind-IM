@@ -54,11 +54,10 @@ export async function wsOnConnect (socket) {
   })
   // if it's private msg, then send all missed direct msg
   if (privateMsgId) {
-    // asynchronously send all missed private msg by offset
-    sendAllMissedMsg(socket, privateMsgId, privateMsgOffset)
+    // asynchronously send all missed direct msg by offset
+    sendAllMissedDirectMsg(socket, privateMsgId, privateMsgOffset)
 
     socket.on(privateMsgEvent, async (msg, ackFn) => {
-      // todo save msg to db
       const msgModel = await persistPrivateMsg(parseInt(privateMsgId), user.id, toUid, msg.content)
       // const senderUsername = await queryUserById(msgModel.fromUid)
       const msg2Send = {
@@ -92,7 +91,7 @@ async function fetchUserFromSocket (socket) {
   return user
 }
 
-async function sendAllMissedMsg (socket, privateMsgId, offset) {
+async function sendAllMissedDirectMsg (socket, privateMsgId, offset) {
   const privateMsgInitEvent = 'privateMsgInitEvent_' + privateMsgId
   const allMissedMsg = await fetchAllMissedPrivateMsg(parseInt(privateMsgId), parseInt(offset))
   const allMissedMsgVO = allMissedMsg.map(m => {

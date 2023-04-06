@@ -108,7 +108,7 @@ export default function DirectMessage () {
 
   return (
     <div className='p-3 w-full h-full flex flex-col overflow-hidden'>
-      <div className='h-24 border-b-[1px] border-solid border-b-[#323437] text-white shrink-0'>
+      <div className='space-y-3 p-2 border-b-[1px] border-solid border-b-[#323437] text-white shrink-0'>
         <p className='font-bold text-2xl'>{privateMsgInfo?.data?.data?.msgTitle}</p>
         {/* <p className='text-white'>msgId: {privateMsgId}</p> */}
         <p>Private message with {privateMsgInfo?.data?.data?.msgTitle}</p>

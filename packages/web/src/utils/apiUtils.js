@@ -34,6 +34,17 @@ export async function getRoomList (channelId) {
   return result.data
 }
 
+// get room info
+export async function getRoomInfo (roomId) {
+  if (!roomId) {
+    return {}
+  }
+  const params = new URLSearchParams([['roomId', roomId]])
+  const result = await axios.get('/api/room', { params })
+  console.log('#getRoomInfo result:' + JSON.stringify(result))
+  return result.data
+}
+
 // delete channel
 export async function deleteChannel ({ channelId }) {
   const result = await axios.post('/api/channel/delete', { channelId })

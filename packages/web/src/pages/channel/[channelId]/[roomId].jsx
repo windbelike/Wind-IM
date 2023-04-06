@@ -1,5 +1,5 @@
 import Layout from '@/pages/Layout'
-import { getChannelMembers } from '@/utils/apiUtils'
+import { getChannelMembers, getRoomInfo, getRoomList } from '@/utils/apiUtils'
 import axios from '@/utils/axiosUtils'
 import EmojiPicker from 'emoji-picker-react'
 import { useRouter } from 'next/router'
@@ -22,26 +22,27 @@ export default function ChannelRoom () {
   const roomId = router.query.roomId
   const [loadEmojiKeyboard, setLoadEmojiKeyboard] = useState(false)
   const $msgInput = useRef()
+  const { data, isLoading, error } = useQuery(['getRoomInfo', roomId], () => getRoomInfo(roomId))
 
-  // handle channel joining and leaving
+  console.log(data)
+
+  // handle being online or offline in a channel
   useEffect(() => {
-    async function notifyLeaving () {
-      console.log('leaving channel:' + channelId)
-      const result = await axios.get('/api/leave')
-      return result.data
+    async function notifyOffline () {
+      console.log('Being offline in channel:' + channelId)
+      axios.get('/api/leave')
     }
     function onBeforeUnload (event) {
-      notifyLeaving()
+      notifyOffline()
     }
-    console.log('join channel:' + channelId)
+    console.log('Being online in channel:' + channelId)
     addEventListener('beforeunload', onBeforeUnload)
     return () => {
-      notifyLeaving()
+      notifyOffline()
       removeEventListener('beforeunload', onBeforeUnload)
     }
   }, [channelId])
 
-  const { data, error, isLoading } = useQuery(['getChannelMembers', channelId], () => getChannelMembers(channelId))
   const currMsgList = []
   const privateMsgInfo = null
 
@@ -52,17 +53,11 @@ export default function ChannelRoom () {
   function onKeyDownMessaging (e) {
     console.log('onKeyDownMessaging')
   }
+
   return (
     <div className='p-3 w-full h-full flex flex-col overflow-hidden text-white'>
-      <div>
-        {channelId} and {roomId}
-      </div>
-      <div>{channelId}</div>
-      <div>data:{JSON.stringify(data?.data)}</div>
-      <div className='h-24 border-b-[1px] border-solid border-b-[#323437] text-white shrink-0'>
-        <p className='font-bold text-2xl'>{privateMsgInfo?.data?.data?.msgTitle}</p>
-        {/* <p className='text-white'>msgId: {privateMsgId}</p> */}
-        <p>Private message with {privateMsgInfo?.data?.data?.msgTitle}</p>
+      <div className='p-2 border-b-[1px] border-solid border-b-[#323437] text-white shrink-0'>
+        <p className='font-bold text-2xl'>{data?.data?.name}</p>
       </div>
       <div id="msgScroll" className='overflow-y-scroll scrollbar h-full my-3'>
         {/* <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'}/>
