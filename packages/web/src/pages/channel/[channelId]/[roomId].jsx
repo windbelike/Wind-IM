@@ -1,8 +1,9 @@
 import Layout from '@/pages/Layout'
 import { getChannelMembers } from '@/utils/apiUtils'
+import axios from '@/utils/axiosUtils'
 import EmojiPicker from 'emoji-picker-react'
 import { useRouter } from 'next/router'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
 import ChannelLayout from '../ChannelLayout'
 
@@ -21,6 +22,24 @@ export default function ChannelRoom () {
   const roomId = router.query.roomId
   const [loadEmojiKeyboard, setLoadEmojiKeyboard] = useState(false)
   const $msgInput = useRef()
+
+  // handle channel joining and leaving
+  useEffect(() => {
+    async function notifyLeaving () {
+      console.log('leaving channel:' + channelId)
+      const result = await axios.get('/api/leave')
+      return result.data
+    }
+    function onBeforeUnload (event) {
+      notifyLeaving()
+    }
+    console.log('join channel:' + channelId)
+    addEventListener('beforeunload', onBeforeUnload)
+    return () => {
+      notifyLeaving()
+      removeEventListener('beforeunload', onBeforeUnload)
+    }
+  }, [channelId])
 
   const { data, error, isLoading } = useQuery(['getChannelMembers', channelId], () => getChannelMembers(channelId))
   const currMsgList = []

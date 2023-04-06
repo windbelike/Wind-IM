@@ -64,6 +64,7 @@ app.use(cors(corsOptions))
   .get('/api/channel/members', loginValidator, channelMembersGet)
   .post('/api/channel/delete', loginValidator, channelDelete)
   .get('/api/roomList', loginValidator, roomListGet)
+  .get('/api/leave', loginValidator, (req, res) => { console.log('/api/leave') })
 
   .use(errorHandler) // for handling global error
 

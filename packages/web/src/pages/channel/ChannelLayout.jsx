@@ -4,7 +4,6 @@ import { useMutation, useQuery } from 'react-query'
 import { AiOutlineNumber } from 'react-icons/ai'
 
 export default function ChannelLayout ({ children, channelId }) {
-  console.log('ChannelLayout channelId:' + channelId)
   return (
     <div className='h-full w-full bg-[#25272a] flex'>
       <ChannelSidebar channelId={channelId} />
@@ -74,12 +73,8 @@ function UserInfoPanel () {
 
 function TextPannel ({ channelId }) {
   const { data, isLoading, error } = useQuery(['getRoomList', channelId], () => getRoomList(channelId))
-  if (data) {
-    console.log('roomList:' + JSON.stringify(data.data))
-  }
   return (
     <div className='mt-3'>
-      {/* <div className='text-white'>{'roomList:' + JSON.stringify(data?.data)}</div> */}
       <p className='text-[#e6eaf0] text-sm mt-2'>TEXT ROOMS</p>
       <div className='ml-4 mt-1'>
         {data?.data?.map((room) => {
@@ -113,7 +108,7 @@ function VoicePannel () {
     <div className='mt-3'>
       <p className='text-[#e6eaf0] text-sm mt-2'>VOICE ROOMS</p>
       <div className='ml-4 mt-1'>
-        <VoiceSelection name="Default" to='/channel/voice'/>
+        {/* <VoiceSelection name="Default" to='/channel/voice'/> */}
       </div>
     </div>
   )
