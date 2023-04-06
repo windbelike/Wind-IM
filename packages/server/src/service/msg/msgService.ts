@@ -26,6 +26,9 @@ export async function createPrivateMsg (fromUid, toUid) {
 }
 
 export async function getDestUserOfPrivateMsg (privateMsgId, uid) {
+  if (Number.isNaN(parseInt(privateMsgId))) {
+    return null
+  }
   try {
     const privateMsg = await prisma.privateMsg.findUnique({
       where: {
