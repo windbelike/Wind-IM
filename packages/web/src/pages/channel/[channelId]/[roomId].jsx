@@ -34,7 +34,7 @@ export default function ChannelRoom () {
     console('onKeyDownMessaging')
   }
   return (
-    <div className='p-3 w-full h-full flex flex-col overflow-hidden'>
+    <div className='p-3 w-full h-full flex flex-col overflow-hidden text-white'>
       <div>
         {channelId} and {roomId}
       </div>

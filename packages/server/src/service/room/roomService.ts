@@ -1,7 +1,7 @@
 import { prisma } from '../../utils/prismaHolder'
 import { redis } from '../../utils/redisHolder'
 
-const roomStatus = {
+export const roomStatus = {
   normal: 0,
   deleted: 1
 }

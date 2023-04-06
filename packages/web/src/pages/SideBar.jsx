@@ -8,7 +8,6 @@ import { getChannelList } from '@/utils/apiUtils'
 
 export default function Sidebar () {
   const [addServerFlag, setAddServerFlag] = useState(false)
-  const { data, error, isLoading } = useQuery('getChannelList', getChannelList)
   const tabState = useState('')
 
   function onAddServerClick () {
@@ -50,7 +49,7 @@ export default function Sidebar () {
         {/* Main Functions */}
         <SidebarIcon linkTo='/' text='Home' icon={<AiOutlineHome size="28" />} tabState ={tabState} />
         <div className='shrink-0 w-[40px] h-[1px] bg-[#2f2f30] mx-4 my-2'></div>
-        <ChannelIconList data={data} tabState={tabState}/>
+        <ChannelIconList tabState={tabState}/>
         <AddChannelIcon />
         <SidebarIcon linkTo='/explore' text='Explore' icon={<AiOutlineCompass size="28"/>} tabState ={tabState}/>
         <SidebarIcon linkTo='/user/profile' text='Profile' icon={<AiOutlineUser size="28"/>} tabState ={tabState}/>
@@ -64,13 +63,20 @@ export default function Sidebar () {
   )
 }
 
-function ChannelIconList ({ data, tabState }) {
+function ChannelIconList ({ tabState }) {
   const [tab, setTab] = tabState
+  // channel list data
+  const { data, error, isLoading } = useQuery('getChannelList', getChannelList)
 
   return (
     <div className='flex flex-col items-center'>
       {data?.data?.map((channel) => {
-        const linkTo = '/channel/' + channel.channelId
+        const channelId = channel.channelId
+        const roomId = channel.channelRel?.roomsRel?.[0].id
+        if (!channelId || !roomId) {
+          return null
+        }
+        const linkTo = `/channel/${channelId}/${roomId}`
         function onChannelIconClick () {
           setTab(linkTo)
         }

@@ -1,6 +1,6 @@
 import { prisma } from '@/utils/prismaHolder'
 import * as Boom from '@hapi/boom'
-import { createDefaultRoom } from '../room/roomService'
+import { createDefaultRoom, roomStatus } from '../room/roomService'
 
 const channelStatus = {
   normal: 0,
@@ -77,11 +77,29 @@ export async function getChannelListByUid (uid) {
     where: {
       uid,
       channelRel: {
-        status: channelStatus.normal
+        status: channelStatus.normal,
+        roomsRel: {
+          every: {
+            status: roomStatus.normal
+          }
+        }
       }
     },
-    include: {
-      channelRel: true
+    select: {
+      uid: true,
+      channelId: true,
+      channelRel: {
+        select: {
+          id: true,
+          name: true,
+          roomsRel: {
+            select: {
+              id: true,
+              name: true
+            }
+          }
+        }
+      }
     }
   })
 }

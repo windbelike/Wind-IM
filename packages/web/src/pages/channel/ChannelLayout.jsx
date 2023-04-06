@@ -50,7 +50,7 @@ function ChannelRightSidebar ({ channelId }) {
   const { data, error, isLoading } = useQuery(['getChannelMembers', channelId], () => getChannelMembers(channelId))
 
   return (
-    <div className='overflow-hidden w-[300px] border-l-[1px] border-solid border-l-[#323437] p-3 text-white'>
+    <div className='ml-auto overflow-hidden w-[300px] border-l-[1px] border-solid border-l-[#323437] p-3 text-white'>
       <div>
         <div>ONLINE - 0</div>
       </div>
