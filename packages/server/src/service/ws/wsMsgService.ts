@@ -4,7 +4,8 @@ import { getUserFromCookieToken } from '@/utils/authUtils'
 
 import type { User } from '@/utils/authUtils'
 import { getDestUserOfPrivateMsg, persistPrivateMsg, fetchAllMissedPrivateMsg } from '@/service/msg/msgService'
-import { queryUserById } from '../user/userService'
+
+// Websocket Message Service
 
 export type SocketData = {
   user: User
@@ -39,6 +40,7 @@ export async function wsAuthMiddleware (socket, next) {
 }
 
 export async function wsOnConnect (socket) {
+  const roomId = socket.data?.roomId
   const privateMsgId = socket.data?.privateMsgId
   const user = socket.data?.user
   const toUid = socket.data?.toUserId
@@ -50,6 +52,7 @@ export async function wsOnConnect (socket) {
   socket.on('disconnect', (reason) => {
     console.log(email + ' disconnected. for reason:' + reason)
   })
+  // if it's private msg, then send all missed direct msg
   if (privateMsgId) {
     // asynchronously send all missed private msg by offset
     sendAllMissedMsg(socket, privateMsgId, privateMsgOffset)
@@ -72,6 +75,9 @@ export async function wsOnConnect (socket) {
       // broadcast: exclude the sender ws
       socket.broadcast.emit(privateMsgEvent, msg2Send)
     })
+  } else if (roomId) {
+    // if it's room msg, then send all missed room msg
+    console.log('room msg, roomId:' + roomId)
   }
 }
 

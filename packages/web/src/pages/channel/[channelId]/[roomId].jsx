@@ -50,7 +50,7 @@ export default function ChannelRoom () {
   }
 
   function onKeyDownMessaging (e) {
-    console('onKeyDownMessaging')
+    console.log('onKeyDownMessaging')
   }
   return (
     <div className='p-3 w-full h-full flex flex-col overflow-hidden text-white'>

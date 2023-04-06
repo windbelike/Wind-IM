@@ -29,7 +29,7 @@ account2: email: 2@gmail.com password: 1
 
 ## DB Schema
 
-You can find db schema in ./packages/server/prisma/chema.prisma
+You can find db schema in ./packages/server/prisma/schema.prisma
 
 Currently using sqlite for dev enviroment.
 

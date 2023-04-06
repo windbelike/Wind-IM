@@ -6,7 +6,7 @@ import http from 'http'
 import * as Boom from '@hapi/boom'
 import cors from 'cors'
 
-import { SocketData, wsAuthMiddleware, wsOnConnect } from '@/service/ws/wsPrivateMsgService'
+import { SocketData, wsAuthMiddleware, wsOnConnect } from '@/service/ws/wsMsgService'
 import { loginValidator } from './utils/authUtils'
 import { privateMsgGet, privateMsgListGet, privateMsgPost } from './handler/http/privateMsgHandler'
 import { whoami } from './handler/http/userHandler'
@@ -19,7 +19,7 @@ import { logoutPost } from './handler/http/logoutHandler'
 import { friendReqGet, friendReqPost } from './handler/http/friendReqhandler'
 import { friendGet } from './handler/http/friendHandler'
 import { channelListGet, channelJoinPost, channelPost, channelMembersGet, channelDelete, channelGet } from './handler/http/channelHandler'
-import { roomListGet } from './handler/http/roomHandler'
+import { roomListGet } from './handler/http/roomMsgHandler'
 
 dotenv.config()
 const FRONTEND_HOST = process.env.FRONTEND_HOST
