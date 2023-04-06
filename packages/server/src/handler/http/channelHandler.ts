@@ -1,6 +1,19 @@
 import { createChannel, deleteChannel, getChannelListByUid, getChannelMembers, joinChannel, selectChannelById } from '@/service/channel/channelService'
 import * as Boom from '@hapi/boom'
 
+// get channel info
+export async function channelGet (req, res, next) {
+  try {
+    const user = req.windImUser
+    const channel = await selectChannelById(parseInt(req.query?.channelId))
+    res.json(
+      { code: 0, message: 'succeed', data: channel }
+    )
+  } catch (e) {
+    next(e)
+  }
+}
+
 // create channel
 export async function channelPost (req, res, next) {
   try {

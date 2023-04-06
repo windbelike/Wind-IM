@@ -18,7 +18,7 @@ import cookieParser from 'cookie-parser'
 import { logoutPost } from './handler/http/logoutHandler'
 import { friendReqGet, friendReqPost } from './handler/http/friendReqhandler'
 import { friendGet } from './handler/http/friendHandler'
-import { channelListGet, channelJoinPost, channelPost, channelMembersGet, channelDelete } from './handler/http/channelHandler'
+import { channelListGet, channelJoinPost, channelPost, channelMembersGet, channelDelete, channelGet } from './handler/http/channelHandler'
 import { roomListGet } from './handler/http/roomHandler'
 
 dotenv.config()
@@ -59,6 +59,7 @@ app.use(cors(corsOptions))
   .post('/api/friendRequest', loginValidator, friendReqPost)
   .get('/api/friend', loginValidator, friendGet)
   .post('/api/channel', loginValidator, channelPost)
+  .get('/api/channel', loginValidator, channelGet)
   .get('/api/channelList', loginValidator, channelListGet)
   .post('/api/channel/join', loginValidator, channelJoinPost)
   .get('/api/channel/members', loginValidator, channelMembersGet)

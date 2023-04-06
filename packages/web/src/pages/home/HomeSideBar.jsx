@@ -3,6 +3,7 @@ import { useQuery } from 'react-query'
 import axios from '@/utils/axiosUtils'
 import { getWhoami } from '@/utils/apiUtils'
 import { useState } from 'react'
+import Avatar from '@/components/Avatar'
 
 export default function HomeSideBar () {
   const activeState = useState('')
@@ -19,8 +20,9 @@ export default function HomeSideBar () {
 function UserInfoPanel () {
   const { isLoading, data, error } = useQuery('getWhoami', getWhoami)
   return (
-    <div className="text-[#e6eaf0] text-xl font-bold">
+    <div className="text-[#e6eaf0] text-xl font-bold flex items-center space-x-2">
       {isLoading && <p>Anonymous</p>}
+      {data && <Avatar username={data.data?.username}/>}
       {data && <p>{data.data?.username}#{data.data?.tag}</p>}
     </div>
   )

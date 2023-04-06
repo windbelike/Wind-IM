@@ -2,6 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 // rel字段表示关系，在schema中用于表示外键约束，字段在db中不存在。
+// 写扩散实现（维护多个发件箱，比如PrivateMsg和Room）
 
 generator client {
   provider = "prisma-client-js"
@@ -77,12 +78,12 @@ model Message {
   id Int @id @default(autoincrement())
   fromUid Int // 发送者
   fromUidRel User @relation(name: "msgReceiveRel", fields: [fromUid], references: [id])
-  toUid Int // 接受者
-  toUidRel User @relation(name: "msgSendRel", fields: [toUid], references: [id])
+  toUid Int ? // 接收者（群聊时，无接收者）
+  toUidRel User ? @relation(name: "msgSendRel", fields: [toUid], references: [id])
   content String // 消息实体
   msgType Int // 消息类型，-1:系统消息 0:点对点 1:群发
   privateMsgId Int ? // 消息所属私聊，仅在msg_type=0时使用
-  channelId Int ? // 消息所属频道，仅在msg_type=1时使用
+  roomId Int ? // 消息所属房间，仅在msg_type=1时使用
   pushed Boolean ?  // 是否成功推送（基于4个报文实现消息可靠推送）
   read  Boolean ? // 是否已读（暂时不实现）
   createdAt DateTime @default(now()) // 创建时间 
@@ -119,7 +120,7 @@ model Channel {
   @@index(fields: [ownerUid], name: "ownerUidIdx")
 }
 
-// 用户-频道 多对多关系表（explicit）
+// 用户-频道 多对多关系表（隐式explicit写法）
 model UsersOnChannels {
   uid     Int 
   userRel       User     @relation(fields: [uid], references: [id])

@@ -15,6 +15,15 @@ export async function getChannelList () {
   return result.data
 }
 
+export async function getChannelInfo (channelId) {
+  if (!channelId) {
+    return {}
+  }
+  const params = new URLSearchParams([['channelId', channelId]])
+  const result = await axios.get('/api/channel', { params })
+  return result.data
+}
+
 // get room list
 export async function getRoomList (channelId) {
   if (!channelId) {

@@ -1,4 +1,4 @@
-import { deleteChannel, getChannelMembers, getPrivateMsg, getRoomList, getWhoami, leaveChannel } from '@/utils/apiUtils'
+import { deleteChannel, getChannelInfo, getChannelMembers, getPrivateMsg, getRoomList, getWhoami, leaveChannel } from '@/utils/apiUtils'
 import Link from 'next/link'
 import { useMutation, useQuery } from 'react-query'
 import { AiOutlineNumber } from 'react-icons/ai'
@@ -32,7 +32,7 @@ function ChannelSidebar ({ channelId }) {
   return (
     <>
       <div className="p-4 shrink-0 flex flex-col h-full w-64 border-r-[1px] border-solid border-r-[#323437] overflow-y-hidden">
-        <UserInfoPanel />
+        <ChannelInfoPanel channelId={channelId}/>
         <TextPannel channelId={channelId}/>
         <VoicePannel channelId={channelId}/>
         <div className='mt-auto flex flex-col space-y-3'>
@@ -61,12 +61,13 @@ function ChannelRightSidebar ({ channelId }) {
   )
 }
 
-function UserInfoPanel () {
-  const { isLoading, data, error } = useQuery('getWhoami', getWhoami)
+function ChannelInfoPanel ({ channelId }) {
+  const { data, isLoading, error } = useQuery(['getChannelInfo', channelId], () => getChannelInfo(channelId))
+
   return (
     <div className="text-[#e6eaf0] font-bold text-xl">
       {isLoading && <p >Anonymous</p>}
-      {data && <p>{data.data?.username}#{data.data?.tag}</p>}
+      {data && <p>{data.data?.name}</p>}
     </div>
   )
 }

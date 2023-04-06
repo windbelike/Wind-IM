@@ -1,3 +1,11 @@
 import { Redis } from 'ioredis'
 
-export const redis = new Redis()
+let redis
+
+try {
+  redis = new Redis()
+} catch (e) {
+  console.error(e)
+}
+
+export { redis }
