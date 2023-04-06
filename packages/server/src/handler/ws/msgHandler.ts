@@ -21,9 +21,10 @@ export async function wsAuthMiddleware (socket, next) {
     if (!user) {
       next(new Error('unknown user'))
     }
+    const roomId = socket.handshake.query?.roomId
     const privateMsgId = socket.handshake.query?.privateMsgId
     const privateMsgOffset = socket.handshake.query?.privateMsgOffset ?? 0
-    if (!privateMsgId) {
+    if (!privateMsgId && !roomId) {
       next(new Error('unknown msgId'))
     }
     const toUserId = await getDestUserOfPrivateMsg(privateMsgId, user.id)
@@ -31,7 +32,8 @@ export async function wsAuthMiddleware (socket, next) {
       user,
       privateMsgId,
       toUserId,
-      privateMsgOffset
+      privateMsgOffset,
+      roomId
     }
     next()
   } catch (e) {
@@ -48,6 +50,7 @@ export async function wsOnConnect (socket) {
   const email = user?.email
   console.log(`email:"${email}" connected with privateMsgId:${privateMsgId}`)
   const privateMsgEvent = 'privateMsgEvent_' + privateMsgId
+  const roomMsgEvent = 'roomMsgEvent_' + roomId
 
   socket.on('disconnect', (reason) => {
     console.log(email + ' disconnected. for reason:' + reason)
@@ -55,7 +58,7 @@ export async function wsOnConnect (socket) {
   // if it's private msg, then send all missed direct msg
   if (privateMsgId) {
     // asynchronously send all missed direct msg by offset
-    sendAllMissedDirectMsg(socket, privateMsgId, privateMsgOffset)
+    sendAllMissedPrivateMsg(socket, privateMsgId, privateMsgOffset)
 
     socket.on(privateMsgEvent, async (msg, ackFn) => {
       const msgModel = await persistPrivateMsg(parseInt(privateMsgId), user.id, toUid, msg.content)
@@ -75,8 +78,21 @@ export async function wsOnConnect (socket) {
       socket.broadcast.emit(privateMsgEvent, msg2Send)
     })
   } else if (roomId) {
-    // if it's room msg, then send all missed room msg
     console.log('room msg, roomId:' + roomId)
+    socket.on(roomMsgEvent, async (msg, ackFn) => {
+      const msg2Send = {
+        content: msg.content,
+        from: user.username
+      }
+      console.log('on receive room msg:' + JSON.stringify(msg2Send))
+      // ...
+      // simulate server timeout, and ack to client
+      // setTimeout(() => ackFn({ code: 0 }), 1000)
+      ackFn({ code: 0 })
+
+      // broadcast: exclude the sender ws
+      socket.broadcast.emit(roomMsgEvent, msg2Send)
+    })
   }
 }
 
@@ -91,7 +107,7 @@ async function fetchUserFromSocket (socket) {
   return user
 }
 
-async function sendAllMissedDirectMsg (socket, privateMsgId, offset) {
+async function sendAllMissedPrivateMsg (socket, privateMsgId, offset) {
   const privateMsgInitEvent = 'privateMsgInitEvent_' + privateMsgId
   const allMissedMsg = await fetchAllMissedPrivateMsg(parseInt(privateMsgId), parseInt(offset))
   const allMissedMsgVO = allMissedMsg.map(m => {

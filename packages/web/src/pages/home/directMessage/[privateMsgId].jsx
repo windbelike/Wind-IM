@@ -48,8 +48,6 @@ export default function DirectMessage () {
     setCurrMsgList([])
   }, [privateMsgId])
 
-  // todo 根据msgId获取双方的基础信息，如头像
-
   function onKeyDownMessaging (e) {
     if (e.nativeEvent.isComposing) {
       // handle chinese keyboard composing

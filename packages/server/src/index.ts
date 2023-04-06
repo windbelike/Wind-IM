@@ -6,7 +6,7 @@ import http from 'http'
 import * as Boom from '@hapi/boom'
 import cors from 'cors'
 
-import { SocketData, wsAuthMiddleware, wsOnConnect } from '@/service/ws/wsMsgService'
+import { SocketData, wsAuthMiddleware, wsOnConnect } from '@/handler/ws/msgHandler'
 import { loginValidator } from './utils/authUtils'
 import { privateMsgGet, privateMsgListGet, privateMsgPost } from './handler/http/privateMsgHandler'
 import { whoami } from './handler/http/userHandler'

@@ -41,7 +41,6 @@ export async function getRoomInfo (roomId) {
   }
   const params = new URLSearchParams([['roomId', roomId]])
   const result = await axios.get('/api/room', { params })
-  console.log('#getRoomInfo result:' + JSON.stringify(result))
   return result.data
 }
 
