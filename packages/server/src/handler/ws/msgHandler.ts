@@ -4,6 +4,7 @@ import { getUserFromCookieToken } from '@/utils/authUtils'
 
 import type { User } from '@/utils/authUtils'
 import { getDestUserOfPrivateMsg, persistPrivateMsg, fetchAllMissedPrivateMsg } from '@/service/msg/msgService'
+import { fetchAllMissedRoomMsg, persistRoomMsg } from '@/service/room/roomService'
 
 // Websocket Message Service
 
@@ -12,6 +13,26 @@ export type SocketData = {
   privateMsgId: any
   toUserId: any
   privateMsgOffset: any
+}
+
+// private msg format
+function buildPrivateMsgEvent (privateMsgId) {
+  return 'privateMsgEvent_' + privateMsgId
+}
+
+// init private msg event
+export function buildInitPrivateMsgEvent (privateMsgId) {
+  return 'privateMsgInitEvent_' + privateMsgId
+}
+
+// room msg format
+function buildRoomMsgEvent (roomId) {
+  return 'roomMsgEvent_' + roomId
+}
+
+// init room msg event
+export function buildInitRoomMsgEvent (roomId) {
+  return 'roomMsgInitEvent_' + roomId
 }
 
 // Middleware to attach msgId and user info
@@ -47,10 +68,11 @@ export async function wsOnConnect (socket) {
   const user = socket.data?.user
   const toUid = socket.data?.toUserId
   const privateMsgOffset = socket.data?.privateMsgOffset
+  const roomMsgOffset = socket.data?.roomMsgOffset
   const email = user?.email
-  console.log(`email:"${email}" connected with privateMsgId:${privateMsgId}`)
-  const privateMsgEvent = 'privateMsgEvent_' + privateMsgId
-  const roomMsgEvent = 'roomMsgEvent_' + roomId
+  console.log(`email:"${email}" connected with privateMsgId:${privateMsgId} roomId:${roomId}`)
+  const privateMsgEvent = buildPrivateMsgEvent(privateMsgId)
+  const roomMsgEvent = buildRoomMsgEvent(roomId)
 
   socket.on('disconnect', (reason) => {
     console.log(email + ' disconnected. for reason:' + reason)
@@ -59,7 +81,7 @@ export async function wsOnConnect (socket) {
   if (privateMsgId) {
     // asynchronously send all missed direct msg by offset
     sendAllMissedPrivateMsg(socket, privateMsgId, privateMsgOffset)
-
+    // handle receiving new private msg
     socket.on(privateMsgEvent, async (msg, ackFn) => {
       const msgModel = await persistPrivateMsg(parseInt(privateMsgId), user.id, toUid, msg.content)
       // const senderUsername = await queryUserById(msgModel.fromUid)
@@ -78,11 +100,16 @@ export async function wsOnConnect (socket) {
       socket.broadcast.emit(privateMsgEvent, msg2Send)
     })
   } else if (roomId) {
-    console.log('room msg, roomId:' + roomId)
+    // asynchronously send all missed room msg by offset
+    sendAllMissedRoomMsg(socket, roomId, roomMsgOffset)
+    // handle receiving new room msg
     socket.on(roomMsgEvent, async (msg, ackFn) => {
+      const msgModel = await persistRoomMsg(parseInt(roomId), user.id, msg.content)
       const msg2Send = {
-        content: msg.content,
-        from: user.username
+        content: msgModel.content,
+        senderUsername: msgModel.fromUidRel.username,
+        createdAt: msgModel.createdAt,
+        id: msgModel.id
       }
       console.log('on receive room msg:' + JSON.stringify(msg2Send))
       // ...
@@ -108,8 +135,38 @@ async function fetchUserFromSocket (socket) {
 }
 
 async function sendAllMissedPrivateMsg (socket, privateMsgId, offset) {
-  const privateMsgInitEvent = 'privateMsgInitEvent_' + privateMsgId
+  if (!offset) {
+    offset = 0
+  }
+  const privateMsgInitEvent = buildInitPrivateMsgEvent(privateMsgId)
   const allMissedMsg = await fetchAllMissedPrivateMsg(parseInt(privateMsgId), parseInt(offset))
+  if (!allMissedMsg) {
+    return
+  }
+  console.log('privateMsgInitEvent:' + privateMsgInitEvent)
+  const allMissedMsgVO = allMissedMsg.map(m => {
+    const msg2Send = {
+      id: m.id,
+      content: m.content,
+      senderUsername: m.fromUidRel.username,
+      createdAt: m.createdAt,
+      sendByMyself: socket.data?.user?.id == m.fromUid
+    }
+    return msg2Send
+  })
+
+  socket.emit(privateMsgInitEvent, allMissedMsgVO)
+}
+
+async function sendAllMissedRoomMsg (socket, roomId, offset) {
+  if (!offset) {
+    offset = 0
+  }
+  const privateMsgInitEvent = buildInitRoomMsgEvent(roomId)
+  const allMissedMsg = await fetchAllMissedRoomMsg(parseInt(roomId), parseInt(offset))
+  if (!allMissedMsg) {
+    return
+  }
   const allMissedMsgVO = allMissedMsg.map(m => {
     const msg2Send = {
       id: m.id,

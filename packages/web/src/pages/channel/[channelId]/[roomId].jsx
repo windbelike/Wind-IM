@@ -43,6 +43,14 @@ export default function ChannelRoom () {
   const whoamiQuery = useQuery('whoami', getWhoami)
   useWs(roomId, $currMsgList, setCurrMsgList) // connect to websocket for room
 
+  // init effect
+  useEffect(() => {
+    // initiate input
+    cleanInputMsg()
+    // initiate currMsgList
+    setCurrMsgList([])
+  }, [roomId])
+
   // handle being online or offline in a channel
   useEffect(() => {
     async function notifyOffline () {

@@ -6,6 +6,8 @@ export const roomStatus = {
   deleted: 1
 }
 
+const roomMsgType = 1
+
 // Room is a notion of volatile group of users, which online status can be stored in some cache such as Redis.
 // Text room only currently.
 
@@ -87,4 +89,61 @@ export async function deleteRoom (roomId) {
       status: roomStatus.deleted
     }
   })
+}
+
+// persist room msg
+export async function persistRoomMsg (roomId, fromUid, content) {
+  try {
+    return await prisma.message.create({
+      data: {
+        fromUidRel: { connect: { id: fromUid } },
+        roomId,
+        content,
+        msgType: roomMsgType,
+        pushed: true,
+        read: true
+      },
+      select: {
+        id: true,
+        fromUid: true,
+        content: true,
+        createdAt: true,
+        fromUidRel: {
+          select: {
+            username: true
+          }
+        }
+      }
+    })
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+// fetch all missed room msg
+export async function fetchAllMissedRoomMsg (roomId, offset) {
+  try {
+    return await prisma.message.findMany({
+      select: {
+        id: true,
+        fromUid: true,
+        fromUidRel: {
+          select: {
+            username: true
+          }
+        },
+        createdAt: true,
+        roomId: true,
+        content: true
+      },
+      where: {
+        id: {
+          gt: offset
+        },
+        roomId
+      }
+    })
+  } catch (e) {
+    console.log(e)
+  }
 }

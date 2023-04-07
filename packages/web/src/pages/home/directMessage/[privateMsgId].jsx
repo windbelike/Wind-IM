@@ -11,15 +11,15 @@ import Layout from '@/pages/Layout'
 
 // todo implement client side msg storage with offset
 
+const defaultRetryTimes = 3
+
+let socket
+
 async function getPrivateMsgInfo (id) {
   const params = new URLSearchParams([['id', id]])
   const result = await axios.get('/api/msg/privateMsg', { params })
   return result.data
 }
-
-const defaultRetryTimes = 3
-
-let socket
 
 DirectMessage.getLayout = function getLayout (page) {
   return (
@@ -29,6 +29,15 @@ DirectMessage.getLayout = function getLayout (page) {
   )
 }
 
+function buildPrivateMsgEvent (privateMsgId) {
+  return 'privateMsgEvent_' + privateMsgId
+}
+
+function buildInitPrivateMsgEvent (privateMsgId) {
+  return 'privateMsgInitEvent_' + privateMsgId
+}
+
+// component entry point
 export default function DirectMessage () {
   const { isLoading, data, error } = useQuery('whoami', getWhoami)
   const router = useRouter()
@@ -41,6 +50,7 @@ export default function DirectMessage () {
   useWs(privateMsgId, $currMsgList, setCurrMsgList)
   const [loadEmojiKeyboard, setLoadEmojiKeyboard] = useState(false)
 
+  // init effect
   useEffect(() => {
     // initiate input
     cleanInputMsg()
@@ -79,7 +89,7 @@ export default function DirectMessage () {
       return
     }
     if (socket && socket.connected) {
-      const privateMsgEvent = 'privateMsgEvent_' + privateMsgId
+      const privateMsgEvent = buildPrivateMsgEvent(privateMsgId)
       // todo guarantee the msg won't miss, we need to impl ack mechanism with https://socket.io/docs/v4/emitting-events/#acknowledgements
       socket.timeout(2000).emit(privateMsgEvent, msg, (err, resp) => {
         if (err) {
@@ -183,8 +193,8 @@ function useWs (privateMsgId, $currMsgList, setCurrMsgList) {
       })
 
       // on initiating & receiving private msg
-      const privateMsgEvent = 'privateMsgEvent_' + privateMsgId
-      const privateMsgInitEvent = 'privateMsgInitEvent_' + privateMsgId
+      const privateMsgEvent = buildPrivateMsgEvent(privateMsgId)
+      const privateMsgInitEvent = buildInitPrivateMsgEvent(privateMsgId)
       socket.on(privateMsgInitEvent, function (msgList) {
         renderMsg(msgList, $currMsgList.current, setCurrMsgList)
       })

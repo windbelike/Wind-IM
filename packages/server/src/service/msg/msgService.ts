@@ -1,7 +1,6 @@
 import { prisma } from '../../utils/prismaHolder'
 
 const privateMsgType = 0
-const channelMsgType = 1
 
 export async function createPrivateMsg (fromUid, toUid) {
   if (!fromUid || !toUid || fromUid == toUid) {
