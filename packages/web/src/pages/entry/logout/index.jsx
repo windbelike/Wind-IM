@@ -51,7 +51,7 @@ export default function LogoutForm () {
   return (
     <>
       <div className='flex flex-col h-full w-full justify-center items-center'>
-        <h1 className='text-5xl'>Really wanna logout?</h1>
+        <h1 className='text-5xl text-white'>Really wanna logout?</h1>
         <button onClick={onClickLogout} className='h-12 bg-black text-white px-5 shrink-0'>Yes</button>
       </div>
     </>

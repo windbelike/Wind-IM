@@ -1,7 +1,7 @@
 import { deleteChannel, getChannelInfo, getChannelMembers, getPrivateMsg, getRoomList, getWhoami, leaveChannel } from '@/utils/apiUtils'
 import Link from 'next/link'
 import { useMutation, useQuery } from 'react-query'
-import { AiOutlineNumber } from 'react-icons/ai'
+import { AiOutlineNumber, AiOutlineMenu } from 'react-icons/ai'
 
 export default function ChannelLayout ({ children, channelId }) {
   return (
@@ -31,7 +31,7 @@ function ChannelSidebar ({ channelId }) {
 
   return (
     <>
-      <div className="p-4 shrink-0 flex flex-col h-full w-64 border-r-[1px] border-solid border-r-[#323437] overflow-y-hidden">
+      <div className="shrink-0 flex flex-col h-full w-64 border-r-[1px] border-solid border-r-[#323437] overflow-y-hidden">
         <ChannelInfoPanel channelId={channelId}/>
         <TextPannel channelId={channelId}/>
         <VoicePannel channelId={channelId}/>
@@ -65,9 +65,10 @@ function ChannelInfoPanel ({ channelId }) {
   const { data, isLoading, error } = useQuery(['getChannelInfo', channelId], () => getChannelInfo(channelId))
 
   return (
-    <div className="text-[#e6eaf0] font-bold text-xl">
+    <div className="p-4 text-[#e6eaf0] font-bold text-xl flex items-center border-b-[1px] border-[#323437]">
       {isLoading && <p >Anonymous</p>}
       {data && <p>{data.data?.name}</p>}
+      <div className='ml-auto hover:cursor-pointer'><AiOutlineMenu size={20} /></div>
     </div>
   )
 }
@@ -75,8 +76,8 @@ function ChannelInfoPanel ({ channelId }) {
 function TextPannel ({ channelId }) {
   const { data, isLoading, error } = useQuery(['getRoomList', channelId], () => getRoomList(channelId))
   return (
-    <div className='mt-3'>
-      <p className='text-[#e6eaf0] text-sm mt-2'>TEXT ROOMS</p>
+    <div className='p-4 mt-3'>
+      <p className='text-[#e6eaf0] text-sm'>TEXT ROOMS</p>
       <div className='ml-4 mt-1'>
         {data?.data?.map((room) => {
           return (
@@ -106,7 +107,7 @@ function TextPannelSelection ({ icon, name, cnt, to }) {
 function VoicePannel () {
   const { error, isLoading, data } = useQuery('getPrivateMsg', getPrivateMsg)
   return (
-    <div className='mt-3'>
+    <div className='p-4'>
       <p className='text-[#e6eaf0] text-sm mt-2'>VOICE ROOMS</p>
       <div className='ml-4 mt-1'>
         {/* <VoiceSelection name="Default" to='/channel/voice'/> */}
