@@ -1,5 +1,6 @@
-import { createChannel, deleteChannel, getChannelListByUid, getChannelMembers, joinChannel, selectChannelById } from '@/service/channel/channelService'
+import { createChannel, deleteChannel, getChannelListByUid, getChannelMembers, isUserOnChannel, joinChannel, selectChannelById } from '@/service/channel/channelService'
 import * as Boom from '@hapi/boom'
+import { redis } from 'utils/redisHolder'
 
 // get channel info
 export async function channelGet (req, res, next) {
@@ -99,4 +100,56 @@ export async function channelDelete (req, res, next) {
   } catch (e) {
     next(e)
   }
+}
+
+export async function joinChannelNotify (req, res, next) {
+  try {
+    const channelId = parseInt(req.query?.id)
+    if (!channelId) {
+      throw Boom.badRequest('Invalid params error')
+    }
+    const user = req.windImUser
+    if (!isUserOnChannel(channelId, user)) {
+      throw Boom.badRequest('You have not joined this channel yet')
+    }
+    const channelOnlineUsersKey = buildChannelOnlineUserskey(channelId)
+    redis.sadd(channelOnlineUsersKey, user.id)
+    res.json({ code: 0, data: 'joinChannelNotify' })
+  } catch (e) {
+    next(e)
+  }
+}
+
+export async function leaveChannelNotify (req, res, next) {
+  try {
+    const channelId = parseInt(req.query?.id)
+    if (!channelId) {
+      throw Boom.badRequest('Invalid params error')
+    }
+    const user = req.windImUser
+    const channelOnlineUsersKey = buildChannelOnlineUserskey(channelId)
+    redis.srem(channelOnlineUsersKey, user.id)
+    res.json({ code: 0, data: 'leaveChannelNotify' })
+  } catch (e) {
+    next(e)
+  }
+}
+
+export async function channelOnlineUsers (req, res, next) {
+  try {
+    const channelId = parseInt(req.query?.id)
+    if (!channelId) {
+      throw Boom.badRequest('Invalid params error')
+    }
+    const channelOnlineUsersKey = buildChannelOnlineUserskey(channelId)
+    const elementCount = await redis.scard(channelOnlineUsersKey) // get element count of a set
+    const onlineUsers = await redis.smembers(channelOnlineUsersKey)
+    res.json({ code: 0, data: { cnt: elementCount, onlineUsers } })
+  } catch (e) {
+    next(e)
+  }
+}
+
+function buildChannelOnlineUserskey (channelId: number) {
+  return `channel-${channelId}-onlineUsers`
 }

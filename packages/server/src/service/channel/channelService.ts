@@ -34,6 +34,23 @@ export async function getChannelMembers (channelId) {
   })
 }
 
+export async function isUserOnChannel (uid, channelId) {
+  const channel = await prisma.usersOnChannels.findUnique({
+    where: {
+      uid_channelId: {
+        uid,
+        channelId
+      }
+    }
+  })
+
+  if (!channel) {
+    return false
+  }
+
+  return channel.status == channelStatus.normal
+}
+
 // 离开channel
 export async function leaveChannel (uid, channelId) {
   const channel = await prisma.usersOnChannels.findUnique({

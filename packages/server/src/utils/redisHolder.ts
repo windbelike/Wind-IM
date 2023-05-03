@@ -1,6 +1,6 @@
 import { Redis } from 'ioredis'
 
-let redis
+let redis:Redis
 
 try {
   redis = new Redis()
