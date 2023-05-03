@@ -38,7 +38,7 @@ export async function privateMsgGet (req, res, next) {
   try {
     const user = req.windImUser
     const msgId = parseInt(req.query?.id)
-    const msgInfo = await getPrivateMsgById(msgId)
+    const msgInfo: any = await getPrivateMsgById(msgId)
     if (!msgInfo) {
       throw Boom.badRequest('No such msg.')
     }

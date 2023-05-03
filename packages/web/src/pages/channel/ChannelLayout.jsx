@@ -2,6 +2,7 @@ import { deleteChannel, getChannelInfo, getChannelMembers, getPrivateMsg, getRoo
 import Link from 'next/link'
 import { useMutation, useQuery } from 'react-query'
 import { AiOutlineNumber, AiOutlineMenu } from 'react-icons/ai'
+import { useState } from 'react'
 
 export default function ChannelLayout ({ children, channelId }) {
   return (
@@ -63,12 +64,32 @@ function ChannelRightSidebar ({ channelId }) {
 
 function ChannelInfoPanel ({ channelId }) {
   const { data, isLoading, error } = useQuery(['getChannelInfo', channelId], () => getChannelInfo(channelId))
+  const [manueActive, setManueActive] = useState(false)
+  function onMenuClick () {
+    console.log('menu click')
+    setManueActive(!manueActive)
+  }
 
   return (
-    <div className="p-4 text-[#e6eaf0] font-bold text-xl flex items-center border-b-[1px] border-[#323437]">
-      {isLoading && <p >Anonymous</p>}
-      {data && <p>{data.data?.name}</p>}
-      <div className='ml-auto hover:cursor-pointer'><AiOutlineMenu size={20} /></div>
+    <div className='relative'>
+      <div className="p-4 text-[#e6eaf0] font-bold text-xl flex items-center border-b-[1px] border-[#323437]">
+        {isLoading && <p >Anonymous</p>}
+        {data && <p>{data.data?.name}</p>}
+        <div onClick={onMenuClick} className='ml-auto hover:cursor-pointer'><AiOutlineMenu size={20} /></div>
+      </div>
+      {manueActive && <ChannelMenu />}
+    </div>
+
+  )
+}
+
+function ChannelMenu () {
+  return (
+    <div className='absolute flex w-full h-[100px] p-3'>
+      <div className='flex flex-col bg-black rounded-md w-full text-white p-1'>
+        <span>Invite People</span>
+        <span>Channel Settings</span>
+      </div>
     </div>
   )
 }
