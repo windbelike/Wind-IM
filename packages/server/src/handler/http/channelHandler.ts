@@ -61,7 +61,7 @@ export async function channelListGet (req, res, next) {
 }
 
 // get all crew by channelId
-export async function channelMembersGet (req, res, next) {
+export async function channelOnlineInfoGet (req, res, next) {
   try {
     console.log('channelMembersGet req:' + JSON.stringify(req.query))
     const user = req.windImUser
@@ -70,8 +70,12 @@ export async function channelMembersGet (req, res, next) {
     if (isNaN(channelId)) {
       throw Boom.badRequest('Invalid params error')
     }
+    const members = await getChannelMembers(channelId)
+    const channelOnlineUsersKey = buildChannelOnlineUserskey(channelId)
+    const onlineUsers = await redis.smembers(channelOnlineUsersKey)
+    const onlineUserCnt = onlineUsers.length
 
-    res.json({ data: await getChannelMembers(channelId) })
+    res.json({ code: 0, data: { members, onlineUsers, onlineUserCnt } })
   } catch (e) {
     next(e)
   }
@@ -102,34 +106,34 @@ export async function channelDelete (req, res, next) {
   }
 }
 
-export async function joinChannelNotify (req, res, next) {
+export async function beOnlineOnChannel (req, res, next) {
   try {
-    const channelId = parseInt(req.query?.id)
+    const channelId = parseInt(req.query?.channelId)
     if (!channelId) {
       throw Boom.badRequest('Invalid params error')
     }
     const user = req.windImUser
-    if (!isUserOnChannel(channelId, user)) {
+    if (!isUserOnChannel(user.id, channelId)) {
       throw Boom.badRequest('You have not joined this channel yet')
     }
     const channelOnlineUsersKey = buildChannelOnlineUserskey(channelId)
     redis.sadd(channelOnlineUsersKey, user.id)
-    res.json({ code: 0, data: 'joinChannelNotify' })
+    res.json({ code: 0, data: 'beOnlineOnChannel' })
   } catch (e) {
     next(e)
   }
 }
 
-export async function leaveChannelNotify (req, res, next) {
+export async function beOfflineOnChannel (req, res, next) {
   try {
-    const channelId = parseInt(req.query?.id)
+    const channelId = parseInt(req.query?.channelId)
     if (!channelId) {
       throw Boom.badRequest('Invalid params error')
     }
     const user = req.windImUser
     const channelOnlineUsersKey = buildChannelOnlineUserskey(channelId)
     redis.srem(channelOnlineUsersKey, user.id)
-    res.json({ code: 0, data: 'leaveChannelNotify' })
+    res.json({ code: 0, data: 'beOfflineOnChannel' })
   } catch (e) {
     next(e)
   }

@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import { useRef, useState } from 'react'
 import EmojiPicker from 'emoji-picker-react'
-import { getChannelMembers, getPrivateMsg, getWhoami } from '@/utils/apiUtils'
+import { getChannelOnlineInfo, getPrivateMsg, getWhoami } from '@/utils/apiUtils'
 import ChannelLayout from './ChannelLayout'
 import Layout from '../Layout'
 
@@ -21,7 +21,7 @@ export default function Channel () {
 
   const router = useRouter()
   const { channelId } = router.query
-  const { data, error, isLoading } = useQuery(['getChannelMembers', channelId], () => getChannelMembers(channelId))
+  const { data, error, isLoading } = useQuery(['getChannelMembers', channelId], () => getChannelOnlineInfo(channelId))
   const currMsgList = []
   const privateMsgInfo = null
 

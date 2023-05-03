@@ -1,10 +1,28 @@
-import { deleteChannel, getChannelInfo, getChannelMembers, getPrivateMsg, getRoomList, getWhoami, leaveChannel } from '@/utils/apiUtils'
+import { beOfflineOnChannel, beOnlineOnChannel, deleteChannel, getChannelInfo, getChannelOnlineInfo, getPrivateMsg, getRoomList, getWhoami, leaveChannel } from '@/utils/apiUtils'
 import Link from 'next/link'
 import { useMutation, useQuery } from 'react-query'
 import { AiOutlineNumber, AiOutlineMenu } from 'react-icons/ai'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function ChannelLayout ({ children, channelId }) {
+  // handle being online or offline in a channel
+  useEffect(() => {
+    beOnlineOnChannel(channelId)
+    async function notifyOffline () {
+      console.log('Being offline in channel:' + channelId)
+      beOfflineOnChannel(channelId)
+    }
+    function onBeforeUnload (event) {
+      notifyOffline()
+    }
+    console.log('Being online in channel:' + channelId)
+    addEventListener('beforeunload', onBeforeUnload)
+    return () => {
+      notifyOffline()
+      removeEventListener('beforeunload', onBeforeUnload)
+    }
+  }, [channelId])
+
   return (
     <div className='h-full w-full bg-[#25272a] flex'>
       <ChannelSidebar channelId={channelId} />
@@ -47,12 +65,12 @@ function ChannelSidebar ({ channelId }) {
 }
 
 function ChannelRightSidebar ({ channelId }) {
-  const { data, error, isLoading } = useQuery(['getChannelMembers', channelId], () => getChannelMembers(channelId))
+  const { data, error, isLoading } = useQuery(['getChannelMembers', channelId], () => getChannelOnlineInfo(channelId))
 
   return (
     <div className='ml-auto overflow-hidden w-[300px] border-l-[1px] border-solid border-l-[#323437] p-3 text-white'>
       <div>
-        <div>ONLINE - 0</div>
+        <div>ONLINE - {data ? data.data?.onlineUserCnt : 0}</div>
       </div>
       <div>
         <div>OFFLINE - 0</div>

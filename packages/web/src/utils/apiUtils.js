@@ -56,12 +56,34 @@ export async function leaveChannel ({ channelId }) {
 }
 
 // get channel members
-export async function getChannelMembers (id) {
+export async function getChannelOnlineInfo (id) {
   if (!id) {
     return {}
   }
   const params = new URLSearchParams([['id', id]])
-  const result = await axios.get('/api/channel/members', {
+  const result = await axios.get('/api/channel/channelOnlineInfo', {
+    params
+  })
+  return result.data
+}
+
+export async function beOfflineOnChannel (channelId) {
+  if (!channelId) {
+    return {}
+  }
+  const params = new URLSearchParams([['channelId', channelId]])
+  const result = await axios.get('/api/beOfflineOnChannel', {
+    params
+  })
+  return result.data
+}
+
+export async function beOnlineOnChannel (channelId) {
+  if (!channelId) {
+    return {}
+  }
+  const params = new URLSearchParams([['channelId', channelId]])
+  const result = await axios.get('/api/beOnlineOnChannel', {
     params
   })
   return result.data

@@ -1,6 +1,6 @@
 import Avatar from '@/components/Avatar'
 import Layout from '@/pages/Layout'
-import { getChannelMembers, getRoomInfo, getRoomList, getWhoami } from '@/utils/apiUtils'
+import { getChannelOnlineInfo, getRoomInfo, getRoomList, getWhoami } from '@/utils/apiUtils'
 import axios from '@/utils/axiosUtils'
 import EmojiPicker from 'emoji-picker-react'
 import { useRouter } from 'next/router'
@@ -50,23 +50,6 @@ export default function ChannelRoom () {
     // initiate currMsgList
     setCurrMsgList([])
   }, [roomId])
-
-  // handle being online or offline in a channel
-  useEffect(() => {
-    async function notifyOffline () {
-      console.log('Being offline in channel:' + channelId)
-      await axios.get('/api/leave')
-    }
-    function onBeforeUnload (event) {
-      notifyOffline()
-    }
-    console.log('Being online in channel:' + channelId)
-    addEventListener('beforeunload', onBeforeUnload)
-    return () => {
-      notifyOffline()
-      removeEventListener('beforeunload', onBeforeUnload)
-    }
-  }, [channelId])
 
   function onClickEmoji (emojiOjb) {
     $msgInput.current.value += emojiOjb.emoji
