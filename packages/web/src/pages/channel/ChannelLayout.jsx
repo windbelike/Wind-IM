@@ -54,11 +54,10 @@ function ChannelSidebar ({ channelId }) {
         <ChannelInfoPanel channelId={channelId}/>
         <TextPannel channelId={channelId}/>
         <VoicePannel channelId={channelId}/>
-        <div className='mt-auto flex flex-col space-y-3'>
+        {/* <div className='mt-auto flex flex-col space-y-3'>
           <button className='bg-gray-400 text-white rounded-md' onClick={onClickLeaveChannel}>Leave Channel</button>
-          {/* owner only operation */}
           <button className='bg-red-700 text-white rounded-md' onClick={onClickDeleteChannel}>Delete Channel</button>
-        </div>
+        </div> */}
       </div>
     </>
   )
@@ -102,12 +101,35 @@ function ChannelInfoPanel ({ channelId }) {
 }
 
 function ChannelMenu () {
+  function onClickInvitePeople () {
+    console.log('onClickInvitePeople')
+    // open modal
+    const dialog = document.querySelector('dialog')
+    dialog.showModal() // Opens a modal
+    dialog.addEventListener('click', e => {
+      const dialogDimensions = dialog.getBoundingClientRect()
+      if (
+        e.clientX < dialogDimensions.left ||
+        e.clientX > dialogDimensions.right ||
+        e.clientY < dialogDimensions.top ||
+        e.clientY > dialogDimensions.bottom
+      ) {
+        dialog.close()
+      }
+    })
+  }
+
   return (
     <div className='absolute flex w-full h-[100px] p-3'>
-      <div className='flex flex-col bg-black rounded-md w-full text-white p-1'>
-        <span>Invite People</span>
+      <div className='flex flex-col bg-black rounded-md w-full text-gray-200 p-1 text-center'>
+        <span className='hover:cursor-pointer p-1 ' onClick={onClickInvitePeople}>Invite People</span>
         <span>Channel Settings</span>
       </div>
+      <dialog className='backdrop:bg-[rgba(0,0,0,0.5)] w-96 h-48'>
+        <div className=''>
+          <span>Invite friends to this channel.</span>
+        </div>
+      </dialog>
     </div>
   )
 }
