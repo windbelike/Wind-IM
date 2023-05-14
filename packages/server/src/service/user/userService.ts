@@ -106,12 +106,8 @@ export function buildChannelOnlineUserskey (channelId: number) {
 // get channel online info
 export async function getChannelOnlineInfo (channelId) {
   const channelOnlineUsersKey = buildChannelOnlineUserskey(channelId)
-  const onlineUserCnt = await redis.scard(channelOnlineUsersKey) // get element count of a set
-  const onlineUsers = await redis.smembers(channelOnlineUsersKey)
-  return {
-    onlineUserCnt,
-    onlineUsers
-  }
+  // const onlineUserCnt = await redis.scard(channelOnlineUsersKey) // get element count of a set
+  return await redis.smembers(channelOnlineUsersKey)
 }
 
 // batch check if user is online

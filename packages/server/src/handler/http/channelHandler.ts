@@ -1,5 +1,5 @@
 import { checkUserInChannel, createChannel, deleteChannel, getChannelListByUid, getChannelMembers, isUserOnChannel, joinChannel, selectChannelById } from '@/service/channel/channelService'
-import { becomeOfflineInChannel, becomeOnlineInChannel, getChannelOnlineInfo } from '@/service/user/userService'
+import { becomeOfflineInChannel, becomeOnlineInChannel, getChannelOnlineInfo as getChannelOnlineMembers } from '@/service/user/userService'
 import * as Boom from '@hapi/boom'
 import { redis } from 'utils/redisHolder'
 
@@ -75,15 +75,18 @@ export async function channelUserInfo (req, res, next) {
       throw Boom.badRequest('Invalid params error')
     }
     const members = await getChannelMembers(channelId)
-    const channelOnlineInfo = await getChannelOnlineInfo(channelId)
-    const result = []
+    const onlineMembers = await getChannelOnlineMembers(channelId)
+    const membersResult = []
     members.map((member) => {
-      const online = channelOnlineInfo.onlineUsers.includes(member.uid.toString())
-      result.push({ ...member, online })
+      const online = onlineMembers.includes(member.uid.toString())
+      membersResult.push({ ...member, online })
       return member
     })
 
-    res.json({ code: 0, data: { members: result, onlineUserCnt: channelOnlineInfo.onlineUserCnt } })
+    const onlineUserCnt = onlineMembers.length
+    const offlineUserCnt = members.length - onlineUserCnt
+
+    res.json({ code: 0, data: { members: membersResult, onlineUserCnt, offlineUserCnt } })
   } catch (e) {
     next(e)
   }

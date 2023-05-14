@@ -74,21 +74,25 @@ function ChannelRightSidebar ({ channelId }) {
     <div className='ml-auto overflow-hidden w-[300px] border-l-[1px] border-solid border-l-[#323437] p-3 text-white'>
       <div>
         <div>ONLINE - {data ? data.data?.onlineUserCnt : 0}</div>
-        {data != null && data.data?.onlineUsers?.map((user) => {
+        {data != null && data.data?.members?.filter(m => m.online).map((member) => {
           return (
-            <>
-              {/* <Avatar username={username} />
-              <div className='flex flex-col items-start mx-2'>
-                <p className='font-bold'>{username}</p>
-                <p className={'break-all '}>{content}</p>
-              </div> */}
-            </>
+            <div key={member.uid} className='flex my-1 items-center space-x-3 p-2 hover:bg-gray-600 rounded-lg'>
+              <Avatar username={member.userRel?.username} />
+              <p className='font-bold'>{member.userRel?.username}</p>
+            </div>
           )
         })}
       </div>
       <div>
-        <div>OFFLINE - 0</div>
-        <div className='break-words'>data:{JSON.stringify(data?.data)}</div>
+        <div>OFFLINE - {data ? data.data?.onlineUserCnt : 0}</div>
+        {data != null && data.data?.members?.filter(m => !m.online).map((member) => {
+          return (
+            <div key={member.uid} className='flex my-1 items-center space-x-3 p-2 hover:bg-gray-600 rounded-lg'>
+              <Avatar username={member.userRel?.username} />
+              <p className='font-bold'>{member.userRel?.username}</p>
+            </div>
+          )
+        })}
       </div>
     </div>
   )
