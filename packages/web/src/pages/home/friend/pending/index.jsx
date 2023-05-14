@@ -12,6 +12,14 @@ async function getFriendRequests () {
   return result.data
 }
 
+Request.getLayout = function getLayout (page) {
+  return (
+    <Layout>
+      <HomeLayout>{page}</HomeLayout>
+    </Layout>
+  )
+}
+
 export default function Request () {
   const [openAddFriendWindow, setOpenAddFriendWindow] = useState(false)
   const { isLoading, error, data } = useQuery('friendRequest', getFriendRequests)
@@ -28,20 +36,12 @@ export default function Request () {
       }
 
       <div className='flex p-3 flex-wrap items-start content-start'>
-        {error && <p>{error}</p>}
+        {error && <p>Error</p>}
         {isLoading && <p>Loading</p>}
         {data && data.data?.map(friendReq => {
           return <FriendReqCard key={friendReq.id} friendReq={friendReq}/>
         })}
       </div>
     </div>
-  )
-}
-
-Request.getLayout = function getLayout (page) {
-  return (
-    <Layout>
-      <HomeLayout>{page}</HomeLayout>
-    </Layout>
   )
 }

@@ -29,7 +29,7 @@ export default function All () {
       }
 
       <div className='flex p-3 flex-wrap items-start content-start'>
-        {error ? <p>{error}</p> : ''}
+        {error ? <p>Error</p> : ''}
         {isLoading && <p>Loading</p>
         }
         {data && data.data?.map((rel, idx) => {

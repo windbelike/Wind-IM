@@ -120,7 +120,7 @@ model Channel {
   @@index(fields: [ownerUid], name: "ownerUidIdx")
 }
 
-// 用户-频道 多对多关系表（隐式explicit写法）
+// 用户-频道 多对多关系表（显式explicit写法）
 model UsersOnChannels {
   uid     Int 
   userRel       User     @relation(fields: [uid], references: [id])
