@@ -1,11 +1,24 @@
-import { beOfflineInChannel, beOnlineInChannel, deleteChannel, getChannelInfo, getChannelOnlineInfo, getPrivateMsg, getRoomList, getWhoami, leaveChannel } from '@/utils/apiUtils'
+import { beOfflineInChannel, beOnlineInChannel, deleteChannel, getChannelInfo, getChannelUserInfo, getPrivateMsg, getRoomList, getWhoami, leaveChannel } from '@/utils/apiUtils'
 import Link from 'next/link'
 import { useMutation, useQuery } from 'react-query'
 import { AiOutlineNumber, AiOutlineMenu } from 'react-icons/ai'
 import { useEffect, useState } from 'react'
+import Avatar from '@/components/Avatar'
 
 export default function ChannelLayout ({ children, channelId }) {
   // handle being online or offline in a channel
+  useChannelOnlineStatus(channelId)
+
+  return (
+    <div className='h-full w-full bg-[#25272a] flex'>
+      <ChannelSidebar channelId={channelId} />
+      {children}
+      <ChannelRightSidebar channelId={channelId} />
+    </div>
+  )
+}
+
+function useChannelOnlineStatus (channelId) {
   useEffect(() => {
     beOnlineInChannel(channelId)
     async function notifyOffline () {
@@ -15,21 +28,12 @@ export default function ChannelLayout ({ children, channelId }) {
     function onBeforeUnload (event) {
       notifyOffline()
     }
-    console.log('Being online in channel:' + channelId)
     addEventListener('beforeunload', onBeforeUnload)
     return () => {
       notifyOffline()
       removeEventListener('beforeunload', onBeforeUnload)
     }
   }, [channelId])
-
-  return (
-    <div className='h-full w-full bg-[#25272a] flex'>
-      <ChannelSidebar channelId={channelId} />
-      {children}
-      <ChannelRightSidebar channelId={channelId} />
-    </div>
-  )
 }
 
 function ChannelSidebar ({ channelId }) {
@@ -64,12 +68,23 @@ function ChannelSidebar ({ channelId }) {
 }
 
 function ChannelRightSidebar ({ channelId }) {
-  const { data, error, isLoading } = useQuery(['getChannelMembers', channelId], () => getChannelOnlineInfo(channelId))
+  const { data, error, isLoading } = useQuery(['getChannelMembers', channelId], () => getChannelUserInfo(channelId))
 
   return (
     <div className='ml-auto overflow-hidden w-[300px] border-l-[1px] border-solid border-l-[#323437] p-3 text-white'>
       <div>
         <div>ONLINE - {data ? data.data?.onlineUserCnt : 0}</div>
+        {data != null && data.data?.onlineUsers?.map((user) => {
+          return (
+            <>
+              {/* <Avatar username={username} />
+              <div className='flex flex-col items-start mx-2'>
+                <p className='font-bold'>{username}</p>
+                <p className={'break-all '}>{content}</p>
+              </div> */}
+            </>
+          )
+        })}
       </div>
       <div>
         <div>OFFLINE - 0</div>

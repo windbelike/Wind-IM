@@ -104,12 +104,12 @@ export function buildChannelOnlineUserskey (channelId: number) {
 }
 
 // get channel online info
-export async function channelOnlineInfo (channelId) {
+export async function getChannelOnlineInfo (channelId) {
   const channelOnlineUsersKey = buildChannelOnlineUserskey(channelId)
-  const elementCount = await redis.scard(channelOnlineUsersKey) // get element count of a set
+  const onlineUserCnt = await redis.scard(channelOnlineUsersKey) // get element count of a set
   const onlineUsers = await redis.smembers(channelOnlineUsersKey)
   return {
-    elementCount,
+    onlineUserCnt,
     onlineUsers
   }
 }

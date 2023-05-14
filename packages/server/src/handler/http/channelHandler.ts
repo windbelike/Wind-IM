@@ -1,5 +1,5 @@
-import { createChannel, deleteChannel, getChannelListByUid, getChannelMembers, isUserOnChannel, joinChannel, selectChannelById } from '@/service/channel/channelService'
-import { becomeOfflineInChannel, becomeOnlineInChannel, channelOnlineInfo } from '@/service/user/userService'
+import { checkUserInChannel, createChannel, deleteChannel, getChannelListByUid, getChannelMembers, isUserOnChannel, joinChannel, selectChannelById } from '@/service/channel/channelService'
+import { becomeOfflineInChannel, becomeOnlineInChannel, getChannelOnlineInfo } from '@/service/user/userService'
 import * as Boom from '@hapi/boom'
 import { redis } from 'utils/redisHolder'
 
@@ -62,21 +62,28 @@ export async function channelListGet (req, res, next) {
 }
 
 // get all crew by channelId
-export async function channelOnlineInfoGet (req, res, next) {
+export async function channelUserInfo (req, res, next) {
   try {
     console.log('channelMembersGet req:' + JSON.stringify(req.query))
     const user = req.windImUser
     const channelId = parseInt(req.query?.id)
-    // 校验channelId为Integer
+    const isUserInChannel = await checkUserInChannel(user.id, channelId)
+    if (!isUserInChannel) {
+      throw Boom.badRequest('You are not in this channel.')
+    }
     if (isNaN(channelId)) {
       throw Boom.badRequest('Invalid params error')
     }
     const members = await getChannelMembers(channelId)
-    const channelOnlineUsersKey = buildChannelOnlineUserskey(channelId)
-    const onlineUsers = await redis.smembers(channelOnlineUsersKey)
-    const onlineUserCnt = onlineUsers.length
+    const channelOnlineInfo = await getChannelOnlineInfo(channelId)
+    const result = []
+    members.map((member) => {
+      const online = channelOnlineInfo.onlineUsers.includes(member.uid.toString())
+      result.push({ ...member, online })
+      return member
+    })
 
-    res.json({ code: 0, data: { members, onlineUsers, onlineUserCnt } })
+    res.json({ code: 0, data: { members: result, onlineUserCnt: channelOnlineInfo.onlineUserCnt } })
   } catch (e) {
     next(e)
   }
@@ -138,19 +145,19 @@ export async function beOfflineInChannel (req, res, next) {
   }
 }
 
-export async function channelOnlineUsers (req, res, next) {
-  try {
-    const channelId = parseInt(req.query?.id)
-    if (!channelId) {
-      throw Boom.badRequest('Invalid params error')
-    }
-    const { elementCount = 0, onlineUsers = [] } = await channelOnlineInfo(channelId)
-    res.json({ code: 0, data: { cnt: elementCount, onlineUsers } })
-  } catch (e) {
-    next(e)
-  }
-}
+// export async function channelOnlineUsers (req, res, next) {
+//   try {
+//     const channelId = parseInt(req.query?.id)
+//     if (!channelId) {
+//       throw Boom.badRequest('Invalid params error')
+//     }
+//     const { onlineUserCnt = 0, onlineUsers = [] } = await getChannelOnlineInfo(channelId)
+//     res.json({ code: 0, data: { onlineUserCnt, onlineUsers } })
+//   } catch (e) {
+//     next(e)
+//   }
+// }
 
-function buildChannelOnlineUserskey (channelId: number) {
-  return `channel-${channelId}-onlineUsers`
-}
+// function buildChannelOnlineUserskey (channelId: number) {
+//   return `channel-${channelId}-onlineUsers`
+// }

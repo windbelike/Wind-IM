@@ -27,8 +27,9 @@ export default function Online () {
         {error ? <p>Error</p> : ''}
         {isLoading && <p>Loading</p>
         }
-        {data && data.data?.map((rel, idx) => {
-          return <FriendCard key={idx} usernameAndTag={`${rel.friendRel?.username}#${rel.friendRel?.tag}`}/>
+        {data && data.data?.map((item, idx) => {
+          const usernameAndTag = `${item.friendRel?.username}#${item.friendRel?.tag}`
+          return <FriendCard key={idx} usernameAndTag={usernameAndTag} online={item.friendRel.online}/>
         })}
       </div>
     </div>

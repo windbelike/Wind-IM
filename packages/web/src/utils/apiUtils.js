@@ -56,12 +56,12 @@ export async function leaveChannel ({ channelId }) {
 }
 
 // get channel members
-export async function getChannelOnlineInfo (id) {
+export async function getChannelUserInfo (id) {
   if (id == null) {
     return {}
   }
   const params = new URLSearchParams([['id', id]])
-  const result = await axios.get('/api/channel/channelOnlineInfo', {
+  const result = await axios.get('/api/channel/channelUserInfo', {
     params
   })
   return result.data

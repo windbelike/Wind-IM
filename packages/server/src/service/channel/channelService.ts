@@ -7,6 +7,12 @@ const channelStatus = {
   deleted: 1
 }
 
+const channelJoinStatus = {
+  notJoin: 0,
+  joined: 1,
+  leave: 2
+}
+
 // 查询channel
 export async function selectChannelById (id) {
   return await prisma.channel.findUnique({
@@ -127,7 +133,6 @@ export async function joinChannel (uid, channelId) {
   if (!uid || !channelId) {
     throw Boom.badRequest('Illegal params.')
   }
-  // 检查channelId为整数
   if (!Number.isInteger(channelId)) {
     throw Boom.badRequest('Illegal channelId.')
   }
@@ -137,26 +142,14 @@ export async function joinChannel (uid, channelId) {
       id: channelId
     }
   })
-  if (!channel || channel.status != channelStatus.normal) {
-    // 不存在此Channel
+  if (channel == null || channel.status != channelStatus.normal) {
     throw Boom.badRequest('No such channel.')
   }
 
-  // 检查是否已经加入
-  const usersOnChannels = await prisma.usersOnChannels.findUnique({
-    where: {
-      uid_channelId: {
-        uid,
-        channelId
-      }
-    },
-    include: {
-      channelRel: true
-    }
-  })
+  const joinStatus = await checkUserJoinChannelStatus(uid, channelId)
 
-  if (!usersOnChannels) {
-    // 第一次加入
+  if (joinStatus == channelJoinStatus.notJoin) {
+    // first join
     return await prisma.usersOnChannels.create({
       data: {
         userRel: {
@@ -170,11 +163,11 @@ export async function joinChannel (uid, channelId) {
     })
   }
 
-  if (usersOnChannels.status == channelStatus.normal) {
-    // 已经加入
-    throw Boom.badRequest('Already in channel.')
-  } else if (usersOnChannels.status == channelStatus.deleted) {
-    // 加入过，但已经离开
+  if (joinStatus == channelJoinStatus.joined) {
+    // already joined
+    throw Boom.badRequest('Already joined this channel.')
+  } else if (joinStatus == channelJoinStatus.leave) {
+    // join this channel again
     return await prisma.usersOnChannels.update({
       where: {
         uid_channelId: {
@@ -186,6 +179,49 @@ export async function joinChannel (uid, channelId) {
         status: channelStatus.normal
       }
     })
+  }
+}
+
+// check if a user is in a channel
+export async function checkUserInChannel (uid, channelId) {
+  if (isNaN(channelId) || isNaN(uid)) {
+    return false
+  }
+  const status = await checkUserJoinChannelStatus(uid, channelId)
+  return status == channelJoinStatus.joined
+}
+
+// check user's join status of a channel
+export async function checkUserJoinChannelStatus (uid, channelId) {
+  if (isNaN(channelId) || isNaN(uid)) {
+    return channelJoinStatus
+  }
+  const usersOnChannels = await prisma.usersOnChannels.findUnique({
+    where: {
+      uid_channelId: {
+        uid,
+        channelId
+      }
+    },
+    include: {
+      channelRel: true
+    }
+  })
+
+  if (usersOnChannels == null) {
+    // haven't join status
+    return channelJoinStatus.notJoin
+  } else {
+    if (usersOnChannels.status == channelStatus.normal) {
+      // joined status
+      return channelJoinStatus.joined
+    } else if (usersOnChannels.status == channelStatus.deleted) {
+      // leave status
+      return channelJoinStatus.leave
+    } else {
+      // unknown status
+      return channelJoinStatus.notJoin
+    }
   }
 }
 

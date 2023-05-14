@@ -1,6 +1,6 @@
 import Avatar from '@/components/Avatar'
 import Layout from '@/pages/Layout'
-import { getChannelOnlineInfo, getRoomInfo, getRoomList, getWhoami } from '@/utils/apiUtils'
+import { getChannelUserInfo, getRoomInfo, getRoomList, getWhoami } from '@/utils/apiUtils'
 import axios from '@/utils/axiosUtils'
 import EmojiPicker from 'emoji-picker-react'
 import { useRouter } from 'next/router'
@@ -41,7 +41,7 @@ export default function ChannelRoom () {
   const $currMsgList = useRef([])
   $currMsgList.current = currMsgList
   const whoamiQuery = useQuery('whoami', getWhoami)
-  useWs(roomId, $currMsgList, setCurrMsgList) // connect to websocket for room
+  useWebSocket(roomId, $currMsgList, setCurrMsgList) // connect to websocket for room
 
   // init effect
   useEffect(() => {
@@ -163,7 +163,7 @@ function renderMsg (newMsg, currMsgList, setCurrMsgList) {
   }, 0)
 }
 
-function useWs (roomId, $currMsgList, setCurrMsgList) {
+function useWebSocket (roomId, $currMsgList, setCurrMsgList) {
   useEffect(() => {
     if (roomId) {
       // fixme useEffect runs twice, socket connects twice
