@@ -17,7 +17,7 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import { logoutPost } from './handler/http/logoutHandler'
 import { friendReqGet, friendReqPost } from './handler/http/friendReqhandler'
-import { friendGet } from './handler/http/friendHandler'
+import { friendGet, onlineFriendsGet } from './handler/http/friendHandler'
 import { channelListGet, channelJoinPost, channelPost, channelOnlineInfoGet, channelDelete, channelGet, beOnlineInChannel, channelOnlineUsers, beOfflineInChannel } from './handler/http/channelHandler'
 import { roomGet, roomListGet } from './handler/http/roomMsgHandler'
 
@@ -57,7 +57,8 @@ app.use(cors(corsOptions))
   .post('/api/logout', loginValidator, logoutPost)
   .get('/api/friendRequest', loginValidator, friendReqGet)
   .post('/api/friendRequest', loginValidator, friendReqPost)
-  .get('/api/friend', loginValidator, friendGet)
+  .get('/api/friends', loginValidator, friendGet)
+  .get('/api/onlineFriends', loginValidator, onlineFriendsGet)
   .post('/api/channel', loginValidator, channelPost)
   .get('/api/channel', loginValidator, channelGet)
   .get('/api/channelList', loginValidator, channelListGet)

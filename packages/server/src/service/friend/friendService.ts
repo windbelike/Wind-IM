@@ -2,12 +2,28 @@
 import { statusPass, statusPending, statusRefuse } from '@/utils/friend-enums'
 import * as Boom from '@hapi/boom'
 import { prisma } from '@/utils/prismaHolder'
+import { batchCheckUserOnline } from '../user/userService'
 
 // todo 限制好友数量
 // todo 限制输入长度
 // todo 限制邮箱格式
 
 // 在线状态设计：1分钟发一个心跳包，redis记录用户心跳时间。业务层判断心跳时间晚于当前时间2分钟，则离线
+
+interface friendListItemType {
+  uid?: number
+  friendId?: number
+  alias?: string
+  friendRel?: {
+    id?: number
+    email?: string
+    bio?: string
+    username?: string
+    tag?: string
+    online?: boolean
+  }
+}
+
 export function isReqStatusValid (status) {
   return status == statusPass || status == statusRefuse
 }
@@ -53,23 +69,12 @@ export async function getAllOnlineFriend (uid) {
   console.log('Not supported')
 }
 
-export async function getFirendList (uid) {
-  // throw Boom.unauthorized('getFirendList boom.')
-  // const friendIdList = await getFriendIdList(uid)
+export async function selectFriendList (uid) {
   return await prisma.friend.findMany({
     where: {
       uid
     },
     include: {
-      userRel: {
-        select: {
-          id: true,
-          email: true,
-          bio: true,
-          username: true,
-          tag: true
-        }
-      },
       friendRel: {
         select: {
           id: true,
@@ -81,6 +86,36 @@ export async function getFirendList (uid) {
       }
     }
   })
+}
+
+export async function getFriendList (uid) {
+  const result = []
+  if (uid == null) {
+    return result
+  }
+  const friendListData = await selectFriendList(uid)
+  const friendIdList = friendListData.map(friend => friend.friendId)
+  const onlineFriendIdList = await batchCheckUserOnline(friendIdList)
+  friendListData.forEach(item => {
+    const isFriendOnline = onlineFriendIdList.includes(item.friendId)
+    const resultItem: friendListItemType = { ...item }
+    resultItem.friendRel.online = isFriendOnline
+    result.push(resultItem)
+  })
+
+  return result
+}
+
+export async function getOnlineFriendList (uid) {
+  const result = []
+  if (uid == null) {
+    return result
+  }
+  const friendList = await getFriendList(uid)
+  if (friendList == null || friendList.length == 0) {
+    return result
+  }
+  return friendList.filter(item => item.friendRel.online)
 }
 
 export async function checkIsFriends (uid, friendId) {

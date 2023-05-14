@@ -93,3 +93,13 @@ export async function onlineHeartbeat () {
   const result = await axios.get('/api/onlineHeartbeat')
   return result.data
 }
+
+export async function getFriendList () {
+  const result = await axios.get('/api/friends')
+  return result.data
+}
+
+export async function getOnlineFriendList () {
+  const result = await axios.get('/api/onlineFriends')
+  return result.data
+}

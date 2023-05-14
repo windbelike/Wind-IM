@@ -4,17 +4,12 @@ import HomeLayout from '../../HomeLayout'
 import AddFriendButton from '../AddFriendButton'
 import AddFriendWindow from '../AddFriendWindow'
 import FriendCard from '../FriendCard'
-import axios from '@/utils/axiosUtils'
 import Layout from '@/pages/Layout'
-
-async function getOnlineFriends () {
-  const result = await axios.get('/api/friend')
-  return result.data
-}
+import { getOnlineFriendList } from '@/utils/apiUtils'
 
 export default function Online () {
   const [openAddFriendWindow, setOpenAddFriendWindow] = useState(false)
-  const { isLoading, error, data } = useQuery('getAllFriends', getOnlineFriends)
+  const { isLoading, error, data } = useQuery('getAllFriends', getOnlineFriendList)
 
   return (
     <div className='p-5'>

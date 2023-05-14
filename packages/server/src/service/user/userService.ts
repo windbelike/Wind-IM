@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt'
 import * as Boom from '@hapi/boom'
 import { redis } from 'utils/redisHolder'
 
+const userOnlineRedisVal = 'true'
+
 export async function queryUserById (id:number) {
   return await prisma.user.findUnique({
     where: {
@@ -78,7 +80,7 @@ async function generateUserTag (username: string) {
 // become online status（global）
 export async function onlineHeartbeat (id) {
   const userOnlineKey = buildUserOnlineKey(id)
-  await redis.set(userOnlineKey, 'true', 'EX', 30) // after 30s, become offline automatically
+  await redis.set(userOnlineKey, userOnlineRedisVal, 'EX', 30) // after 30s, become offline automatically
 }
 
 function buildUserOnlineKey (id) {
@@ -110,4 +112,21 @@ export async function channelOnlineInfo (channelId) {
     elementCount,
     onlineUsers
   }
+}
+
+// batch check if user is online
+export async function batchCheckUserOnline (uidList) {
+  const pipeline = redis.pipeline()
+  uidList.forEach(uid => {
+    const userOnlineKey = buildUserOnlineKey(uid)
+    pipeline.get(userOnlineKey)
+  })
+  const result = await pipeline.exec()
+  const onlineUidList = []
+  result.forEach((item, index) => {
+    if (item[1] === userOnlineRedisVal) {
+      onlineUidList.push(uidList[index])
+    }
+  })
+  return onlineUidList
 }

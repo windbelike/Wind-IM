@@ -4,17 +4,12 @@ import HomeLayout from '../../HomeLayout'
 import AddFriendButton from '../AddFriendButton'
 import AddFriendWindow from '../AddFriendWindow'
 import FriendCard from '../FriendCard'
-import axios from '@/utils/axiosUtils'
 import Layout from '@/pages/Layout'
-
-async function getAllFriends () {
-  const result = await axios.get('/api/friend')
-  return result.data
-}
+import { getFriendList } from '@/utils/apiUtils'
 
 export default function All () {
   const [openAddFriendWindow, setOpenAddFriendWindow] = useState(false)
-  const { isLoading, error, data } = useQuery('getAllFriends', getAllFriends)
+  const { isLoading, error, data } = useQuery('getAllFriends', getFriendList)
 
   return (
     <div className='p-5'>
