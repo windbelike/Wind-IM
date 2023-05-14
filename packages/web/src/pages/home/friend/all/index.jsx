@@ -36,8 +36,11 @@ export default function All ({ sideBarActiveState }) {
         {error ? <p>Error</p> : ''}
         {isLoading && <p>Loading</p>
         }
-        {data && data.data?.map((rel, idx) => {
-          return <FriendCard key={idx} usernameAndTag={`${rel.friendRel?.username}#${rel.friendRel?.tag}`}/>
+        {data && data.data?.sort((a, b) => {
+          return b.friendRel.online - a.friendRel.online // online first
+        }).map((item, idx) => {
+          const usernameAndTag = `${item.friendRel?.username}#${item.friendRel?.tag}`
+          return <FriendCard key={idx} usernameAndTag={usernameAndTag} online={item.friendRel.online}/>
         })}
       </div>
     </div>
