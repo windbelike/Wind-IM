@@ -119,7 +119,7 @@ export default function DirectMessage () {
       <div className='space-y-3 p-2 border-b-[1px] border-solid border-b-[#323437] text-white shrink-0'>
         <p className='font-bold text-2xl'>{privateMsgInfo?.data?.data?.msgTitle}</p>
         {/* <p className='text-white'>msgId: {privateMsgId}</p> */}
-        <p>Private message with {privateMsgInfo?.data?.data?.msgTitle}</p>
+        <p className=''>Direct message with {privateMsgInfo?.data?.data?.msgTitle}</p>
       </div>
       <div id="msgScroll" className='overflow-y-scroll scrollbar h-full my-3'>
         {/* <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'}/>

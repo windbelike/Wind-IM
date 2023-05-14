@@ -1,4 +1,4 @@
-import { beOfflineOnChannel, beOnlineOnChannel, deleteChannel, getChannelInfo, getChannelOnlineInfo, getPrivateMsg, getRoomList, getWhoami, leaveChannel } from '@/utils/apiUtils'
+import { beOfflineInChannel, beOnlineInChannel, deleteChannel, getChannelInfo, getChannelOnlineInfo, getPrivateMsg, getRoomList, getWhoami, leaveChannel } from '@/utils/apiUtils'
 import Link from 'next/link'
 import { useMutation, useQuery } from 'react-query'
 import { AiOutlineNumber, AiOutlineMenu } from 'react-icons/ai'
@@ -7,10 +7,10 @@ import { useEffect, useState } from 'react'
 export default function ChannelLayout ({ children, channelId }) {
   // handle being online or offline in a channel
   useEffect(() => {
-    beOnlineOnChannel(channelId)
+    beOnlineInChannel(channelId)
     async function notifyOffline () {
       console.log('Being offline in channel:' + channelId)
-      beOfflineOnChannel(channelId)
+      beOfflineInChannel(channelId)
     }
     function onBeforeUnload (event) {
       notifyOffline()

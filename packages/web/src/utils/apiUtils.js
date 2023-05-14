@@ -67,23 +67,23 @@ export async function getChannelOnlineInfo (id) {
   return result.data
 }
 
-export async function beOfflineOnChannel (channelId) {
+export async function beOfflineInChannel (channelId) {
   if (!channelId) {
     return {}
   }
   const params = new URLSearchParams([['channelId', channelId]])
-  const result = await axios.get('/api/beOfflineOnChannel', {
+  const result = await axios.get('/api/beOfflineInChannel', {
     params
   })
   return result.data
 }
 
-export async function beOnlineOnChannel (channelId) {
+export async function beOnlineInChannel (channelId) {
   if (!channelId) {
     return {}
   }
   const params = new URLSearchParams([['channelId', channelId]])
-  const result = await axios.get('/api/beOnlineOnChannel', {
+  const result = await axios.get('/api/beOnlineInChannel', {
     params
   })
   return result.data

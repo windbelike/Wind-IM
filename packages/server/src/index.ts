@@ -18,7 +18,7 @@ import cookieParser from 'cookie-parser'
 import { logoutPost } from './handler/http/logoutHandler'
 import { friendReqGet, friendReqPost } from './handler/http/friendReqhandler'
 import { friendGet } from './handler/http/friendHandler'
-import { channelListGet, channelJoinPost, channelPost, channelOnlineInfoGet, channelDelete, channelGet, beOnlineOnChannel, channelOnlineUsers, beOfflineOnChannel } from './handler/http/channelHandler'
+import { channelListGet, channelJoinPost, channelPost, channelOnlineInfoGet, channelDelete, channelGet, beOnlineInChannel, channelOnlineUsers, beOfflineInChannel } from './handler/http/channelHandler'
 import { roomGet, roomListGet } from './handler/http/roomMsgHandler'
 
 dotenv.config()
@@ -70,8 +70,8 @@ app.use(cors(corsOptions))
     console.log('/api/leave')
     res.json({ code: 200 })
   })
-  .get('/api/beOnlineOnChannel', loginValidator, beOnlineOnChannel)
-  .get('/api/beOfflineOnChannel', loginValidator, beOfflineOnChannel)
+  .get('/api/beOnlineInChannel', loginValidator, beOnlineInChannel)
+  .get('/api/beOfflineInChannel', loginValidator, beOfflineInChannel)
   .get('/api/channelOnlineUsers', loginValidator, channelOnlineUsers)
 
   .use(errorHandler) // for handling global error

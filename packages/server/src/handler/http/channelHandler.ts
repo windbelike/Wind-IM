@@ -1,4 +1,5 @@
 import { createChannel, deleteChannel, getChannelListByUid, getChannelMembers, isUserOnChannel, joinChannel, selectChannelById } from '@/service/channel/channelService'
+import { becomeOfflineInChannel, becomeOnlineInChannel, channelOnlineInfo } from '@/service/user/userService'
 import * as Boom from '@hapi/boom'
 import { redis } from 'utils/redisHolder'
 
@@ -106,7 +107,7 @@ export async function channelDelete (req, res, next) {
   }
 }
 
-export async function beOnlineOnChannel (req, res, next) {
+export async function beOnlineInChannel (req, res, next) {
   try {
     const channelId = parseInt(req.query?.channelId)
     if (!channelId) {
@@ -116,24 +117,22 @@ export async function beOnlineOnChannel (req, res, next) {
     if (!isUserOnChannel(user.id, channelId)) {
       throw Boom.badRequest('You have not joined this channel yet')
     }
-    const channelOnlineUsersKey = buildChannelOnlineUserskey(channelId)
-    redis.sadd(channelOnlineUsersKey, user.id)
-    res.json({ code: 0, data: 'beOnlineOnChannel' })
+    becomeOnlineInChannel(user.id, channelId)
+    res.json({ code: 0, data: 'beOnlineInChannel' })
   } catch (e) {
     next(e)
   }
 }
 
-export async function beOfflineOnChannel (req, res, next) {
+export async function beOfflineInChannel (req, res, next) {
   try {
     const channelId = parseInt(req.query?.channelId)
     if (!channelId) {
       throw Boom.badRequest('Invalid params error')
     }
     const user = req.windImUser
-    const channelOnlineUsersKey = buildChannelOnlineUserskey(channelId)
-    redis.srem(channelOnlineUsersKey, user.id)
-    res.json({ code: 0, data: 'beOfflineOnChannel' })
+    becomeOfflineInChannel(user.id, channelId)
+    res.json({ code: 0, data: 'beOfflineInChannel' })
   } catch (e) {
     next(e)
   }
@@ -145,9 +144,7 @@ export async function channelOnlineUsers (req, res, next) {
     if (!channelId) {
       throw Boom.badRequest('Invalid params error')
     }
-    const channelOnlineUsersKey = buildChannelOnlineUserskey(channelId)
-    const elementCount = await redis.scard(channelOnlineUsersKey) // get element count of a set
-    const onlineUsers = await redis.smembers(channelOnlineUsersKey)
+    const { elementCount = 0, onlineUsers = [] } = await channelOnlineInfo(channelId)
     res.json({ code: 0, data: { cnt: elementCount, onlineUsers } })
   } catch (e) {
     next(e)

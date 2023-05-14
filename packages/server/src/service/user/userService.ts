@@ -1,6 +1,7 @@
 import { prisma } from '@/utils/prismaHolder'
 import bcrypt from 'bcrypt'
 import * as Boom from '@hapi/boom'
+import { redis } from 'utils/redisHolder'
 
 export async function queryUserById (id:number) {
   return await prisma.user.findUnique({
@@ -71,5 +72,42 @@ async function generateUserTag (username: string) {
       return tag
     }
     retryTimes--
+  }
+}
+
+// become online status（global）
+export async function onlineHeartbeat (id) {
+  const userOnlineKey = buildUserOnlineKey(id)
+  await redis.set(userOnlineKey, 'true', 'EX', 60) // after 60s, become offline automatically
+}
+
+function buildUserOnlineKey (id) {
+  return `user-${id}-online`
+}
+
+// become online status in a channel
+export async function becomeOnlineInChannel (uid, channelId) {
+  const channelOnlineUsersKey = buildChannelOnlineUserskey(channelId)
+  redis.sadd(channelOnlineUsersKey, uid)
+}
+
+// become offline status in a channel
+export async function becomeOfflineInChannel (uid, channelId) {
+  const channelOnlineUsersKey = buildChannelOnlineUserskey(channelId)
+  redis.srem(channelOnlineUsersKey, uid)
+}
+
+export function buildChannelOnlineUserskey (channelId: number) {
+  return `channel-${channelId}-onlineUsers`
+}
+
+// get channel online info
+export async function channelOnlineInfo (channelId) {
+  const channelOnlineUsersKey = buildChannelOnlineUserskey(channelId)
+  const elementCount = await redis.scard(channelOnlineUsersKey) // get element count of a set
+  const onlineUsers = await redis.smembers(channelOnlineUsersKey)
+  return {
+    elementCount,
+    onlineUsers
   }
 }
