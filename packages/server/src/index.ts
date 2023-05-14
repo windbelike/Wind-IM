@@ -18,7 +18,7 @@ import cookieParser from 'cookie-parser'
 import { logoutPost } from './handler/http/logoutHandler'
 import { friendReqGet, friendReqPost } from './handler/http/friendReqhandler'
 import { friendGet, onlineFriendsGet } from './handler/http/friendHandler'
-import { channelListGet, channelJoinPost, channelPost, channelUserInfo, channelDelete, channelGet, beOnlineInChannel, channelOnlineUsers, beOfflineInChannel } from './handler/http/channelHandler'
+import { channelListGet, channelJoinPost, channelPost, channelUserInfo, channelDelete, channelGet, beOnlineInChannel, beOfflineInChannel } from './handler/http/channelHandler'
 import { roomGet, roomListGet } from './handler/http/roomMsgHandler'
 
 dotenv.config()
