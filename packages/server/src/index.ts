@@ -9,7 +9,7 @@ import cors from 'cors'
 import { SocketData, wsAuthMiddleware, wsOnConnect } from '@/handler/ws/msgHandler'
 import { loginValidator } from './utils/authUtils'
 import { privateMsgGet, privateMsgListGet, privateMsgPost } from './handler/http/privateMsgHandler'
-import { whoami } from './handler/http/userHandler'
+import { batchCheckUserOnlineGet, onlineHeartbeatGet, whoami } from './handler/http/userHandler'
 import { errorHandler } from './handler/http/errorHandler'
 import { loginPost } from './handler/http/loginHandler'
 import { signupPost } from './handler/http/signupHandler'
@@ -73,6 +73,8 @@ app.use(cors(corsOptions))
   .get('/api/beOnlineInChannel', loginValidator, beOnlineInChannel)
   .get('/api/beOfflineInChannel', loginValidator, beOfflineInChannel)
   .get('/api/channelOnlineUsers', loginValidator, channelOnlineUsers)
+  .get('/api/onlineHeartbeat', loginValidator, onlineHeartbeatGet)
+  .get('/api/batchCheckUserOnline', loginValidator, batchCheckUserOnlineGet)
 
   .use(errorHandler) // for handling global error
 

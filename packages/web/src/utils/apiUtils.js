@@ -88,3 +88,8 @@ export async function beOnlineInChannel (channelId) {
   })
   return result.data
 }
+
+export async function onlineHeartbeat () {
+  const result = await axios.get('/api/onlineHeartbeat')
+  return result.data
+}

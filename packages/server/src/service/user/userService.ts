@@ -78,7 +78,7 @@ async function generateUserTag (username: string) {
 // become online status（global）
 export async function onlineHeartbeat (id) {
   const userOnlineKey = buildUserOnlineKey(id)
-  await redis.set(userOnlineKey, 'true', 'EX', 60) // after 60s, become offline automatically
+  await redis.set(userOnlineKey, 'true', 'EX', 30) // after 30s, become offline automatically
 }
 
 function buildUserOnlineKey (id) {
