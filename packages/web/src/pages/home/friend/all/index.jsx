@@ -7,7 +7,16 @@ import FriendCard from '../FriendCard'
 import Layout from '@/pages/Layout'
 import { getFriendList } from '@/utils/apiUtils'
 
-export default function All () {
+All.getLayout = function getLayout (page) {
+  return (
+    <Layout>
+      <HomeLayout>{page}</HomeLayout>
+    </Layout>
+  )
+}
+
+export default function All ({ sideBarActiveState }) {
+  console.log('sideBarActiveState:' + sideBarActiveState)
   const [openAddFriendWindow, setOpenAddFriendWindow] = useState(false)
   const { isLoading, error, data } = useQuery('getAllFriends', getFriendList)
 
@@ -32,13 +41,5 @@ export default function All () {
         })}
       </div>
     </div>
-  )
-}
-
-All.getLayout = function getLayout (page) {
-  return (
-    <Layout>
-      <HomeLayout>{page}</HomeLayout>
-    </Layout>
   )
 }

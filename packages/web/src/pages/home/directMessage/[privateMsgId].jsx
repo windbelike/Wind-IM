@@ -3,10 +3,9 @@ import { io } from 'socket.io-client'
 import { useEffect, useRef, useState } from 'react'
 import HomeLayout from '../HomeLayout'
 import EmojiPicker from 'emoji-picker-react'
-import axios from '@/utils/axiosUtils'
 import { useQuery } from 'react-query'
 import Avatar from '@/components/Avatar'
-import { getWhoami } from '@/utils/apiUtils'
+import { getPrivateMsgInfo, getWhoami } from '@/utils/apiUtils'
 import Layout from '@/pages/Layout'
 
 // todo implement client side msg storage with offset
@@ -14,12 +13,6 @@ import Layout from '@/pages/Layout'
 const defaultRetryTimes = 3
 
 let socket
-
-async function getPrivateMsgInfo (id) {
-  const params = new URLSearchParams([['id', id]])
-  const result = await axios.get('/api/msg/privateMsg', { params })
-  return result.data
-}
 
 DirectMessage.getLayout = function getLayout (page) {
   return (
@@ -119,7 +112,7 @@ export default function DirectMessage () {
       <div className='space-y-3 p-2 border-b-[1px] border-solid border-b-[#323437] text-white shrink-0'>
         <p className='font-bold text-2xl'>{privateMsgInfo?.data?.data?.msgTitle}</p>
         {/* <p className='text-white'>msgId: {privateMsgId}</p> */}
-        <p className=''>Direct message with {privateMsgInfo?.data?.data?.msgTitle}</p>
+        <p className='text-[#717579]'>Direct message with {privateMsgInfo?.data?.data?.msgTitle}</p>
       </div>
       <div id="msgScroll" className='overflow-y-scroll scrollbar h-full my-3'>
         {/* <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'}/>

@@ -16,7 +16,7 @@ export async function getChannelList () {
 }
 
 export async function getChannelInfo (channelId) {
-  if (!channelId) {
+  if (channelId == null) {
     return {}
   }
   const params = new URLSearchParams([['channelId', channelId]])
@@ -26,7 +26,7 @@ export async function getChannelInfo (channelId) {
 
 // get room list
 export async function getRoomList (channelId) {
-  if (!channelId) {
+  if (channelId == null) {
     return {}
   }
   const params = new URLSearchParams([['channelId', channelId]])
@@ -36,7 +36,7 @@ export async function getRoomList (channelId) {
 
 // get room info
 export async function getRoomInfo (roomId) {
-  if (!roomId) {
+  if (roomId == null) {
     return {}
   }
   const params = new URLSearchParams([['roomId', roomId]])
@@ -57,7 +57,7 @@ export async function leaveChannel ({ channelId }) {
 
 // get channel members
 export async function getChannelOnlineInfo (id) {
-  if (!id) {
+  if (id == null) {
     return {}
   }
   const params = new URLSearchParams([['id', id]])
@@ -68,7 +68,7 @@ export async function getChannelOnlineInfo (id) {
 }
 
 export async function beOfflineInChannel (channelId) {
-  if (!channelId) {
+  if (channelId == null) {
     return {}
   }
   const params = new URLSearchParams([['channelId', channelId]])
@@ -79,7 +79,7 @@ export async function beOfflineInChannel (channelId) {
 }
 
 export async function beOnlineInChannel (channelId) {
-  if (!channelId) {
+  if (channelId == null) {
     return {}
   }
   const params = new URLSearchParams([['channelId', channelId]])
@@ -101,5 +101,14 @@ export async function getFriendList () {
 
 export async function getOnlineFriendList () {
   const result = await axios.get('/api/onlineFriends')
+  return result.data
+}
+
+export async function getPrivateMsgInfo (id) {
+  if (id == null) {
+    return {}
+  }
+  const params = new URLSearchParams([['id', id]])
+  const result = await axios.get('/api/msg/privateMsg', { params })
   return result.data
 }

@@ -49,8 +49,8 @@ function FriendPanel ({ activeState }) {
     <div className='mt-3'>
       <p className='text-[#e6eaf0] text-sm mt-2'>FRIENDS</p>
       <div className='ml-4 mt-1'>
-        <FriendSelection name='Online' to='/home/friend/online'/>
         <FriendSelection name='All' to='/home/friend/all'/>
+        <FriendSelection name='Online' to='/home/friend/online'/>
         <FriendSelection name='Pending' to='/home/friend/pending'/>
       </div>
     </div>
