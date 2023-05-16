@@ -43,7 +43,7 @@ export default function FriendCard ({ usernameAndTag, online = false, sideBarAct
 function useJump2DirectMsg (createPrivateMsgMut, sideBarActiveState, router) {
   // use effect to avoid calling setState during render
   // or u will get an Warning: Cannot update a component from inside the function body of a different component.
-  // see: https://pl.legacy.reactjs.org/blog/2020/02/26/react-v16.13.0.html 
+  // see: https://pl.legacy.reactjs.org/blog/2020/02/26/react-v16.13.0.html
   useEffect(() => {
     if (createPrivateMsgMut.data) {
       const privateMsgId = createPrivateMsgMut.data.data?.id

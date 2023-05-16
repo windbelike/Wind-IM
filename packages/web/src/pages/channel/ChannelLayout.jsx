@@ -84,7 +84,7 @@ function ChannelRightSidebar ({ channelId }) {
         })}
       </div>
       <div>
-        <div>OFFLINE - {data ? data.data?.onlineUserCnt : 0}</div>
+        <div>OFFLINE - {data ? data.data?.offlineUserCnt : 0}</div>
         {data != null && data.data?.members?.filter(m => !m.online).map((member) => {
           return (
             <div key={member.uid} className='flex my-1 items-center space-x-3 p-2 hover:bg-gray-600 rounded-lg'>
