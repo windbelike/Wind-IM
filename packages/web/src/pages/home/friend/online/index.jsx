@@ -7,7 +7,7 @@ import FriendCard from '../FriendCard'
 import Layout from '@/pages/Layout'
 import { getOnlineFriendList } from '@/utils/apiUtils'
 
-export default function Online () {
+export default function Online ({ sideBarActiveState }) {
   const [openAddFriendWindow, setOpenAddFriendWindow] = useState(false)
   const { isLoading, error, data } = useQuery('getAllFriends', getOnlineFriendList)
 
@@ -29,7 +29,7 @@ export default function Online () {
         }
         {data && data.data?.map((item, idx) => {
           const usernameAndTag = `${item.friendRel?.username}#${item.friendRel?.tag}`
-          return <FriendCard key={idx} usernameAndTag={usernameAndTag} online={item.friendRel.online}/>
+          return <FriendCard key={idx} usernameAndTag={usernameAndTag} online={item.friendRel.online} sideBarActiveState={sideBarActiveState}/>
         })}
       </div>
     </div>

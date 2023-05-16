@@ -1,16 +1,14 @@
-import { useState } from 'react'
+import { useState, cloneElement } from 'react'
 import HomeSideBar from './HomeSideBar'
 
 export default function HomeLayout ({ children }) {
   const sideBarActiveState = useState('')
-  // const Children = children
-  // const c = <Children sideBarActiveState={sideBarActiveState} />
+  const childrenWithProps = cloneElement(children, { sideBarActiveState })
   return (
     <>
       <div className='h-full w-full bg-[#25272a] flex'>
-        <HomeSideBar />
-        {/* todo pass sideBarActiveState to children as props */}
-        {children}
+        <HomeSideBar sideBarActiveState={sideBarActiveState}/>
+        {childrenWithProps}
       </div>
     </>
   )

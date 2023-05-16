@@ -5,14 +5,12 @@ import { getWhoami } from '@/utils/apiUtils'
 import { useState } from 'react'
 import Avatar from '@/components/Avatar'
 
-export default function HomeSideBar () {
-  const activeState = useState('')
-
+export default function HomeSideBar ({ sideBarActiveState }) {
   return (
     <div className="p-5 shrink-0 flex flex-col h-full w-64 border-r-[1px] border-solid border-r-[#323437] overflow-y-hidden">
       <UserInfoPanel />
-      <FriendPanel activeState={activeState}/>
-      <DirectMsgPanel activeState={activeState}/>
+      <FriendPanel activeState={sideBarActiveState}/>
+      <DirectMsgPanel activeState={sideBarActiveState}/>
     </div>
   )
 }
