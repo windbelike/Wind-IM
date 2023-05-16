@@ -1,6 +1,5 @@
 import Avatar from '@/components/Avatar'
 import axios from '@/utils/axiosUtils'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { AiOutlineMessage, AiOutlineUserDelete } from 'react-icons/ai'

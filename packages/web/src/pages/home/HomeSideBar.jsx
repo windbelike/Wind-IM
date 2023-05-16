@@ -46,7 +46,7 @@ function FriendPanel ({ activeState }) {
   return (
     <div className='mt-3'>
       <p className='text-[#e6eaf0] text-sm mt-2'>FRIENDS</p>
-      <div className='ml-4 mt-1'>
+      <div className='ml-4 mt-1 flex flex-col space-y-1'>
         <FriendSelection name='All' to='/home/friend/all'/>
         <FriendSelection name='Online' to='/home/friend/online'/>
         <FriendSelection name='Pending' to='/home/friend/pending'/>
@@ -80,7 +80,7 @@ function DirectMsgPanel ({ activeState }) {
   return (
     <div className='mt-3'>
       <p className='text-[#e6eaf0] text-sm mt-2'>DIRECT MESSAGES</p>
-      <div className='ml-4 mt-1'>
+      <div className='ml-4 mt-1 flex flex-col space-y-1'>
         {data && data.data?.map((pm, idx) => {
           return <DirectMsgSelection key={idx} name={pm.msgTitle} to={`/home/directMessage/${pm.id}`}/>
         })}

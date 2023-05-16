@@ -7,6 +7,14 @@ import FriendCard from '../FriendCard'
 import Layout from '@/pages/Layout'
 import { getOnlineFriendList } from '@/utils/apiUtils'
 
+Online.getLayout = function getLayout (page) {
+  return (
+    <Layout>
+      <HomeLayout>{page}</HomeLayout>
+    </Layout>
+  )
+}
+
 export default function Online ({ sideBarActiveState }) {
   const [openAddFriendWindow, setOpenAddFriendWindow] = useState(false)
   const { isLoading, error, data } = useQuery('getAllFriends', getOnlineFriendList)
@@ -14,7 +22,7 @@ export default function Online ({ sideBarActiveState }) {
   return (
     <div className='p-5'>
       <div className='flex'>
-        <h1 className='text-white'>Online&nbsp;-&nbsp;{data ? data.data?.length : 0}</h1>
+        <h1 className='text-white'>Online - {data ? data.data?.length : 0}</h1>
         <AddFriendButton setOpenAddFriendWindow={setOpenAddFriendWindow}/>
       </div>
 
@@ -33,13 +41,5 @@ export default function Online ({ sideBarActiveState }) {
         })}
       </div>
     </div>
-  )
-}
-
-Online.getLayout = function getLayout (page) {
-  return (
-    <Layout>
-      <HomeLayout>{page}</HomeLayout>
-    </Layout>
   )
 }
