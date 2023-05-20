@@ -52,12 +52,12 @@ export default function Sidebar () {
         <ChannelIconList tabState={tabState}/>
         <AddChannelIcon />
         {/* <SidebarIcon linkTo='/explore' text='Explore' icon={<AiOutlineCompass size="28"/>} tabState ={tabState}/> */}
-        <SidebarIcon linkTo='/user/profile' text='Profile' icon={<AiOutlineUser size="28"/>} tabState ={tabState}/>
+        {/* <SidebarIcon linkTo='/user/profile' text='Profile' icon={<AiOutlineUser size="28"/>} tabState ={tabState}/> */}
         {/* <SideBarIcon linkTo='/entry/login' text='Profile' icon={<AiOutlineUser size="28" />} /> */}
         <SidebarIcon linkTo='/entry/logout' text='Logout' icon={<AiOutlineLogin size="28" />} tabState ={tabState}/>
-        <div className="mt-auto">
+        {/* <div className="mt-auto">
           <SidebarIcon linkTo='/settings' text="Settings" icon={<AiOutlineSetting size="28" />} tabState ={tabState}/>
-        </div>
+        </div> */}
       </div>
     </div>
   )
