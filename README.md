@@ -1,7 +1,15 @@
 An IM (as Instant Messaging) made by Sawyer.
 
 ## Demo
-![demo](readmeStuff/windimDemo.png)
+![demo](readmeStuff/friends.png)
+
+![demo](readmeStuff/addFriend.png)
+
+![demo](readmeStuff/dm.png)
+
+![demo](readmeStuff/addChannel.png)
+
+![demo](readmeStuff/channelMessage.png)
 
 ## Getting Started
 
