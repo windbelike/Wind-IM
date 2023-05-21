@@ -47,6 +47,7 @@ Currently using sqlite for dev enviroment.
 
 1. Message ordering
 2. At least once message arrival
+3. Client side message caching
 
 ## License
 
