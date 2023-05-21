@@ -7,6 +7,7 @@ import { useQuery } from 'react-query'
 import Avatar from '@/components/Avatar'
 import { getPrivateMsgInfo, getWhoami } from '@/utils/apiUtils'
 import Layout from '@/pages/Layout'
+import { getLatestStoredDMOffset, storeDirectMsg } from '@/utils/msgUtils'
 
 // todo implement client side msg storage with offset
 
@@ -40,10 +41,8 @@ export default function DirectMessage () {
   const { privateMsgId } = router.query
   const privateMsgInfo = useQuery(['getPrivateMsgInfo', privateMsgId], () => getPrivateMsgInfo(privateMsgId))
   const [currMsgList, setCurrMsgList] = useState([])
-  const $currMsgList = useRef([])
-  $currMsgList.current = currMsgList
   const $msgInput = useRef()
-  useWs(privateMsgId, $currMsgList, setCurrMsgList)
+  useWs(privateMsgId, setCurrMsgList)
   const [loadEmojiKeyboard, setLoadEmojiKeyboard] = useState(false)
 
   // init effect
@@ -75,11 +74,11 @@ export default function DirectMessage () {
       ext: { retryTimes: defaultRetryTimes }
     }
     cleanInputMsg()
-    emit(msg2Send)
+    emitMessage(msg2Send)
   }
 
   // At least once message arrival
-  function emit (msg) {
+  function emitMessage (msg) {
     if (msg.ext?.retryTimes < 0) {
       console.log('Ran out of retry times.')
       return
@@ -92,9 +91,9 @@ export default function DirectMessage () {
           // retry sending msg, cuz the other side did not acknowledge the event in the given delay
           console.log('emit error, going to retry, e=' + JSON.stringify(err))
           msg.ext.retryTimes--
-          emit(msg)
+          emitMessage(msg)
         } else {
-          renderMsg(msg, currMsgList, setCurrMsgList)
+          saveAndRenderMsg(msg, setCurrMsgList, privateMsgId)
         }
       })
     }
@@ -151,14 +150,21 @@ function SingleMsg ({ username, content, sendByMyself = false }) {
 }
 
 // render the msg panel
-function renderMsg (newMsg, currMsgList, setCurrMsgList) {
+function saveAndRenderMsg (newMsg, setCurrMsgList, privateMsgId) {
   if (!newMsg) {
     return
   }
+  // store msg to localStorage
+  storeDirectMsg(privateMsgId, newMsg)
+  console.log('latest msg offset:' + getLatestStoredDMOffset(privateMsgId))
   if (Array.isArray(newMsg)) {
-    setCurrMsgList([...currMsgList, ...newMsg])
+    setCurrMsgList((currMsgList) => {
+      return [...currMsgList, ...newMsg]
+    })
   } else {
-    setCurrMsgList([...currMsgList, newMsg])
+    setCurrMsgList((currMsgList) => {
+      return [...currMsgList, newMsg]
+    })
   }
   // wait for next tick
   setTimeout(() => {
@@ -167,10 +173,9 @@ function renderMsg (newMsg, currMsgList, setCurrMsgList) {
   }, 0)
 }
 
-function useWs (privateMsgId, $currMsgList, setCurrMsgList) {
+function useWs (privateMsgId, setCurrMsgList) {
   useEffect(() => {
     if (privateMsgId) {
-      // fixme useEffect runs twice, socket connects twice
       socket = io(process.env.NEXT_PUBLIC_WS_HOST, {
         withCredentials: true, // send cookies
         transports: ['websocket'],
@@ -192,11 +197,11 @@ function useWs (privateMsgId, $currMsgList, setCurrMsgList) {
       const privateMsgEvent = buildPrivateMsgEvent(privateMsgId)
       const privateMsgInitEvent = buildInitPrivateMsgEvent(privateMsgId)
       socket.on(privateMsgInitEvent, function (msgList) {
-        renderMsg(msgList, $currMsgList.current, setCurrMsgList)
+        saveAndRenderMsg(msgList, setCurrMsgList, privateMsgId)
       })
       socket.on(privateMsgEvent, function (msg) {
         msg.sendByMyself = false
-        renderMsg(msg, $currMsgList.current, setCurrMsgList)
+        saveAndRenderMsg(msg, setCurrMsgList, privateMsgId)
       })
     }
     return () => { socket?.disconnect() }
