@@ -100,7 +100,6 @@ export default function ChannelRoom () {
     const whoami = whoamiQuery?.data?.data?.username || 'Yourself'
     const msg2Send = {
       content: msgInput,
-      sendByMyself: true,
       senderUsername: whoami,
       ext: { retryTimes: 3 }
     }
@@ -115,10 +114,9 @@ export default function ChannelRoom () {
       </div>
       <div id="msgScroll" className='overflow-y-scroll scrollbar h-full my-3'>
         {/* <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'}/>
-          <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'} sendByMyself={true}/>
           <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'}/> */}
         {currMsgList.map((m, idx) => {
-          return <SingleMsg className='text-white' key={idx} content={m.content} sendByMyself={m.sendByMyself} username={m.senderUsername}/>
+          return <SingleMsg className='text-white' key={idx} content={m.content} username={m.senderUsername}/>
         })}
       </div>
       <div className='fixed right-20 bottom-32'>{ loadEmojiKeyboard && <EmojiPicker searchDisabled={true} theme='dark' emojiStyle='native' onEmojiClick={onClickEmoji}/> }
@@ -135,7 +133,7 @@ export default function ChannelRoom () {
 function SingleMsg ({ username, content }) {
   return (
     <>
-      <div className='flex mx-2 p-3 text-white rounded-lg hover:bg-[#323437]'>
+      <div className='flex mx-2 p-3 text-white rounded-lg hover:bg-[#323437] duration-300 ease-linear'>
         {/* <img className='w-12 h-12 bg-white rounded-full' src="https://avatars.githubusercontent.com/u/33996345?v=4" alt="" /> */}
         <Avatar username={username} />
         <div className='flex flex-col items-start mx-2'>
@@ -204,7 +202,6 @@ function useWebSocket (roomId, setCurrMsgList) {
       const roomMsgEvent = buildRoomMsgEvent(roomId)
       const roomMsgInitEvent = buildRoomMsgInitEvent(roomId)
       socket.on(roomMsgEvent, function (msg) {
-        msg.sendByMyself = false
         saveAndRenderMsg(msg, setCurrMsgList, roomId)
       })
       socket.on(roomMsgInitEvent, function (msgList) {

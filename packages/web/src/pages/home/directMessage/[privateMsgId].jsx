@@ -137,7 +137,7 @@ export default function DirectMessage () {
 function SingleMsg ({ username, content }) {
   return (
     <>
-      <div className='flex mx-2 p-3 text-white rounded-lg hover:bg-[#323437]'>
+      <div className='flex mx-2 p-3 text-white rounded-lg hover:bg-[#323437] duration-300 ease-linear'>
         {/* <img className='w-12 h-12 bg-white rounded-full' src="https://avatars.githubusercontent.com/u/33996345?v=4" alt="" /> */}
         <Avatar username={username} />
         <div className='flex flex-col items-start mx-2'>
