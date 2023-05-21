@@ -7,7 +7,7 @@ import { useQuery } from 'react-query'
 import Avatar from '@/components/Avatar'
 import { getPrivateMsgInfo, getWhoami } from '@/utils/apiUtils'
 import Layout from '@/pages/Layout'
-import { getLatestStoredDMOffset, storeDirectMsg } from '@/utils/msgUtils'
+import { getDMfromLocalStorage, getLatestStoredDMOffset, storeDirectMsg } from '@/utils/msgUtils'
 
 // todo implement client side msg storage with offset
 
@@ -93,7 +93,9 @@ export default function DirectMessage () {
           msg.ext.retryTimes--
           emitMessage(msg)
         } else {
-          saveAndRenderMsg(msg, setCurrMsgList, privateMsgId)
+          const persistedMsgId = resp.sentMsg?.id
+          msg.id = persistedMsgId
+          renderMsg(msg, setCurrMsgList, privateMsgId)
         }
       })
     }
@@ -151,12 +153,19 @@ function SingleMsg ({ username, content, sendByMyself = false }) {
 
 // render the msg panel
 function saveAndRenderMsg (newMsg, setCurrMsgList, privateMsgId) {
-  if (!newMsg) {
+  if (newMsg == null || privateMsgId == null) {
     return
   }
   // store msg to localStorage
   storeDirectMsg(privateMsgId, newMsg)
-  console.log('latest msg offset:' + getLatestStoredDMOffset(privateMsgId))
+  // render msg to screen
+  renderMsg(newMsg, setCurrMsgList, privateMsgId)
+}
+
+function renderMsg (newMsg, setCurrMsgList, privateMsgId) {
+  if (newMsg == null || privateMsgId == null) {
+    return
+  }
   if (Array.isArray(newMsg)) {
     setCurrMsgList((currMsgList) => {
       return [...currMsgList, ...newMsg]
@@ -175,13 +184,15 @@ function saveAndRenderMsg (newMsg, setCurrMsgList, privateMsgId) {
 
 function useWs (privateMsgId, setCurrMsgList) {
   useEffect(() => {
+    const msgOffset = getLatestStoredDMOffset(privateMsgId)
+    console.log('msg offset:' + msgOffset)
     if (privateMsgId) {
       socket = io(process.env.NEXT_PUBLIC_WS_HOST, {
         withCredentials: true, // send cookies
         transports: ['websocket'],
         query: {
           privateMsgId,
-          privateMsgOffset: 0 // received private msg offset
+          privateMsgOffset: msgOffset
         }
       })
 
@@ -196,12 +207,16 @@ function useWs (privateMsgId, setCurrMsgList) {
       // on initiating & receiving private msg
       const privateMsgEvent = buildPrivateMsgEvent(privateMsgId)
       const privateMsgInitEvent = buildInitPrivateMsgEvent(privateMsgId)
-      socket.on(privateMsgInitEvent, function (msgList) {
-        saveAndRenderMsg(msgList, setCurrMsgList, privateMsgId)
-      })
       socket.on(privateMsgEvent, function (msg) {
         msg.sendByMyself = false
         saveAndRenderMsg(msg, setCurrMsgList, privateMsgId)
+      })
+      socket.on(privateMsgInitEvent, function (msgList) {
+        // init msg from localStorage
+        const cachedMsg = getDMfromLocalStorage(privateMsgId)
+        renderMsg(cachedMsg, setCurrMsgList, privateMsgId)
+        // get the rest of missing msg
+        saveAndRenderMsg(msgList, setCurrMsgList, privateMsgId)
       })
     }
     return () => { socket?.disconnect() }

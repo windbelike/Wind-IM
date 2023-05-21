@@ -21,6 +21,16 @@ export function storeDirectMsg (privateMsgId, msg) {
   localStorage.setItem(storageKey, msgArrayStr)
 }
 
+export function getDMfromLocalStorage (privateMsgId) {
+  const storageKey = buildPrivateMsgStoreKey(privateMsgId)
+  let currentMsgListStr = localStorage.getItem(storageKey)
+  if (currentMsgListStr == null) {
+    currentMsgListStr = '[]'
+  }
+  const msgArray = JSON.parse(currentMsgListStr)
+  return msgArray
+}
+
 // get the latest offset of an DM
 export function getLatestStoredDMOffset (privateMsgId) {
   const storageKey = buildPrivateMsgStoreKey(privateMsgId)
@@ -30,5 +40,5 @@ export function getLatestStoredDMOffset (privateMsgId) {
   }
   const msgArray = JSON.parse(currentMsgListStr)
   const latestMsg = msgArray.pop()
-  return latestMsg.ids
+  return latestMsg.id
 }

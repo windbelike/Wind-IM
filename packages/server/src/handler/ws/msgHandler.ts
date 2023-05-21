@@ -91,10 +91,9 @@ export async function wsOnConnect (socket) {
         createdAt: msgModel.createdAt,
         id: msgModel.id
       }
-      // ...
       // simulate server timeout, and ack to client
       // setTimeout(() => ackFn({ code: 0 }), 1000)
-      ackFn({ code: 0 })
+      ackFn({ code: 0, sentMsg: msg2Send })
 
       // broadcast: exclude the sender ws
       socket.broadcast.emit(privateMsgEvent, msg2Send)
@@ -112,10 +111,9 @@ export async function wsOnConnect (socket) {
         id: msgModel.id
       }
       console.log('on receive room msg:' + JSON.stringify(msg2Send))
-      // ...
       // simulate server timeout, and ack to client
       // setTimeout(() => ackFn({ code: 0 }), 1000)
-      ackFn({ code: 0 })
+      ackFn({ code: 0, sentMsg: msg2Send })
 
       // broadcast: exclude the sender ws
       socket.broadcast.emit(roomMsgEvent, msg2Send)
@@ -143,7 +141,6 @@ async function sendAllMissedPrivateMsg (socket, privateMsgId, offset) {
   if (!allMissedMsg) {
     return
   }
-  console.log('privateMsgInitEvent:' + privateMsgInitEvent)
   const allMissedMsgVO = allMissedMsg.map(m => {
     const msg2Send = {
       id: m.id,
