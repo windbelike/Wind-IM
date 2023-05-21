@@ -12,6 +12,8 @@ services:
       - 2000:2000
     networks:
       - internal
+    environment:
+      - WINDIM_ENV=beta
 
   redis: 
     image: redis:alpine
@@ -19,8 +21,8 @@ services:
       - redis:/data
     networks:
       - internal
-    ports:
-      - 6379:6379
+    expose:
+      - 6379
 
 volumes:
   redis:
