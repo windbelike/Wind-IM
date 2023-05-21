@@ -90,8 +90,12 @@ export async function beOnlineInChannel (channelId) {
 }
 
 export async function onlineHeartbeat () {
-  const result = await axios.get('/api/onlineHeartbeat')
-  return result.data
+  try {
+    const result = await axios.get('/api/onlineHeartbeat')
+    return result.data
+  } catch (e) {
+    console.error('onlineHeartbeat error')
+  }
 }
 
 export async function getFriendList () {

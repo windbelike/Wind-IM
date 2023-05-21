@@ -1,4 +1,4 @@
-import { beOfflineInChannel, beOnlineInChannel, deleteChannel, getChannelInfo, getChannelUserInfo, getPrivateMsg, getRoomList, getWhoami, leaveChannel } from '@/utils/apiUtils'
+import { beOfflineInChannel, beOnlineInChannel, deleteChannel, getChannelInfo, getChannelUserInfo, getPrivateMsg, getRoomList, leaveChannel } from '@/utils/apiUtils'
 import Link from 'next/link'
 import { useMutation, useQuery } from 'react-query'
 import { AiOutlineNumber, AiOutlineMenu } from 'react-icons/ai'

@@ -33,6 +33,9 @@ function buildInitPrivateMsgEvent (privateMsgId) {
 // component entry point
 export default function DirectMessage () {
   const { isLoading, data, error } = useQuery('whoami', getWhoami)
+  if (error) {
+    console.error(error)
+  }
   const router = useRouter()
   const { privateMsgId } = router.query
   const privateMsgInfo = useQuery(['getPrivateMsgInfo', privateMsgId], () => getPrivateMsgInfo(privateMsgId))
