@@ -1,13 +1,13 @@
 import Avatar from '@/components/Avatar'
 import Layout from '@/pages/Layout'
 import { getChannelUserInfo, getRoomInfo, getRoomList, getWhoami } from '@/utils/apiUtils'
-import axios from '@/utils/axiosUtils'
 import EmojiPicker from 'emoji-picker-react'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
 import { io } from 'socket.io-client'
 import ChannelLayout from '../ChannelLayout'
+import { getLatestStoredRMOffset, getRMFromLocalStorage, storeRoomMsg } from '@/utils/msgUtils'
 
 let socket
 
@@ -38,10 +38,8 @@ export default function ChannelRoom () {
   const $msgInput = useRef()
   const { data, isLoading, error } = useQuery(['getRoomInfo', roomId], () => getRoomInfo(roomId))
   const [currMsgList, setCurrMsgList] = useState([])
-  const $currMsgList = useRef([])
-  $currMsgList.current = currMsgList
   const whoamiQuery = useQuery('whoami', getWhoami)
-  useWebSocket(roomId, $currMsgList, setCurrMsgList) // connect to websocket for room
+  useWebSocket(roomId, setCurrMsgList) // connect to websocket for room
 
   // init effect
   useEffect(() => {
@@ -77,7 +75,10 @@ export default function ChannelRoom () {
           msg.ext.retryTimes--
           emit(msg)
         } else {
-          renderMsg(msg, currMsgList, setCurrMsgList)
+          // todo backend msg id from resp
+          const persistedMsgId = resp.sentMsg?.id
+          msg.id = persistedMsgId
+          renderMsg(msg, setCurrMsgList, roomId)
         }
       })
     }
@@ -131,7 +132,7 @@ export default function ChannelRoom () {
   )
 }
 
-function SingleMsg ({ username, content, sendByMyself = false }) {
+function SingleMsg ({ username, content }) {
   return (
     <>
       <div className='flex mx-2 p-3 text-white rounded-lg hover:bg-[#323437]'>
@@ -146,15 +147,28 @@ function SingleMsg ({ username, content, sendByMyself = false }) {
   )
 }
 
+function saveAndRenderMsg (newMsg, setCurrMsgList, roomId) {
+  if (newMsg == null || roomId == null) {
+    return
+  }
+
+  storeRoomMsg(roomId, newMsg)
+  renderMsg(newMsg, setCurrMsgList)
+}
+
 // render the msg panel
-function renderMsg (newMsg, currMsgList, setCurrMsgList) {
-  if (!newMsg) {
+function renderMsg (newMsg, setCurrMsgList) {
+  if (newMsg == null || setCurrMsgList == null) {
     return
   }
   if (Array.isArray(newMsg)) {
-    setCurrMsgList([...currMsgList, ...newMsg])
+    setCurrMsgList((currMsgList) => {
+      return [...currMsgList, ...newMsg]
+    })
   } else {
-    setCurrMsgList([...currMsgList, newMsg])
+    setCurrMsgList((currMsgList) => {
+      return [...currMsgList, newMsg]
+    })
   }
   // wait for next tick
   setTimeout(() => {
@@ -163,8 +177,10 @@ function renderMsg (newMsg, currMsgList, setCurrMsgList) {
   }, 0)
 }
 
-function useWebSocket (roomId, $currMsgList, setCurrMsgList) {
+function useWebSocket (roomId, setCurrMsgList) {
   useEffect(() => {
+    const msgOffset = getLatestStoredRMOffset(roomId)
+    console.log('msgOffset:' + msgOffset)
     if (roomId) {
       // fixme useEffect runs twice, socket connects twice
       socket = io(process.env.NEXT_PUBLIC_WS_HOST, {
@@ -172,7 +188,7 @@ function useWebSocket (roomId, $currMsgList, setCurrMsgList) {
         transports: ['websocket'],
         query: {
           roomId,
-          roomMsgOffset: 0 // received room msg offset
+          roomMsgOffset: msgOffset
         }
       })
 
@@ -187,14 +203,16 @@ function useWebSocket (roomId, $currMsgList, setCurrMsgList) {
       // on initiating & receiving room msg
       const roomMsgEvent = buildRoomMsgEvent(roomId)
       const roomMsgInitEvent = buildRoomMsgInitEvent(roomId)
-      socket.on(roomMsgInitEvent, function (msgList) {
-        renderMsg(msgList, $currMsgList.current, setCurrMsgList)
-      })
       socket.on(roomMsgEvent, function (msg) {
         msg.sendByMyself = false
-        console.log('on roomMsgEvent, msg=' + JSON.stringify(msg))
-        // todo fix invalid msg username
-        renderMsg(msg, $currMsgList.current, setCurrMsgList)
+        saveAndRenderMsg(msg, setCurrMsgList, roomId)
+      })
+      socket.on(roomMsgInitEvent, function (msgList) {
+        // get msg from cache
+        const cachedMsg = getRMFromLocalStorage(roomId)
+        renderMsg(cachedMsg, setCurrMsgList, roomId)
+        // render the rest of missing messages
+        saveAndRenderMsg(msgList, setCurrMsgList, roomId)
       })
     }
     return () => { socket?.disconnect() }

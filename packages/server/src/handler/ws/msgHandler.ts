@@ -45,6 +45,7 @@ export async function wsAuthMiddleware (socket, next) {
     const roomId = socket.handshake.query?.roomId
     const privateMsgId = socket.handshake.query?.privateMsgId
     const privateMsgOffset = socket.handshake.query?.privateMsgOffset ?? 0
+    const roomMsgOffset = socket.handshake.query?.roomMsgOffset ?? 0
     if (!privateMsgId && !roomId) {
       next(new Error('unknown msgId'))
     }
@@ -54,6 +55,7 @@ export async function wsAuthMiddleware (socket, next) {
       privateMsgId,
       toUserId,
       privateMsgOffset,
+      roomMsgOffset,
       roomId
     }
     next()
@@ -146,8 +148,7 @@ async function sendAllMissedPrivateMsg (socket, privateMsgId, offset) {
       id: m.id,
       content: m.content,
       senderUsername: m.fromUidRel.username,
-      createdAt: m.createdAt,
-      sendByMyself: socket.data?.user?.id == m.fromUid
+      createdAt: m.createdAt
     }
     return msg2Send
   })
@@ -169,8 +170,7 @@ async function sendAllMissedRoomMsg (socket, roomId, offset) {
       id: m.id,
       content: m.content,
       senderUsername: m.fromUidRel.username,
-      createdAt: m.createdAt,
-      sendByMyself: socket.data?.user?.id == m.fromUid
+      createdAt: m.createdAt
     }
     return msg2Send
   })

@@ -69,7 +69,6 @@ export default function DirectMessage () {
     const whoami = data?.data?.username || 'Yourself'
     const msg2Send = {
       content: msgInput,
-      sendByMyself: true,
       senderUsername: whoami,
       ext: { retryTimes: defaultRetryTimes }
     }
@@ -120,10 +119,9 @@ export default function DirectMessage () {
       </div>
       <div id="msgScroll" className='overflow-y-scroll scrollbar h-full my-3'>
         {/* <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'}/>
-          <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'} sendByMyself={true}/>
           <SingleMsg className='text-white' content={'test msg'} email={'unsetEmail'}/> */}
         {currMsgList.map((m, idx) => {
-          return <SingleMsg className='text-white' key={idx} content={m.content} sendByMyself={m.sendByMyself} username={m.senderUsername}/>
+          return <SingleMsg className='text-white' key={idx} content={m.content} username={m.senderUsername}/>
         })}
       </div>
       <div className='fixed right-20 bottom-32'>{ loadEmojiKeyboard && <EmojiPicker searchDisabled={true} theme='dark' emojiStyle='native' onEmojiClick={onClickEmoji}/> }
@@ -136,7 +134,7 @@ export default function DirectMessage () {
   )
 }
 
-function SingleMsg ({ username, content, sendByMyself = false }) {
+function SingleMsg ({ username, content }) {
   return (
     <>
       <div className='flex mx-2 p-3 text-white rounded-lg hover:bg-[#323437]'>
@@ -159,11 +157,11 @@ function saveAndRenderMsg (newMsg, setCurrMsgList, privateMsgId) {
   // store msg to localStorage
   storeDirectMsg(privateMsgId, newMsg)
   // render msg to screen
-  renderMsg(newMsg, setCurrMsgList, privateMsgId)
+  renderMsg(newMsg, setCurrMsgList)
 }
 
-function renderMsg (newMsg, setCurrMsgList, privateMsgId) {
-  if (newMsg == null || privateMsgId == null) {
+function renderMsg (newMsg, setCurrMsgList) {
+  if (newMsg == null) {
     return
   }
   if (Array.isArray(newMsg)) {
@@ -208,14 +206,13 @@ function useWs (privateMsgId, setCurrMsgList) {
       const privateMsgEvent = buildPrivateMsgEvent(privateMsgId)
       const privateMsgInitEvent = buildInitPrivateMsgEvent(privateMsgId)
       socket.on(privateMsgEvent, function (msg) {
-        msg.sendByMyself = false
         saveAndRenderMsg(msg, setCurrMsgList, privateMsgId)
       })
       socket.on(privateMsgInitEvent, function (msgList) {
         // init msg from localStorage
         const cachedMsg = getDMfromLocalStorage(privateMsgId)
         renderMsg(cachedMsg, setCurrMsgList, privateMsgId)
-        // get the rest of missing msg
+        // render the rest of missing messages
         saveAndRenderMsg(msgList, setCurrMsgList, privateMsgId)
       })
     }
