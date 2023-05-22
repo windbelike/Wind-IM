@@ -111,7 +111,7 @@ function ChannelInfoPanel ({ channelId }) {
       <div className="p-4 text-[#e6eaf0] font-bold text-xl flex items-center border-b-[1px] border-[#323437]">
         {isLoading && <p >Anonymous</p>}
         {data && <p>{data.data?.name}</p>}
-        <div onClick={onMenuClick} className='ml-auto hover:cursor-pointer'><AiOutlineMenu size={20} /></div>
+        <button onClick={onMenuClick} className='ml-auto hover:cursor-pointer'><AiOutlineMenu size={20} /></button>
       </div>
       {manueActive && <ChannelMenu />}
     </div>
@@ -121,7 +121,6 @@ function ChannelInfoPanel ({ channelId }) {
 
 function ChannelMenu () {
   function onClickInvitePeople () {
-    console.log('onClickInvitePeople')
     // open modal
     const dialog = document.querySelector('dialog')
     dialog.showModal() // Opens a modal
@@ -139,10 +138,10 @@ function ChannelMenu () {
   }
 
   return (
-    <div className='absolute flex w-full h-[100px] p-3'>
-      <div className='flex flex-col bg-black rounded-md w-full text-gray-200 p-1 text-center'>
-        <span className='hover:cursor-pointer p-1 ' onClick={onClickInvitePeople}>Invite People</span>
-        <span>Channel Settings</span>
+    <div className='absolute flex w-full px-7'>
+      <div className='flex flex-col bg-[rgb(23,24,26)] rounded-md w-full text-gray-200 p-3'>
+        <span className='hover:cursor-pointer p-1 hover:bg-[#3b3c3f] rounded-lg' onClick={onClickInvitePeople}>Invite People</span>
+        <span className='hover:cursor-pointer p-1 hover:bg-[#3b3c3f] rounded-lg'>Channel Settings</span>
       </div>
       <dialog className='backdrop:bg-[rgba(0,0,0,0.5)] w-96 h-48'>
         <div className=''>
