@@ -1,4 +1,4 @@
-import { beOfflineInChannel, beOnlineInChannel, deleteChannel, getChannelInfo, getChannelUserInfo, getPrivateMsg, getRoomList, leaveChannel } from '@/utils/apiUtils'
+import { beOfflineInChannel, beOnlineInChannel, deleteChannel, getChannelInfo, getChannelUserInfo, getInviteUrl, getPrivateMsg, getRoomList, leaveChannel } from '@/utils/apiUtils'
 import Link from 'next/link'
 import { useMutation, useQuery } from 'react-query'
 import { AiOutlineNumber, AiOutlineMenu } from 'react-icons/ai'
@@ -113,17 +113,18 @@ function ChannelInfoPanel ({ channelId }) {
         {data && <p>{data.data?.name}</p>}
         <button onClick={onMenuClick} className='ml-auto hover:cursor-pointer'><AiOutlineMenu size={20} /></button>
       </div>
-      {manueActive && <ChannelMenu />}
+      {manueActive && <ChannelMenu channelId={channelId} />}
     </div>
 
   )
 }
 
-function ChannelMenu () {
+function ChannelMenu ({ channelId }) {
   function onClickInvitePeople () {
     // open modal
     const dialog = document.querySelector('dialog')
     dialog.showModal() // Opens a modal
+    // close when clicking else where
     dialog.addEventListener('click', e => {
       const dialogDimensions = dialog.getBoundingClientRect()
       if (
@@ -143,11 +144,26 @@ function ChannelMenu () {
         <span className='hover:cursor-pointer p-1 hover:bg-[#3b3c3f] rounded-lg' onClick={onClickInvitePeople}>Invite People</span>
         <span className='hover:cursor-pointer p-1 hover:bg-[#3b3c3f] rounded-lg'>Channel Settings</span>
       </div>
-      <dialog className='backdrop:bg-[rgba(0,0,0,0.5)] w-96 h-48'>
-        <div className=''>
-          <span>Invite friends to this channel.</span>
-        </div>
+      <dialog className='backdrop:bg-[rgba(0,0,0,0.5)] w-96 h-48 rounded-lg'>
+        <InviteDialogContent channelId={channelId}/>
       </dialog>
+    </div>
+  )
+}
+
+function InviteDialogContent ({ channelId }) {
+  // request api for a invite url
+  const { data, isLoading, error } = useQuery(['getInviteUrl', channelId], () => getInviteUrl(channelId))
+  console.log(data?.data)
+
+  return (
+    <div className=''>
+      <span>Invite friends to this channel.</span>
+      {/* display invite url */}
+      <div className='flex items-center space-x-3'>
+        <div className='w-full p-1 rounded-md'> {data?.data?.inviteUrl}</div>
+        <button className='bg-gray-400 text-white rounded-md p-1'>Copy</button>
+      </div>
     </div>
   )
 }

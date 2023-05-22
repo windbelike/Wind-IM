@@ -116,3 +116,13 @@ export async function getPrivateMsgInfo (id) {
   const result = await axios.get('/api/msg/privateMsg', { params })
   return result.data
 }
+
+// get inviteUrl
+export async function getInviteUrl (channelId) {
+  if (channelId == null) {
+    return {}
+  }
+  const params = new URLSearchParams([['channelId', channelId]])
+  const result = await axios.get('/api/channelInviteUrl', { params })
+  return result.data
+}

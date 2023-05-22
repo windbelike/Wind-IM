@@ -1,6 +1,8 @@
 import { prisma } from '@/utils/prismaHolder'
 import * as Boom from '@hapi/boom'
 import { createDefaultRoom, roomStatus } from '../room/roomService'
+import { redis } from '@/utils/redisHolder'
+import crypto from 'crypto'
 
 const channelStatus = {
   normal: 0,
@@ -275,4 +277,55 @@ export async function createChannel (uid, name, desc) {
   }
 
   return channel
+}
+
+type InviteInfo = {
+  invitorId: number,
+  channelId: number
+}
+
+export async function generateInviteUrl (uid, channelId) {
+  const isUserInChannel = await checkUserInChannel(uid, channelId)
+  if (!isUserInChannel) {
+    throw Boom.badRequest('User not in channel.')
+  }
+  const code = await generateInviteCode(uid, channelId)
+  console.log('code:' + code)
+  if (code == null) {
+    throw Boom.badRequest('Generate invite code failed.')
+  }
+
+  const FRONTEND_HOST = process.env.FRONTEND_HOST
+  return `${FRONTEND_HOST}/invite/${code}`
+}
+
+// generate a invite code
+async function generateInviteCode (uid, channelId) {
+  if (uid == null || channelId == null) {
+    return null
+  }
+  const inviteInfo: InviteInfo = {
+    invitorId: uid,
+    channelId
+  }
+
+  // generate uuid
+  const code = crypto.randomUUID().split('-')[0]
+  // expire in a day
+  const expireSec = 60 * 60 * 24
+  await redis.setex(code, expireSec, JSON.stringify(inviteInfo))
+
+  return code
+}
+
+export async function parseInviteCode (code) {
+  const inviteInfo = await redis.get(buildInviteInfoKey(code))
+  if (inviteInfo == null) {
+    return {}
+  }
+  return JSON.parse(inviteInfo)
+}
+
+function buildInviteInfoKey (code) {
+  return `invite_info_${code}`
 }

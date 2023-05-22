@@ -1,7 +1,6 @@
-import { checkUserInChannel, createChannel, deleteChannel, getChannelListByUid, getChannelMembers, isUserOnChannel, joinChannel, selectChannelById } from '@/service/channel/channelService'
+import { checkUserInChannel, createChannel, deleteChannel, generateInviteCode, generateInviteUrl, getChannelListByUid, getChannelMembers, isUserOnChannel, joinChannel, selectChannelById } from '@/service/channel/channelService'
 import { becomeOfflineInChannel, becomeOnlineInChannel, getChannelOnlineInfo as getChannelOnlineMembers } from '@/service/user/userService'
 import * as Boom from '@hapi/boom'
-import { redis } from 'utils/redisHolder'
 
 // get channel info
 export async function channelGet (req, res, next) {
@@ -148,19 +147,13 @@ export async function beOfflineInChannel (req, res, next) {
   }
 }
 
-// export async function channelOnlineUsers (req, res, next) {
-//   try {
-//     const channelId = parseInt(req.query?.id)
-//     if (!channelId) {
-//       throw Boom.badRequest('Invalid params error')
-//     }
-//     const { onlineUserCnt = 0, onlineUsers = [] } = await getChannelOnlineInfo(channelId)
-//     res.json({ code: 0, data: { onlineUserCnt, onlineUsers } })
-//   } catch (e) {
-//     next(e)
-//   }
-// }
-
-// function buildChannelOnlineUserskey (channelId: number) {
-//   return `channel-${channelId}-onlineUsers`
-// }
+export async function channelInviteGet (req, res, next) {
+  try {
+    const user = req.windImUser
+    const channelId = parseInt(req.query?.channelId)
+    const inviteUrl = await generateInviteUrl(user.id, channelId)
+    res.json({ code: 0, data: { inviteUrl } })
+  } catch (e) {
+    next(e)
+  }
+}
