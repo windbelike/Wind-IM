@@ -1,4 +1,4 @@
-import { checkUserInChannel, createChannel, deleteChannel, generateInviteCode, generateInviteUrl, getChannelListByUid, getChannelMembers, isUserOnChannel, joinChannel, selectChannelById } from '@/service/channel/channelService'
+import { checkUserInChannel, createChannel, deleteChannel, generateInviteUrl, getChannelListByUid, getChannelMembers, isUserOnChannel, joinChannel, selectChannelById } from '@/service/channel/channelService'
 import { becomeOfflineInChannel, becomeOnlineInChannel, getChannelOnlineInfo as getChannelOnlineMembers } from '@/service/user/userService'
 import * as Boom from '@hapi/boom'
 
