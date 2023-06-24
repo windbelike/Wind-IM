@@ -4,6 +4,7 @@ const loginErrorCode = 403
 const loginErrorMsg = 'Please login first.'
 
 export function errorHandler (err, req, res, next) {
+  console.error(err)
   // 如果是一个 Boom 异常，则根据 Boom 异常结构修改 `res`
   if (Boom.isBoom(err)) {
     // login error

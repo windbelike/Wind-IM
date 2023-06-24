@@ -17,10 +17,10 @@ export default function HomeSideBar ({ sideBarActiveState }) {
 
 function UserInfoPanel () {
   const { isLoading, data, error } = useQuery('getWhoami', getWhoami)
-  if (error && error.response.status == 403) {
-    console.log('go to login page.')
-    Router.push('/entry/login')
-  }
+  // if (error && error.response?.status == 403) {
+  //   console.log('go to login page.')
+  //   Router.push('/entry/login')
+  // }
   return (
     <div className="text-[#e6eaf0] text-xl font-bold flex items-center space-x-2">
       {isLoading && <p>Anonymous</p>}

@@ -3,15 +3,6 @@ import { useMutation } from 'react-query'
 import axios from '@/utils/axiosUtils'
 import Layout from '@/pages/Layout'
 
-async function whoami (req) {
-  const data = await axios.get('/api/whoami', {
-    headers: {
-      Cookie: req.headers.cookie
-    }
-  })
-  return data.data
-}
-
 async function logout () {
   const result = await axios.post('/api/logout', {
     withCredentials: true
@@ -29,6 +20,7 @@ LogoutForm.getLayout = function getLayout (page) {
 }
 
 export default function LogoutForm () {
+  console.log('logout form')
   const logoutMutation = useMutation(logout)
   const router = useRouter()
   function onClickLogout () {
@@ -56,27 +48,4 @@ export default function LogoutForm () {
       </div>
     </>
   )
-}
-
-export async function getServerSideProps ({ req }) {
-  let data
-  try {
-    data = await whoami(req)
-  } catch (e) {
-    console.log('#getServerSideProps error')
-  }
-
-  if (data?.code != 0) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/entry'
-      }
-    }
-  }
-  return {
-    props: {
-      user: data.data
-    }
-  }
 }
